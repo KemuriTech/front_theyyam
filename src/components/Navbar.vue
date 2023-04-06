@@ -67,6 +67,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
 const navigation = [
   { name: 'Events', href: 'Events', current: true },
+  { name: 'Past Events', href: 'Pastevents', current: true },
   { name: 'Map View', href: 'Mapview', current: false },
   { name: 'Story', href: 'Story', current: false },
 ]
