@@ -40,3 +40,9 @@ npm run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Firebase deployment notes
+
+1) Copy your Firebase service account key json content
+2) Save it in a Github action secret variable
+3) Update https://github.com/KemuriTechnology/nuxt3-ts-tailwindui/blob/main/.github/workflows/firebase-build.yml#L15 with variable name and project id
