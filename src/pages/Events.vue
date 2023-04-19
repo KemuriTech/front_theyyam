@@ -1,16 +1,16 @@
-<script>
-export default {
-  async setup() {
-    const pageNumber = 1;
-    const eventList = [];
-    await fetch('https://theyyam.g.kuroco.app/rcms-api/1/events?topics_group_id%5B%5D=%271%27&pageID='+ pageNumber, {
-      method: 'GET',
-    }).then(response => response.json())
-        .then(response => {
-          response.list.forEach(el => eventList.push({ topicID: el.topics_id, title: el.subject, description: el.ext_3, start_dt: el.ext_4, end_dt: el.ext_5, location: el.ext_6, image: el.ext_16.url}))
-        })
-    return { eventList, pageNumber }
-  }
+<script setup>
+import { AisInstantSearch, AisSearchBox, AisInfiniteHits } from 'vue-instantsearch/vue3/es/index.js'
+import { createWidgetMixin } from 'vue-instantsearch/vue3/es';
+import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
+const indexName = 'events'
+const algolia = useAlgoliaRef()
+
+createWidgetMixin({ connector: connectInfiniteHits })
+
+const visibilityChanged = (isVisible) => {
+    if (isVisible && !this.state.isLastPage) {
+      this.state.showMore();
+    }
 }
 </script>
 
@@ -18,109 +18,44 @@ export default {
   <div class="bg-white">
     <section class="bg-gray-100 dark:bg-gray-900 py-10 px-12">
       <span class="text-4xl">Events</span>
-      <!-- Card Grid -->
-      <div
-          class="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          <div
-              class="my-8 rounded shadow-lg shadow-gray-200 dark:shadow-gray-900 bg-white dark:bg-gray-800 duration-300 hover:-translate-y-1"
-              v-for="(event, index) in eventList">
-            <!-- Clickable Area -->
-            <NuxtLink :to="`Event${event.topicID}`" class="cursor-pointer">
-              <figure>
-                <!-- Image -->
-                <img
-                    :src="event.image"
-                    class="rounded-t h-72 w-full object-cover" />
-                <figcaption class="p-4">
-                  <p
-                      class="text-lg mb-4 font-bold leading-relaxed text-gray-800 dark:text-gray-300"
-                      v-text="event.title"/>
-                  <small
-                      class="leading-5 text-gray-500 dark:text-gray-400"
-                      v-text="event.description">
-                  </small>
-                </figcaption>
-              </figure>
-            </NuxtLink>
-          </div>
-      </div>
+      <ais-instant-search :index-name="indexName" :search-client="algolia">
+      <ais-search-box />
+      <ais-infinite-hits>
+        <template v-slot:item="{ item }">
+          <NuxtLink :to="`Event${item['Topic ID']}`" class="cursor-pointer">
+            <figure>
+              <img v-if='!JSON.parse(item["videos_path_1(Additional items)"])["url"]' :src="JSON.parse(item['photos_path(Additional items)'])['url']">
+              <iframe v-else :src='"https://www.youtube.com/embed/" + JSON.parse(item["videos_path_1(Additional items)"])["url"].split("v=")[1]' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              <figcaption class="p-4">
+                <p
+                    class="text-lg mb-4 font-bold leading-relaxed text-gray-800 dark:text-gray-300"
+                    v-text="item.Title"/>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
+                  <path d="M5.25 12a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H6a.75.75 0 01-.75-.75V12zM6 13.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V14a.75.75 0 00-.75-.75H6zM7.25 12a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H8a.75.75 0 01-.75-.75V12zM8 13.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V14a.75.75 0 00-.75-.75H8zM9.25 10a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H10a.75.75 0 01-.75-.75V10zM10 11.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V12a.75.75 0 00-.75-.75H10zM9.25 14a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H10a.75.75 0 01-.75-.75V14zM12 9.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V10a.75.75 0 00-.75-.75H12zM11.25 12a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H12a.75.75 0 01-.75-.75V12zM12 13.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V14a.75.75 0 00-.75-.75H12zM13.25 10a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H14a.75.75 0 01-.75-.75V10zM14 11.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V12a.75.75 0 00-.75-.75H14z" />
+                  <path fillRule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clipRule="evenodd" />
+                </svg>
+                <p
+                    class="text-lg mb-4 font-light leading-relaxed text-gray-800 dark:text-gray-300"
+                >
+                  {{ item["start_dt(Additional items)"] }} -> {{ item["end_dt(Additional items)"] }}
+                </p>
+                <a :href="`https://maps.google.com/?q=${item['venue_lat(Additional items)']},${item['venue_long(Additional items)']}`">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
+                    <path fillRule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clipRule="evenodd" />
+                  </svg>
+                Location</a>
+                <br>
+                <small
+                    class="leading-5 text-gray-500 dark:text-gray-400"
+                    v-text="item['description(Additional items)'].substring(0, 150) + '...'">
+                </small>
+              </figcaption>
+            </figure>
+          </NuxtLink>
+        </template>
+      </ais-infinite-hits>
+      </ais-instant-search>
     </section>
-    <ol class="flex justify-center gap-1 text-xs font-medium">
-      <li>
-        <a
-            href="#"
-            class="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100"
-        >
-          <span class="sr-only">Prev Page</span>
-          <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-3 w-3"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-          >
-            <path
-                fill-rule="evenodd"
-                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                clip-rule="evenodd"
-            />
-          </svg>
-        </a>
-      </li>
-
-      <li>
-        <a
-            href="#"
-            class="block h-8 w-8 rounded border border-gray-100 text-center leading-8"
-        >
-          1
-        </a>
-      </li>
-
-      <li
-          class="block h-8 w-8 rounded border-blue-600 bg-blue-600 text-center leading-8 text-white"
-      >
-        2
-      </li>
-
-      <li>
-        <a
-            href="#"
-            class="block h-8 w-8 rounded border border-gray-100 text-center leading-8"
-        >
-          3
-        </a>
-      </li>
-
-      <li>
-        <a
-            href="#"
-            class="block h-8 w-8 rounded border border-gray-100 text-center leading-8"
-        >
-          4
-        </a>
-      </li>
-
-      <li>
-        <a
-            href="#"
-            class="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100"
-        >
-          <span class="sr-only">Next Page</span>
-          <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-3 w-3"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-          >
-            <path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"
-            />
-          </svg>
-        </a>
-      </li>
-    </ol>
   </div>
 </template>
 

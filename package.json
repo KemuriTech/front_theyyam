@@ -13,6 +13,9 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.12",
-    "@heroicons/vue": "^2.0.16"
+    "@heroicons/vue": "^2.0.16",
+    "@nuxtjs/algolia": "^1.5.1",
+    "instantsearch.js": "^4.54.1",
+    "vue-instantsearch": "^4.8.9"
   }
 }
