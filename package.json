@@ -16,6 +16,8 @@
     "@heroicons/vue": "^2.0.16",
     "@nuxtjs/algolia": "^1.5.1",
     "instantsearch.js": "^4.54.1",
-    "vue-instantsearch": "^4.8.9"
+    "vue-instantsearch": "^4.8.9",
+    "vue-intersection-observer": "^0.1.9",
+    "vue-observe-visibility": "^1.0.0"
   }
 }
