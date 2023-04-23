@@ -17,5 +17,5 @@ jobs:
           channelId: live
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
-          APPLICATION_ID: '${{ secrets.YOUR_APP_ID }}'
-          API_KEY: '${{ secrets.YOUR_API_KEY_WITH_WRITE_PERMISSIONS }}'
+          APPLICATION_ID: '${{ secrets.ALGOLIA_APPLICATION_ID }}'
+          API_KEY: '${{ secrets.ALGOLIA_API_KEY }}'
