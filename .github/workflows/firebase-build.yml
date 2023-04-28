@@ -10,8 +10,8 @@ jobs:
       - name: Create .env file
         uses: ozaytsev86/create-env-file@v1
         with:
-          ENV_ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_APPLICATION_ID }}
-          ENV_ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_SEARCH_API_KEY }}
+          ENV_ALGOLIA_SEARCH_API_KEY: ${{ secrets.ALGOLIA_SEARCH_API_KEY }}
+          ENV_ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
       - uses: actions/checkout@v2
       - run: npm ci && npm run build && npm run generate
       - uses: FirebaseExtended/action-hosting-deploy@v0
