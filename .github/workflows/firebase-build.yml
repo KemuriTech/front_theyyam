@@ -7,13 +7,11 @@ jobs:
   build_and_preview:
     runs-on: ubuntu-latest
     steps:
-      - name: create env file
-        run: |
-         touch .env
-          echo ALGOLIA_SEARCH_API_KEY=${{ secrets.ALGOLIA_SEARCH_API_KEY }} >> .env
-          echo ALGOLIA_APPLICATION_ID=${{ secrets.ALGOLIA_APPLICATION_ID }} >> .env
       - uses: actions/checkout@v2
       - run: npm ci && npm run build && npm run generate
+        env:
+          algolia-app-key: ${{ secrets.ALGOLIA_SEARCH_API_KEY }}
+          algolia-api-id:  ${{ secrets.ALGOLIA_APPLICATION_ID }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
