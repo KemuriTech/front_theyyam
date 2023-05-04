@@ -1,5 +1,5 @@
 <script setup>
-import { AisInstantSearch, AisSearchBox, AisInfiniteHits } from 'vue-instantsearch/vue3/es/index.js'
+import { AisInstantSearch, AisSearchBox, AisInfiniteHits, AisConfigure } from 'vue-instantsearch/vue3/es/index.js'
 import { createWidgetMixin } from 'vue-instantsearch/vue3/es';
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 const indexName = 'events'
@@ -12,13 +12,16 @@ const visibilityChanged = (isVisible) => {
     this.state.showMore();
   }
 }
+
+const todayTimeStamp = Math.round(+new Date()/1000);
 </script>
 
 <template>
   <div class="bg-white">
     <section class="bg-gray-100 dark:bg-gray-900 py-10 px-12">
-      <span class="text-4xl">Events</span>
+      <span class="text-4xl">Past Events</span>
       <ais-instant-search :index-name="indexName" :search-client="algolia">
+        <ais-configure :filters="`'end_dt_timestamp(Additional items)' < ${todayTimeStamp}`" />
         <ais-search-box />
         <ais-infinite-hits>
           <template v-slot:item="{ item }">
@@ -46,32 +49,6 @@ const visibilityChanged = (isVisible) => {
           </template>
         </ais-infinite-hits>
       </ais-instant-search>
-      <!-- Card Grid -->
-      <div
-          class="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <div
-            class="my-8 rounded shadow-lg shadow-gray-200 dark:shadow-gray-900 bg-white dark:bg-gray-800 duration-300 hover:-translate-y-1"
-            v-for="(event, index) in eventList">
-          <!-- Clickable Area -->
-          <NuxtLink :to="`Event${event.topicID}`" class="cursor-pointer">
-            <figure>
-              <!-- Image -->
-              <img
-                  :src="event.image"
-                  class="rounded-t h-72 w-full object-cover" />
-              <figcaption class="p-4">
-                <p
-                    class="text-lg mb-4 font-bold leading-relaxed text-gray-800 dark:text-gray-300"
-                    v-text="event.title"/>
-                <small
-                    class="leading-5 text-gray-500 dark:text-gray-400"
-                    v-text="event.description">
-                </small>
-              </figcaption>
-            </figure>
-          </NuxtLink>
-        </div>
-      </div>
-    </section>
+      </section>
   </div>
 </template>
