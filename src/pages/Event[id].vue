@@ -26,17 +26,13 @@ export default {
 </script>
 
 <template>
-  <section>
-    <div class="relative mx-auto max-w-screen-xl px-4 py-8">
-      <div class="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
-        <div class="grid grid-cols-2 gap-4 md:grid-cols-1">
-          <img
-              alt="Temple Photo"
-              :src="eventData.ext_16.url"
-              class="aspect-square w-1/2 rounded-xl object-cover"
-          />
+<section class="py-8 px-4 sm:px-8 md:px-12">
+  <div class="max-w-screen-xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <img alt="Temple Photo" :src="eventData.ext_16.url" class="w-full rounded-xl object-cover mb-4" />
 
-          <div class="grid grid-cols-2 gap-4 lg:mt-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
             <div class="aspect-w-16 aspect-h-9">
               <iframe :src='`https://www.youtube.com/embed/${eventData.ext_13.url.split("v=")[1]}`' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -55,28 +51,22 @@ export default {
           </div>
         </div>
 
-        <div class="sticky top-0">
+      <div class="sticky top-0">
+        
+        <div class="max-w-[35ch] space-y-4">
+          <a :href="eventData.ext_1.url">
+            <h1 class="text-2xl font-bold text-black mb-2">{{ eventData.subject }}</h1>
+          </a>
 
-          <div class="mt-8 flex justify-between">
-            <div class="max-w-[35ch] space-y-2">
-              <a :href="eventData.ext_1.url">
-                <h1 class="text-xl font-bold sm:text-2xl text-black">
-                  {{ eventData.subject }}
-                </h1>
-              </a>
-
-              Dates: <span class="text-sm text-gray-700">{{ eventData.ext_4 }}  -> {{ eventData.ext_5 }}</span> <br>
-              Date according to Malayalam Calendar : <span class="text-sm text-gray-700"> {{ eventData.ext_7 }} </span>
-
-            </div>
+          <div>
+            <span class="text-sm text-gray-700">Dates:</span>
+            <span class="text-sm text-gray-700">{{ eventData.ext_4 }} -> {{ eventData.ext_5 }}</span>
           </div>
 
-          <div class="mt-4">
-            <div class="prose max-w-none">
-              <p class="text-sm text-gray-700">
-                {{ eventData.ext_3 }}
-               </p>
-            </div>
+          <div>
+            <span class="text-sm text-gray-700">Date according to Malayalam Calendar:</span>
+            <span class="text-sm text-gray-700">{{ eventData.ext_7 }}</span>
+          </div>
 
           </div>
 
@@ -103,7 +93,7 @@ export default {
 
               <h3>Contact Info:</h3>
 
-              <div class="col-sm-12 text-gray-700">
+              <div class="text-gray-700">
                   <span v-if="eventData.ext_17">{{ eventData.ext_17 }} <br></span>
                   <span v-if="eventData.ext_18">{{ eventData.ext_18 }} <br></span>
                   <span v-if="eventData.ext_19">{{ eventData.ext_19 }} <br></span>
@@ -111,7 +101,7 @@ export default {
                   <span v-if="eventData.ext_21">{{ eventData.ext_21 }} <br></span>
               </div>
 
-              <div class="col-sm-12 text-gray-700">
+              <div class="text-gray-700">
                 <span v-if="eventData.ext_22">{{ eventData.ext_22 }} <br></span>
                 <span v-if="eventData.ext_23">{{ eventData.ext_23 }} <br></span>
                 <span v-if="eventData.ext_24">{{ eventData.ext_24 }} <br></span>
@@ -119,7 +109,7 @@ export default {
                 <span v-if="eventData.ext_26">{{ eventData.ext_26 }} <br></span>
               </div>
 
-              <div class="col-sm-12 text-gray-700">
+              <div class="text-gray-700">
                 <span v-if="eventData.ext_27">{{ eventData.ext_27 }} <br></span>
                 <span v-if="eventData.ext_28">{{ eventData.ext_28 }} <br></span>
                 <span v-if="eventData.ext_29">{{ eventData.ext_29 }} <br></span>
@@ -127,7 +117,7 @@ export default {
                 <span v-if="eventData.ext_31">{{ eventData.ext_31 }} <br></span>
               </div>
 
-              <div class="col-sm-12 text-gray-700">
+              <div class="text-gray-700">
                 <span v-if="eventData.ext_32">{{ eventData.ext_32 }} <br></span>
                 <span v-if="eventData.ext_33">{{ eventData.ext_33 }} <br></span>
                 <span v-if="eventData.ext_34">{{ eventData.ext_34 }} <br></span>
@@ -139,17 +129,19 @@ export default {
       </div>
     </div>
   </section>
-<section class="bg-gray-100 dark:bg-gray-900 py-10 px-12">
+  <section class="bg-gray-100 dark:bg-gray-900 py-10 px-12">
   <div>
     <h1 class="justify-center text-center font-bold text-2xl text-gray-800 dark:text-gray-300 mb-4">Upcoming Events</h1>
   </div>
-  <div class="event-card-container">
-    <div v-for="event in upcomingEventData" :key="event.id" class="event-card">
-      <NuxtLink :to="`Event${event.topics_id}`" class="cursor-pointer">
-        <figure>
-          <iframe :src='`https://www.youtube.com/embed/${event.ext_13.url.split("v=")[1]}`' frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+  <div class="flex flex-wrap justify-center -mx-2">
+    <div v-for="event in upcomingEventData" :key="event.id" class="event-card w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 mx-2">
+        <NuxtLink :to="`Event${event.topics_id}`" class="cursor-pointer">
+          <figure class="relative">
+            <div class="aspect-w-16 aspect-h-9 overflow-hidden">
+              <iframe :src='`https://www.youtube.com/embed/${event.ext_13.url.split("v=")[1]}`' frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen class="embed-responsive-item"></iframe>
+            </div>
           <figcaption class="p-4">
             <p class="text-lg mb-4 font-bold leading-relaxed text-gray-800 dark:text-gray-300" v-text="event.subject"></p>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#c4c8d8" class="w-6 h-6">
@@ -177,10 +169,6 @@ export default {
 </section>
 </template>
 <style scoped>
-.event-card-container {
-  display: flex;
-  margin-top: 20px;
-}
 
 .event-card {
   flex: 1;
