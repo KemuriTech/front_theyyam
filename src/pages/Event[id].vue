@@ -129,7 +129,7 @@ export default {
       </div>
     </div>
   </section>
-  <section class="bg-gray-100 dark:bg-gray-900 py-10 px-12">
+  <section class="bg-gray-100 dark:bg-gray-900 py-10 px-4 sm:px-8 md:px-12">
   <div>
     <h1 class="justify-center text-center font-bold text-2xl text-gray-800 dark:text-gray-300 mb-4">Upcoming Events</h1>
   </div>
