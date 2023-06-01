@@ -122,8 +122,8 @@ const eventImg = 'land6.jpg';
             </div>
         </div>
     </div>
-
-    <div class="relative bg-gray-50 pt-16 overflow-hidden sm:pt-24 lg:pt-32">
+    <UpcomingEvents/>
+    <div class="relative bg-gray-50 pt-4 overflow-hidden sm:pt-8 lg:pt-16">
         <div class="mx-auto max-w-md px-4 text-center sm:px-6 sm:max-w-3xl lg:px-8 lg:max-w-7xl">
             <div>
                 <h2 class="text-base font-semibold tracking-wider text-indigo-600">Why to visit Theyyam</h2>
