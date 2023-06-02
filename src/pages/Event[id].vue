@@ -247,7 +247,10 @@ export default {
                                     </h3>
                                     <DisclosurePanel as="div" class="pb-6 prose prose-sm">
                                         <p>{{ eventData.ext_9 }}</p>
-                                        <p>{{ eventData.ext_10 }}</p>
+                                        <p class="pb-2">{{ eventData.ext_10 }}</p>
+                                        <a :href="`https://www.google.com/maps/search/?api=1&query=${eventData.ext_11}%2C${eventData.ext_12}`" target="_blank" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 no-underline">
+                                            Open in Google Maps
+                                        </a>
                                     </DisclosurePanel>
                                 </Disclosure>
                                 <Disclosure as="div" v-slot="{ open }">
