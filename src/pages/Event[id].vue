@@ -1,186 +1,337 @@
 <script>
 import { useRoute } from "vue-router";
-export default {
-  async setup() {
-    const { params } = useRoute();
-    let eventData = {};
-    await fetch(`https://theyyam.g.kuroco.app/rcms-api/1/event/${params.id}`, {
-      method: 'GET',
-    }).then(response => response.json())
-        .then(response => {
-          eventData = response.details
-        })
 
-    let upcomingEventData = {};
+import { ref } from 'vue'
+import {
+    Dialog,
+    DialogOverlay,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    Popover,
+    PopoverButton,
+    PopoverGroup,
+    PopoverPanel,
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+    TransitionChild,
+    TransitionRoot,
+} from '@headlessui/vue'
+import {
+    UserIcon,
+    StarIcon
+} from '@heroicons/vue/20/solid';
 
-    await fetch(`https://theyyam.g.kuroco.app/rcms-api/1/latest-event`, {
-      method: 'GET',
-    }).then(response => response.json())
-      .then(response => {
-        upcomingEventData = response.list;
-      })
+import {MinusIcon, PlusIcon} from "@heroicons/vue/20/solid";
 
-    return { eventData, upcomingEventData };
-  }
+const product = {
+    name: 'Zip Tote Basket',
+    price: '$140',
+    rating: 4,
+    images: [
+        {
+            id: 1,
+            name: 'Angled view',
+            src: 'https://tailwindui.com/img/ecommerce-images/product-page-03-product-01.jpg',
+            alt: 'Angled front view with bag zipped and handles upright.',
+        },
+        // More images...
+    ],
+    colors: [
+        { name: 'Washed Black', bgColor: 'bg-gray-700', selectedColor: 'ring-gray-700' },
+        { name: 'White', bgColor: 'bg-white', selectedColor: 'ring-gray-400' },
+        { name: 'Washed Gray', bgColor: 'bg-gray-500', selectedColor: 'ring-gray-500' },
+    ],
+    description: `
+    <p>The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.</p>
+  `,
+    details: [
+        {
+            name: 'Features',
+            items: [
+                'Multiple strap configurations',
+                'Spacious interior with top zip',
+                'Leather handle and tabs',
+                'Interior dividers',
+                'Stainless strap loops',
+                'Double stitched construction',
+                'Water-resistant',
+            ],
+        },
+        {
+            name: 'Features 1',
+            items: [
+                'Multiple strap configurations',
+                'Spacious interior with top zip',
+                'Leather handle and tabs',
+                'Interior dividers',
+                'Stainless strap loops',
+                'Double stitched construction',
+                'Water-resistant',
+            ],
+        },
+        // More sections...
+    ],
 }
+const open = ref(false)
+
+const ContactInfo = {
+    props: [
+        'name',
+        'designation',
+        'contact1',
+        'contact2',
+        'contact3'
+    ],
+    template:`
+      <div v-if="name||designation||contact1||contact2||contact3" class="border-b pb-2 mb-3">
+        <span v-if="name">{{name}}</span> <span v-if="designation">({{designation}})</span>
+        <div v-if="contact1">{{contact1}}</div>
+        <div v-if="contact2">{{contact2}}</div>
+        <div v-if="contact3">{{contact3}}</div>
+      </div>
+    `
+}
+
+//
+export default {
+    components: {
+        Dialog,
+        DialogOverlay,
+        Disclosure,
+        DisclosureButton,
+        DisclosurePanel,
+        Popover,
+        PopoverButton,
+        PopoverGroup,
+        PopoverPanel,
+        RadioGroup,
+        RadioGroupLabel,
+        RadioGroupOption,
+        Tab,
+        TabGroup,
+        TabList,
+        TabPanel,
+        TabPanels,
+        TransitionChild,
+        TransitionRoot,
+        MinusIcon,
+        PlusIcon,
+        StarIcon,
+        UserIcon,
+        ContactInfo
+    },
+    async setup() {
+        const { params } = useRoute();
+        let eventData = {};
+        await fetch(`https://theyyam.g.kuroco.app/rcms-api/1/event/${params.id}`, {
+            method: 'GET',
+        }).then(response => response.json())
+            .then(response => {
+                eventData = response.details
+            })
+        return {
+            eventData,
+            product,
+            open,
+        }
+    },
+    computed:{
+        getAllMedia() {
+            const mediaArr = [];
+
+            mediaArr.push({
+                url:this.eventData.ext_16.url,
+                type:'image'
+            })
+
+            mediaArr.push({
+                url:`https://www.youtube.com/embed/${this.eventData.ext_13.url.split("v=")[1]}`,
+                type:'yt-video'
+            })
+
+            mediaArr.push({
+                url:`https://www.youtube.com/embed/${this.eventData.ext_14.url.split("v=")[1]}`,
+                type:'yt-video'
+            })
+
+            mediaArr.push({
+                url:`https://www.youtube.com/embed/${this.eventData.ext_15.url.split("v=")[1]}`,
+                type:'yt-video'
+            })
+
+            return mediaArr;
+        }
+    }
+}
+
+
 </script>
 
 <template>
-<section class="py-8 px-4 sm:px-8 md:px-12">
-  <div class="max-w-screen-xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div>
-        <img alt="Temple Photo" :src="eventData.ext_16.url" class="w-full rounded-xl object-cover mb-4" />
+    <div class="bg-white pb-8">
+        <main class="max-w-7xl mx-auto sm:pt-16 sm:px-6 lg:px-8">
+            <div class="max-w-2xl mx-auto lg:max-w-none">
+                <!-- Product -->
+                <div class="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
+                    <!-- Image gallery -->
+                    <TabGroup as="div" class="flex flex-col-reverse">
+                        <!-- Image selector -->
+                        <div class="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
+                            <TabList class="grid grid-cols-4 gap-6">
+                                <Tab v-for="(media, id) in getAllMedia" :key="id" class="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50" v-slot="{ selected }">
+                                  <span class="sr-only">
+                                    {{ media.type }}
+                                  </span>
+                                    <span class="absolute inset-0 rounded-md overflow-hidden">
+                    <img :src="media.url" alt="" class="w-full h-full object-center object-cover" />
+                  </span>
+                                    <span :class="[selected ? 'ring-indigo-500' : 'ring-transparent', 'absolute inset-0 rounded-md ring-2 ring-offset-2 pointer-events-none']" aria-hidden="true" />
+                                </Tab>
+                            </TabList>
+                        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <TabPanels class="w-full aspect-w-1 aspect-h-1">
+                            <TabPanel v-for="(media, id) in getAllMedia" :key="id">
+                                <img :src="media.url" alt="" class="w-full h-full object-center object-cover sm:rounded-lg" />
+                            </TabPanel>
+                        </TabPanels>
+                    </TabGroup>
 
-            <div class="aspect-w-16 aspect-h-9">
-              <iframe :src='`https://www.youtube.com/embed/${eventData.ext_13.url.split("v=")[1]}`' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <!-- Product info -->
+                    <div class="mt-8 px-4 sm:px-0 sm:mt-16 lg:mt-0">
+                        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">{{ eventData.subject }}</h1>
+
+                        <div class="mt-3">
+                            <h2 class="sr-only">Details</h2>
+                            <p class="text-lg	text-gray-900">Dates: <span class="text-gray-700">{{ eventData.ext_4 }} -> {{ eventData.ext_5 }}</span>
+                            </p>
+                            <p class="text-lg">Date according to Malayalam Calendar : <span class="text-gray-700">{{ eventData.ext_7 }}</span>
+                            </p>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="sr-only">Description</h3>
+
+                            <div class="text-base text-gray-700 space-y-6">
+                                {{ eventData.ext_3 }}
+                            </div>
+                        </div>
+
+                        <section aria-labelledby="details-heading" class="mt-12">
+                            <h2 id="details-heading" class="sr-only">Additional details</h2>
+
+                            <div class="border-t divide-y divide-gray-200">
+                                <Disclosure as="div" v-slot="{ open }">
+                                    <h3>
+                                        <DisclosureButton class="group relative w-full py-6 flex justify-between items-center text-left">
+                      <span :class="[open ? 'text-indigo-600' : 'text-gray-900', 'text-sm font-medium']">
+                        Theyyams Performing Here
+                      </span>
+                                            <span class="ml-6 flex items-center">
+                        <PlusIcon v-if="!open" class="block h-6 w-6 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                        <MinusIcon v-else class="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500" aria-hidden="true" />
+                      </span>
+                                        </DisclosureButton>
+                                    </h3>
+                                    <DisclosurePanel as="div" class="pb-6 prose prose-sm">
+                                        <p>
+                                            {{ eventData.ext_6 }}
+                                        </p>
+                                    </DisclosurePanel>
+                                </Disclosure>
+                                <Disclosure as="div" v-slot="{ open }">
+                                    <h3>
+                                        <DisclosureButton class="group relative w-full py-6 flex justify-between items-center text-left">
+                      <span :class="[open ? 'text-indigo-600' : 'text-gray-900', 'text-sm font-medium']">
+                        Address
+                      </span>
+                                            <span class="ml-6 flex items-center">
+                        <PlusIcon v-if="!open" class="block h-6 w-6 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                        <MinusIcon v-else class="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500" aria-hidden="true" />
+                      </span>
+                                        </DisclosureButton>
+                                    </h3>
+                                    <DisclosurePanel as="div" class="pb-6 prose prose-sm">
+                                        <p>
+                                            {{ eventData.ext_9 }}
+                                        </p>
+                                    </DisclosurePanel>
+                                </Disclosure>
+                                <Disclosure as="div" v-slot="{ open }">
+                                    <h3>
+                                        <DisclosureButton class="group relative w-full py-6 flex justify-between items-center text-left">
+                      <span :class="[open ? 'text-indigo-600' : 'text-gray-900', 'text-sm font-medium']">
+                        Venue Directions
+                      </span>
+                                            <span class="ml-6 flex items-center">
+                        <PlusIcon v-if="!open" class="block h-6 w-6 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                        <MinusIcon v-else class="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500" aria-hidden="true" />
+                      </span>
+                                        </DisclosureButton>
+                                    </h3>
+                                    <DisclosurePanel as="div" class="pb-6 prose prose-sm">
+                                        <p>
+                                            {{ eventData.ext_10 }}
+                                        </p>
+                                    </DisclosurePanel>
+                                </Disclosure>
+                                <Disclosure as="div" v-slot="{ open }">
+                                    <h3>
+                                        <DisclosureButton class="group relative w-full py-6 flex justify-between items-center text-left">
+                      <span :class="[open ? 'text-indigo-600' : 'text-gray-900', 'text-sm font-medium']">
+                        Contact Info
+                      </span>
+                                            <span class="ml-6 flex items-center">
+                        <PlusIcon v-if="!open" class="block h-6 w-6 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                        <MinusIcon v-else class="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500" aria-hidden="true" />
+                      </span>
+                                        </DisclosureButton>
+                                    </h3>
+                                    <DisclosurePanel as="div" class="pb-6 prose prose-sm">
+                                        <div class="grid grid-cols-2">
+                                            <ContactInfo
+                                                    :name="eventData.ext_17"
+                                                    :designation="eventData.ext_18"
+                                                    :contact1="eventData.ext_19"
+                                                    :contact2="eventData.ext_20"
+                                                    :contact3="eventData.ext_21"
+                                            />
+                                            <ContactInfo
+                                                    :name="eventData.ext_22"
+                                                    :designation="eventData.ext_23"
+                                                    :contact1="eventData.ext_24"
+                                                    :contact2="eventData.ext_25"
+                                                    :contact3="eventData.ext_26"
+                                            />
+                                            <ContactInfo
+                                                    :name="eventData.ext_27"
+                                                    :designation="eventData.ext_28"
+                                                    :contact1="eventData.ext_29"
+                                                    :contact2="eventData.ext_30"
+                                                    :contact3="eventData.ext_31"
+                                            />
+                                            <ContactInfo
+                                                    :name="eventData.ext_32"
+                                                    :designation="eventData.ext_33"
+                                                    :contact1="eventData.ext_34"
+                                                    :contact2="eventData.ext_35"
+                                                    :contact3="eventData.ext_36"
+                                            />
+                                        </div>
+                                    </DisclosurePanel>
+                                </Disclosure>
+                            </div>
+                        </section>
+                    </div>
+                </div>
             </div>
-
-            <div class="aspect-w-16 aspect-h-9">
-              <iframe :src='`https://www.youtube.com/embed/${eventData.ext_14.url.split("v=")[1]}`' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-
-            <div class="aspect-w-16 aspect-h-9">
-              <iframe :src='`https://www.youtube.com/embed/${eventData.ext_15.url.split("v=")[1]}`' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-
-            <div id="venueMap"></div>
-
-          </div>
-        </div>
-
-      <div class="sticky top-0">
-        
-        <div class="max-w-[35ch] space-y-4">
-          <a :href="eventData.ext_1.url">
-            <h1 class="text-2xl font-bold text-black mb-2">{{ eventData.subject }}</h1>
-          </a>
-
-          <div>
-            <span class="text-sm text-gray-700">Dates:</span>
-            <span class="text-sm text-gray-700">{{ eventData.ext_4 }} -> {{ eventData.ext_5 }}</span>
-          </div>
-
-          <div>
-            <span class="text-sm text-gray-700">Date according to Malayalam Calendar:</span>
-            <span class="text-sm text-gray-700">{{ eventData.ext_7 }}</span>
-          </div>
-
-          </div>
-
-              <span class="mb-1 text-sm font-medium">Theyyams Performing Here:</span>
-
-              <div class="flex flex-wrap gap-1 text-gray-700">
-
-                  {{ eventData.ext_6 }}
-              </div>
-
-              <span class="mb-1 text-sm font-medium">Address:</span>
-
-              <div class="flex flex-wrap gap-1 text-gray-700">
-
-                {{ eventData.ext_9 }}
-              </div>
-
-              <span class="mb-1 text-sm font-medium">Venue Directions:</span>
-
-              <div class="flex flex-wrap gap-1 text-gray-700">
-
-                {{ eventData.ext_10 }}
-              </div>
-
-              <h3>Contact Info:</h3>
-
-              <div class="text-gray-700">
-                  <span v-if="eventData.ext_17">{{ eventData.ext_17 }} <br></span>
-                  <span v-if="eventData.ext_18">{{ eventData.ext_18 }} <br></span>
-                  <span v-if="eventData.ext_19">{{ eventData.ext_19 }} <br></span>
-                  <span v-if="eventData.ext_20">{{ eventData.ext_20 }} <br></span>
-                  <span v-if="eventData.ext_21">{{ eventData.ext_21 }} <br></span>
-              </div>
-
-              <div class="text-gray-700">
-                <span v-if="eventData.ext_22">{{ eventData.ext_22 }} <br></span>
-                <span v-if="eventData.ext_23">{{ eventData.ext_23 }} <br></span>
-                <span v-if="eventData.ext_24">{{ eventData.ext_24 }} <br></span>
-                <span v-if="eventData.ext_25">{{ eventData.ext_25 }} <br></span>
-                <span v-if="eventData.ext_26">{{ eventData.ext_26 }} <br></span>
-              </div>
-
-              <div class="text-gray-700">
-                <span v-if="eventData.ext_27">{{ eventData.ext_27 }} <br></span>
-                <span v-if="eventData.ext_28">{{ eventData.ext_28 }} <br></span>
-                <span v-if="eventData.ext_29">{{ eventData.ext_29 }} <br></span>
-                <span v-if="eventData.ext_30">{{ eventData.ext_30 }} <br></span>
-                <span v-if="eventData.ext_31">{{ eventData.ext_31 }} <br></span>
-              </div>
-
-              <div class="text-gray-700">
-                <span v-if="eventData.ext_32">{{ eventData.ext_32 }} <br></span>
-                <span v-if="eventData.ext_33">{{ eventData.ext_33 }} <br></span>
-                <span v-if="eventData.ext_34">{{ eventData.ext_34 }} <br></span>
-                <span v-if="eventData.ext_35">{{ eventData.ext_35 }} <br></span>
-                <span v-if="eventData.ext_36">{{ eventData.ext_36 }} <br></span>
-              </div>
-
-        </div>
-      </div>
+        </main>
     </div>
-  </section>
-  <section class="bg-gray-100 dark:bg-gray-900 py-10 px-4 sm:px-8 md:px-12">
-  <div>
-    <h1 class="justify-center text-center font-bold text-2xl text-gray-800 dark:text-gray-300 mb-4">Upcoming Events</h1>
-  </div>
-  <div class="flex flex-wrap justify-center -mx-2">
-    <div v-for="event in upcomingEventData" :key="event.id" class="event-card w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 mx-2">
-        <NuxtLink :to="`Event${event.topics_id}`" class="cursor-pointer">
-          <figure class="relative">
-            <div class="aspect-w-16 aspect-h-9 overflow-hidden">
-              <iframe :src='`https://www.youtube.com/embed/${event.ext_13.url.split("v=")[1]}`' frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen class="embed-responsive-item"></iframe>
-            </div>
-          <figcaption class="p-4">
-            <p class="text-lg mb-4 font-bold leading-relaxed text-gray-800 dark:text-gray-300" v-text="event.subject"></p>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#c4c8d8" class="w-6 h-6">
-              <path
-                d="M5.25 12a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H6a.75.75 0 01-.75-.75V12zM6 13.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V14a.75.75 0 00-.75-.75H6zM7.25 12a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H8a.75.75 0 01-.75-.75V12zM8 13.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V14a.75.75 0 00-.75-.75H8zM9.25 10a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H10a.75.75 0 01-.75-.75V10zM10 11.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V12a.75.75 0 00-.75-.75H10zM9.25 14a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H10a.75.75 0 01-.75-.75V14zM12 9.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V10a.75.75 0 00-.75-.75H12zM11.25 12a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H12a.75.75 0 01-.75-.75V12zM12 13.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V14a.75.75 0 00-.75-.75H12zM13.25 10a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H14a.75.75 0 01-.75-.75V10zM14 11.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V12a.75.75 0 00-.75-.75H14z" />
-              <path fill-rule="evenodd"
-                d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z"
-                clip-rule="evenodd" />
-            </svg>
-            <p class="text-lg mb-4 font-light leading-relaxed text-gray-800 dark:text-gray-300">
-              {{ event.ext_4 }} -> {{ event.ext_5 }}
-            </p>
-            <a style="color:#c4c8d8;" :href="`https://maps.google.com/?q=${event.ext_11},${event.ext_12}`">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#c4c8d8" class="w-6 h-6">
-                    <path fillRule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clipRule="evenodd" />
-                  </svg>
-            Location</a>
-            <br><br>
-            <small class="leading-5 text-gray-500 dark:text-gray-400" v-text="event.ext_3"></small>
-          </figcaption>
-        </figure>
-      </NuxtLink>
-    </div>
-  </div>
-</section>
 </template>
-<style scoped>
-
-.event-card {
-  flex: 1;
-  box-sizing: border-box;
-  border: 1px solid #c4c8d8;
-  box-shadow:0 2px 5px 0px #e3e5ec;
-  padding: 10px;
-  margin-right: 10px;
-}
-
-.event-card:last-child {
-  margin-right: 0;
-}
-</style>
-
