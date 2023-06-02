@@ -72,7 +72,7 @@ const GetMainMedia = {
     template:`
       <img v-if="detail.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="detail.url" alt="Temple" />
       <div v-else-if="detail.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
-      <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$getYTVideoUrl(detail.url)"></iframe>
+      <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$getYTVideoUrl(detail.url, 'mute=0&modestbranding=1&autoplay=1')"></iframe>
       </div>
     `
 }
