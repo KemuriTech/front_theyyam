@@ -30,55 +30,12 @@ import {
 
 import {MinusIcon, PlusIcon} from "@heroicons/vue/20/solid";
 
-const product = {
-    name: 'Zip Tote Basket',
-    price: '$140',
-    rating: 4,
-    images: [
-        {
-            id: 1,
-            name: 'Angled view',
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-03-product-01.jpg',
-            alt: 'Angled front view with bag zipped and handles upright.',
-        },
-        // More images...
-    ],
-    colors: [
-        { name: 'Washed Black', bgColor: 'bg-gray-700', selectedColor: 'ring-gray-700' },
-        { name: 'White', bgColor: 'bg-white', selectedColor: 'ring-gray-400' },
-        { name: 'Washed Gray', bgColor: 'bg-gray-500', selectedColor: 'ring-gray-500' },
-    ],
-    description: `
-    <p>The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.</p>
-  `,
-    details: [
-        {
-            name: 'Features',
-            items: [
-                'Multiple strap configurations',
-                'Spacious interior with top zip',
-                'Leather handle and tabs',
-                'Interior dividers',
-                'Stainless strap loops',
-                'Double stitched construction',
-                'Water-resistant',
-            ],
-        },
-        {
-            name: 'Features 1',
-            items: [
-                'Multiple strap configurations',
-                'Spacious interior with top zip',
-                'Leather handle and tabs',
-                'Interior dividers',
-                'Stainless strap loops',
-                'Double stitched construction',
-                'Water-resistant',
-            ],
-        },
-        // More sections...
-    ],
+
+const MEDIA_TYPE = {
+    IMAGE: 'IMAGE',
+    YT_VIDEO: 'YT_VIDEO',
 }
+
 const open = ref(false)
 
 const ContactInfo = {
@@ -98,8 +55,26 @@ const ContactInfo = {
       </div>
     `
 }
+const GetMainMedia = {
+    setup() {
+        const { $getYTVideoUrl } = useNuxtApp()
+        console.log($getYTVideoUrl)
+        return {
+            MEDIA_TYPE,
+            $getYTVideoUrl
+        }
+    },
+    props: [
+        'detail'
+    ],
+    template:`
+      <img v-if="detail.type === MEDIA_TYPE.IMAGE" class="w-full h-full object-center object-cover sm:rounded-lg" :src="detail.url" alt="Temple" />
+      <div v-else-if="detail.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-full object-center object-cover sm:rounded-lg'>
+      <iframe  frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$getYTVideoUrl(detail.url)"></iframe>
+      </div>
+    `
+}
 
-//
 export default {
     components: {
         Dialog,
@@ -125,7 +100,8 @@ export default {
         PlusIcon,
         StarIcon,
         UserIcon,
-        ContactInfo
+        ContactInfo,
+        GetMainMedia,
     },
     async setup() {
         const { params } = useRoute();
@@ -138,36 +114,46 @@ export default {
             })
         return {
             eventData,
-            product,
             open,
         }
     },
-    computed:{
+    computed: {
         getAllMedia() {
             const mediaArr = [];
 
             mediaArr.push({
                 url:this.eventData.ext_16.url,
-                type:'image'
+                type:MEDIA_TYPE.IMAGE
             })
 
             mediaArr.push({
-                url:`https://www.youtube.com/embed/${this.eventData.ext_13.url.split("v=")[1]}`,
-                type:'yt-video'
+                url:this.eventData.ext_13.url.split("v=")[1],
+                type:MEDIA_TYPE.YT_VIDEO
             })
 
             mediaArr.push({
-                url:`https://www.youtube.com/embed/${this.eventData.ext_14.url.split("v=")[1]}`,
-                type:'yt-video'
+                url:this.eventData.ext_14.url.split("v=")[1],
+                type:MEDIA_TYPE.YT_VIDEO
             })
 
             mediaArr.push({
-                url:`https://www.youtube.com/embed/${this.eventData.ext_15.url.split("v=")[1]}`,
-                type:'yt-video'
+                url:this.eventData.ext_15.url.split("v=")[1],
+                type:MEDIA_TYPE.YT_VIDEO
             })
 
             return mediaArr;
         }
+    },
+    methods: {
+        getImage({type, url}) {
+            console.log(type, url)
+            switch (type) {
+                case MEDIA_TYPE.IMAGE:
+                    return url;
+                case MEDIA_TYPE.YT_VIDEO:
+                    return `https://img.youtube.com/vi/${url}/0.jpg`;
+            }
+        },
     }
 }
 
@@ -190,7 +176,7 @@ export default {
                                     {{ media.type }}
                                   </span>
                                     <span class="absolute inset-0 rounded-md overflow-hidden">
-                    <img :src="media.url" alt="" class="w-full h-full object-center object-cover" />
+                    <img :src="getImage({type:media.type, url:media.url})" alt="" class="w-full h-full object-center object-cover" />
                   </span>
                                     <span :class="[selected ? 'ring-indigo-500' : 'ring-transparent', 'absolute inset-0 rounded-md ring-2 ring-offset-2 pointer-events-none']" aria-hidden="true" />
                                 </Tab>
@@ -199,7 +185,7 @@ export default {
 
                         <TabPanels class="w-full aspect-w-1 aspect-h-1">
                             <TabPanel v-for="(media, id) in getAllMedia" :key="id">
-                                <img :src="media.url" alt="" class="w-full h-full object-center object-cover sm:rounded-lg" />
+                                <GetMainMedia :detail="media"/>
                             </TabPanel>
                         </TabPanels>
                     </TabGroup>
