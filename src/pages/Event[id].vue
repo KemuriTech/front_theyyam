@@ -58,7 +58,6 @@ const ContactInfo = {
 const GetMainMedia = {
     setup() {
         const { $getYTVideoUrl } = useNuxtApp()
-        console.log($getYTVideoUrl)
         return {
             MEDIA_TYPE,
             $getYTVideoUrl
@@ -104,6 +103,7 @@ export default {
         GetMainMedia,
     },
     async setup() {
+        const { $formatDate } = useNuxtApp()
         const { params } = useRoute();
         let eventData = {};
         await fetch(`https://theyyam.g.kuroco.app/rcms-api/1/event/${params.id}`, {
@@ -115,6 +115,7 @@ export default {
         return {
             eventData,
             open,
+            $formatDate
         }
     },
     computed: {
@@ -196,7 +197,7 @@ export default {
 
                         <div class="mt-3">
                             <h2 class="sr-only">Details</h2>
-                            <p class="text-lg	text-gray-900">Dates: <span class="text-gray-700">{{ eventData.ext_4 }} -> {{ eventData.ext_5 }}</span>
+                            <p class="text-lg	text-gray-900">Dates: <span class="text-gray-700">{{$formatDate(eventData.ext_4, eventData.ext_5)}}</span>
                             </p>
                             <p class="text-lg">Date according to Malayalam Calendar : <span class="text-gray-700">{{ eventData.ext_7 }}</span>
                             </p>
