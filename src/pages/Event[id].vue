@@ -53,9 +53,9 @@ const ContactInfo = {
     },
     template:`<div v-if="name||designation||contact1||contact2||contact3" class="border-b pb-2 mb-3">
     <span v-if="name">{{name}}</span> <span v-if="designation">({{designation}})</span>
-    <div v-if="contact1"><a class="no-underline" :href="getTel(contact1)">{{contact1}}</a></div>
-    <div v-if="contact2"><a class="no-underline" :href="getTel(contact2)">{{contact2}}</a></div>
-    <div v-if="contact3"><a class="no-underline" :href="getTel(contact3)">{{contact3}}</a></div>
+    <div v-if="contact1"><a class="no-underline text-gray-600 font-normal" :href="getTel(contact1)">{{contact1}}</a></div>
+    <div v-if="contact2"><a class="no-underline text-gray-600 font-normal" :href="getTel(contact2)">{{contact2}}</a></div>
+    <div v-if="contact3"><a class="no-underline text-gray-600 font-normal" :href="getTel(contact3)">{{contact3}}</a></div>
     </div>`
 }
 const GetMainMedia = {
@@ -150,7 +150,6 @@ export default {
     },
     methods: {
         getImage({type, url}) {
-            console.log(type, url)
             switch (type) {
                 case MEDIA_TYPE.IMAGE:
                     return url;
@@ -200,10 +199,8 @@ export default {
 
                         <div class="mt-3">
                             <h2 class="sr-only">Details</h2>
-                            <p class="text-lg	text-gray-900">Dates: <span class="text-gray-700">{{$formatDate(eventData.ext_4, eventData.ext_5)}}</span>
-                            </p>
-                            <p class="text-lg">Date according to Malayalam Calendar : <span class="text-gray-700">{{ eventData.ext_7 }}</span>
-                            </p>
+                            <p class="text-lg	text-gray-700">{{$formatDate(eventData.ext_4, eventData.ext_5)}}</p>
+                            <p class="text-lg text-gray-700">{{ eventData.ext_7 }}</p>
                         </div>
 
                         <div class="mt-6">
@@ -250,12 +247,10 @@ export default {
                                     </h3>
                                     <DisclosurePanel as="div" class="pb-6 prose prose-sm">
                                         <p>{{ eventData.ext_9 }}</p>
-                                        <p class="pb-2">{{ eventData.ext_10 }}</p>
-                                        <a :href="`https://www.google.com/maps/search/?api=1&query=${eventData.ext_11}%2C${eventData.ext_12}`" target="_blank" class=" py-2.5 text-center font-bold no-underline">
-                                            <span>
+                                        <p>{{ eventData.ext_10 }}</p>
+                                        <a :href="`https://www.google.com/maps/search/?api=1&query=${eventData.ext_11}%2C${eventData.ext_12}`" target="_blank" class="py-2.5 text-center no-underline text-gray-600 font-normal">
                                                 Open in Google Maps
-                                            <svg class="inline mb-0.5" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="12" height="12" viewBox="0 0 48 48" ><path d="M 40.960938 4.9804688 A 2.0002 2.0002 0 0 0 40.740234 5 L 28 5 A 2.0002 2.0002 0 1 0 28 9 L 36.171875 9 L 22.585938 22.585938 A 2.0002 2.0002 0 1 0 25.414062 25.414062 L 39 11.828125 L 39 20 A 2.0002 2.0002 0 1 0 43 20 L 43 7.2460938 A 2.0002 2.0002 0 0 0 40.960938 4.9804688 z M 12.5 8 C 8.3826878 8 5 11.382688 5 15.5 L 5 35.5 C 5 39.617312 8.3826878 43 12.5 43 L 32.5 43 C 36.617312 43 40 39.617312 40 35.5 L 40 26 A 2.0002 2.0002 0 1 0 36 26 L 36 35.5 C 36 37.446688 34.446688 39 32.5 39 L 12.5 39 C 10.553312 39 9 37.446688 9 35.5 L 9 15.5 C 9 13.553312 10.553312 12 12.5 12 L 22 12 A 2.0002 2.0002 0 1 0 22 8 L 12.5 8 z"/></svg>
-                                            </span>
+                                            <svg class="inline mb-0.5 fill-gray-600" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="12" height="12" viewBox="0 0 48 48" ><path d="M 40.960938 4.9804688 A 2.0002 2.0002 0 0 0 40.740234 5 L 28 5 A 2.0002 2.0002 0 1 0 28 9 L 36.171875 9 L 22.585938 22.585938 A 2.0002 2.0002 0 1 0 25.414062 25.414062 L 39 11.828125 L 39 20 A 2.0002 2.0002 0 1 0 43 20 L 43 7.2460938 A 2.0002 2.0002 0 0 0 40.960938 4.9804688 z M 12.5 8 C 8.3826878 8 5 11.382688 5 15.5 L 5 35.5 C 5 39.617312 8.3826878 43 12.5 43 L 32.5 43 C 36.617312 43 40 39.617312 40 35.5 L 40 26 A 2.0002 2.0002 0 1 0 36 26 L 36 35.5 C 36 37.446688 34.446688 39 32.5 39 L 12.5 39 C 10.553312 39 9 37.446688 9 35.5 L 9 15.5 C 9 13.553312 10.553312 12 12.5 12 L 22 12 A 2.0002 2.0002 0 1 0 22 8 L 12.5 8 z"/></svg>
                                         </a>
                                     </DisclosurePanel>
                                 </Disclosure>
