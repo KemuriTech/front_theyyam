@@ -11,12 +11,15 @@
       <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
         <div v-for="event in upcomingEventData" :key="event.id" class="relative group">
           <NuxtLink :to="`Event${event.topics_id}`" class="cursor-pointer">
-            <div class="aspect-w-4 aspect-h-3 rounded-lg overflow-hidden bg-gray-100">
-              <img :src="event.ext_16.url" class="object-center object-cover h-full w-full" />
+            <div class="w-full aspect-h-3 rounded bg-gray-100">
+                <img v-if="!isAnyYTVideo(event)" :src="event.ext_16.url" class="object-center object-cover h-full w-full" />
+                <iframe v-else class='bg-cover bg-center rounded' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen  v-on:mouseover="playVideo" v-on:mouseleave="stopVideo" :data-uid='getYTUID(event)'
+                        :style='`background-image: url("${getYoutubeImage(event)}");`'></iframe>
+
             </div>
             <div class="mt-4 flex  text-left justify-between text-base font-medium text-gray-900 space-x-8 mb-1">
               <h3>
-                  <span aria-hidden="true" class="absolute inset-0" />
+                  <span aria-hidden="true" class="" />
                   {{ event.subject }}
               </h3>
             </div>
@@ -51,6 +54,34 @@ export default {
     });
 
     return { upcomingEventData };
+  },
+  methods: {
+      playVideo(event) {
+          const _target = event.target;
+
+          _target.setAttribute('src', 'https://www.youtube.com/embed/'+_target.getAttribute('data-uid')+'?autoplay=1&mute=1&controls=0')
+      },
+
+      getYoutubeImage(item) {
+          return `https://img.youtube.com/vi/${this.getYTUID(item)}/0.jpg`;
+      },
+
+      stopVideo(event){
+          const _target = event.target;
+
+          _target.setAttribute('src', '');
+      },
+
+      isAnyYTVideo(item){
+          if (item?.ext_13?.url || item?.ext_14?.url || item?.ext_15?.url || item?.ext_16?.url) return true;
+          return false;
+      },
+      splitYTUID(url) {
+          return url.split("v=")[1] ?? null;
+      },
+      getYTUID(item) {
+          return this.splitYTUID(item?.ext_13?.url) ?? this.splitYTUID(item?.ext_14?.url) ?? this.splitYTUID(item?.ext_15?.url) ?? this.splitYTUID(item?.ext_16?.url);
+      }
   }
 }
 
