@@ -87,7 +87,7 @@ const eventImg = 'land6.jpg';
             <div  id="pattern" class="sm:w-full lg:max-w-xl bg-contain bg-no-repeat md:ml-4 xl:mr-16 overflow-hidden lg:py-5 px-5">
                 <div class="w-full flex gap-5 lg:gap-10 justify-center">
                     <div v-for="(imageGroup, key) in images" :key="key" class="flex flex-col gap-5 lg:gap-10 justify-center" :data-key="key">
-                        <img v-for="(image, _key) in imageGroup" :key="_key" class="object-cover object-center rounded-xl lg:max-h-fit" alt="hero" :src="`_nuxt/assets/images/${image.imageSrc}`" />
+                        <img v-for="(image, _key) in imageGroup" :key="_key" class="object-cover object-center rounded-xl lg:max-h-fit" alt="hero" :src="`/images/${image.imageSrc}`" />
                     </div>
                 </div>
             </div>
@@ -101,7 +101,7 @@ const eventImg = 'land6.jpg';
         <div class="h-80 w-full absolute bottom-0 xl:inset-0 xl:h-full">
             <div class="h-full w-full xl:grid xl:grid-cols-2">
                 <div class="h-full xl:relative xl:col-start-2">
-                    <img class="h-full w-full object-cover opacity-25 xl:absolute xl:inset-0" :src="`_nuxt/assets/images/${section2Img}`" alt="" />
+                    <img class="h-full w-full object-cover opacity-25 xl:absolute xl:inset-0" :src="`/images/${section2Img}`" alt="" />
                     <div aria-hidden="true" class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-gray-900 xl:inset-y-0 xl:left-0 xl:h-full xl:w-32 xl:bg-gradient-to-r" />
                 </div>
             </div>
@@ -132,7 +132,7 @@ const eventImg = 'land6.jpg';
             </div>
             <div class="mt-12">
                 <video controls class="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5" playsinline="" autoplay="autoplay" loop="loop" muted="muted" type="video" id="avatarVideo" >
-                    <source id="videoSrc" :src="`_nuxt/assets/videos/${videoName}`" />
+                    <source id="videoSrc" :src="`/videos/${videoName}`" />
                 </video>
             </div>
             <div class="mt-10 pb-20">
@@ -157,7 +157,7 @@ const eventImg = 'land6.jpg';
         <div class="h-80 w-full absolute bottom-0 xl:inset-0 xl:h-full">
             <div class="h-full w-full xl:grid xl:grid-cols-2">
                 <div class="h-full xl:relative xl:col-start-0">
-                    <img class="h-full w-full object-cover opacity-25 xl:absolute xl:inset-0" :src="`_nuxt/assets/images/${eventImg}`" alt="" />
+                    <img class="h-full w-full object-cover opacity-25 xl:absolute xl:inset-0" :src="`/images/${eventImg}`" alt="" />
                     <div aria-hidden="true" class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-gray-900 xl:inset-y-0 xl:left-0 xl:h-full xl:w-32 xl:bg-gradient-to-l ml-auto" />
                 </div>
             </div>
