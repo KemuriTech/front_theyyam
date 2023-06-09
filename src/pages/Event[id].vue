@@ -38,45 +38,6 @@ const MEDIA_TYPE = {
 
 const open = ref(false)
 
-const ContactInfo = {
-    props: [
-        'name',
-        'designation',
-        'contact1',
-        'contact2',
-        'contact3'
-    ],
-    methods: {
-        getTel(tel) {
-            return `tel:${tel}`;
-        }
-    },
-    template:`<div v-if="name||designation||contact1||contact2||contact3" class="border-b pb-2 mb-3">
-    <span v-if="name">{{name}}</span> <span v-if="designation">({{designation}})</span>
-    <div v-if="contact1"><a class="no-underline text-gray-600 font-normal" :href="getTel(contact1)">{{contact1}}</a></div>
-    <div v-if="contact2"><a class="no-underline text-gray-600 font-normal" :href="getTel(contact2)">{{contact2}}</a></div>
-    <div v-if="contact3"><a class="no-underline text-gray-600 font-normal" :href="getTel(contact3)">{{contact3}}</a></div>
-    </div>`
-}
-const GetMainMedia = {
-    setup() {
-        const { $getYTVideoUrl } = useNuxtApp()
-        return {
-            MEDIA_TYPE,
-            $getYTVideoUrl
-        }
-    },
-    props: [
-        'detail'
-    ],
-    template:`
-      <img v-if="detail.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="detail.url" alt="Temple" />
-      <div v-else-if="detail.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
-      <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$getYTVideoUrl(detail.url, 'mute=0&modestbranding=1&autoplay=1')"></iframe>
-      </div>
-    `
-}
-
 export default {
     components: {
         Dialog,
@@ -102,11 +63,9 @@ export default {
         PlusIcon,
         StarIcon,
         UserIcon,
-        ContactInfo,
-        GetMainMedia,
     },
     async setup() {
-        const { $formatDate } = useNuxtApp()
+        const { $formatDate,$getYTVideoUrl } = useNuxtApp()
         const { params } = useRoute();
         let eventData = {};
         await fetch(`https://theyyam.g.kuroco.app/rcms-api/1/event/${params.id}`, {
@@ -118,7 +77,9 @@ export default {
         return {
             eventData,
             open,
-            $formatDate
+            $formatDate,
+            $getYTVideoUrl,
+            MEDIA_TYPE
         }
     },
     computed: {
@@ -130,20 +91,26 @@ export default {
                 type:MEDIA_TYPE.IMAGE
             })
 
-            mediaArr.push({
-                url:this.eventData.ext_13.url.split("v=")[1],
-                type:MEDIA_TYPE.YT_VIDEO
-            })
+      if(this.eventData.ext_13.url) {
+        mediaArr.push({
+          url:this.eventData.ext_13.url.split("v=")[1],
+          type: MEDIA_TYPE.YT_VIDEO
+        })
+      }
 
-            mediaArr.push({
-                url:this.eventData.ext_14.url.split("v=")[1],
-                type:MEDIA_TYPE.YT_VIDEO
-            })
+      if(this.eventData.ext_14.url) {
+        mediaArr.push({
+          url:this.eventData.ext_14.url.split("v=")[1],
+          type: MEDIA_TYPE.YT_VIDEO
+        })
+      }
 
-            mediaArr.push({
-                url:this.eventData.ext_15.url.split("v=")[1],
-                type:MEDIA_TYPE.YT_VIDEO
-            })
+      if(this.eventData.ext_15.url) {
+        mediaArr.push({
+          url:this.eventData.ext_15.url.split("v=")[1],
+          type: MEDIA_TYPE.YT_VIDEO
+        })
+      }
 
             return mediaArr;
         }
@@ -188,8 +155,10 @@ export default {
 
                         <TabPanels class="w-full aspect-w-1 aspect-h-1">
                             <TabPanel v-for="(media, id) in getAllMedia" :key="id">
-                                <GetMainMedia :detail="media"/>
-                            </TabPanel>
+                              <img v-if="media.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="media.url" alt="Temple" />
+                              <div v-else-if="media.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
+                                <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$getYTVideoUrl(media.url, 'mute=0&modestbranding=1&autoplay=1')"></iframe>
+                              </div>                            </TabPanel>
                         </TabPanels>
                     </TabGroup>
 
@@ -306,4 +275,5 @@ export default {
             </div>
         </main>
     </div>
+  <UpcomingEvents />
 </template>
