@@ -24,8 +24,6 @@ const navigation = {
     main: [
         { name: 'Events', href: '/events' },
         { name: 'Past Events', href: '/past' },
-        { name: 'Map View', href: '/map' },
-        { name: 'Story', href: '/story' },
     ],
     date: {
         year:(new Date()).getFullYear()
