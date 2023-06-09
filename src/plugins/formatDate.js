@@ -16,12 +16,7 @@ const formatDate = (fromDateStr, toDateStr) => {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
     toDate.setHours(0, 0, 0, 0);
-
-    // If event is already over
-    if (currentDate > toDate) {
-        return "The event is over.";
-    }
-
+    
     // Get day, month, and year values for "from" date
     const fromDay = formatDay(fromDate.getDate());
     const fromMonth = fromDate.toLocaleString('en-us', { month: 'short' });
