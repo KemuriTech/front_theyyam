@@ -85,11 +85,13 @@ export default {
     computed: {
         getAllMedia() {
             const mediaArr = [];
-
+            
+          if(this.eventData.ext_16.url) {
             mediaArr.push({
-                url:this.eventData.ext_16.url,
-                type:MEDIA_TYPE.IMAGE
+              url: this.eventData.ext_16.url,
+              type: MEDIA_TYPE.IMAGE
             })
+          }
 
       if(this.eventData.ext_13.url) {
         mediaArr.push({
