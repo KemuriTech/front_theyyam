@@ -1,19 +1,39 @@
-<script>
-export default {
-  props: ['name', 'designation', 'contact1', 'contact2', 'contact3'],
-  methods: {
-    getTel(tel) {
-      return `tel:${tel}`;
-    }
-  }
-};
-</script>
-
 <template>
-  <div v-if="name || designation || contact1 || contact2 || contact3" class="border-b pb-2 mb-3">
-    <span v-if="name">{{ name }}</span> <span v-if="designation">({{ designation }})</span>
-    <div v-if="contact1"><a class="no-underline text-gray-600 font-normal" :href="getTel(contact1)">{{ contact1 }}</a></div>
-    <div v-if="contact2"><a class="no-underline text-gray-600 font-normal" :href="getTel(contact2)">{{ contact2 }}</a></div>
-    <div v-if="contact3"><a class="no-underline text-gray-600 font-normal" :href="getTel(contact3)">{{ contact3 }}</a></div>
+  <div>
+    <div v-if="showContactInfo">
+      <span v-if="name">{{ name }}</span> <span v-if="designation">({{ designation }})</span>
+      <div v-for="contact in contacts" :key="contact">
+        <a class="no-underline text-gray-600 font-normal" :href="formattedTel(contact)">{{ contact }}</a>
+      </div>
+    </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: ['name', 'designation', 'firstContact', 'secondContact', 'thirdContact'],
+  computed: {
+    showContactInfo() {
+      return (
+          this.name ||
+          this.designation ||
+          this.firstContact !== undefined ||
+          this.secondContact !== undefined ||
+          this.thirdContact !== undefined
+      );
+    },
+    contacts() {
+      const contactList = [];
+      if (this.firstContact !== undefined) contactList.push(this.firstContact);
+      if (this.secondContact !== undefined) contactList.push(this.secondContact);
+      if (this.thirdContact !== undefined) contactList.push(this.thirdContact);
+      return contactList;
+    },
+  },
+  methods: {
+    formattedTel(tel) {
+      return `tel:${tel}`;
+    },
+  },
+};
+</script>

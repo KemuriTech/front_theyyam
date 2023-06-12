@@ -65,7 +65,7 @@ export default {
         UserIcon,
     },
     async setup() {
-        const { $formatDate,$getYTVideoUrl } = useNuxtApp()
+        const { $formatDate, $getYTVideoUrl } = useNuxtApp()
         const { params } = useRoute();
         let eventData = {};
         await fetch(`https://theyyam.g.kuroco.app/rcms-api/1/event/${params.id}`, {
@@ -86,33 +86,25 @@ export default {
         getAllMedia() {
             const mediaArr = [];
             
-          if(this.eventData.ext_16.url) {
             mediaArr.push({
-              url: this.eventData.ext_16.url,
+              url: this.eventData.ext_16?.url,
               type: MEDIA_TYPE.IMAGE
             })
-          }
-
-      if(this.eventData.ext_13.url) {
+          
         mediaArr.push({
-          url:this.eventData.ext_13.url.split("v=")[1],
+          url:this.eventData.ext_13?.url.split("v=")[1],
           type: MEDIA_TYPE.YT_VIDEO
         })
-      }
-
-      if(this.eventData.ext_14.url) {
+          
         mediaArr.push({
-          url:this.eventData.ext_14.url.split("v=")[1],
+          url:this.eventData.ext_14?.url.split("v=")[1],
           type: MEDIA_TYPE.YT_VIDEO
         })
-      }
-
-      if(this.eventData.ext_15.url) {
+          
         mediaArr.push({
-          url:this.eventData.ext_15.url.split("v=")[1],
+          url:this.eventData.ext_15?.url.split("v=")[1],
           type: MEDIA_TYPE.YT_VIDEO
         })
-      }
 
             return mediaArr;
         }
@@ -242,30 +234,30 @@ export default {
                                             <ContactInfo
                                                     :name="eventData.ext_17"
                                                     :designation="eventData.ext_18"
-                                                    :contact1="eventData.ext_19"
-                                                    :contact2="eventData.ext_20"
-                                                    :contact3="eventData.ext_21"
+                                                    :firstContact="eventData.ext_19"
+                                                    :secondContact="eventData.ext_20"
+                                                    :thirdContact="eventData.ext_21"
                                             />
                                             <ContactInfo
                                                     :name="eventData.ext_22"
                                                     :designation="eventData.ext_23"
-                                                    :contact1="eventData.ext_24"
-                                                    :contact2="eventData.ext_25"
-                                                    :contact3="eventData.ext_26"
+                                                    :firstContact="eventData.ext_24"
+                                                    :secondContact="eventData.ext_25"
+                                                    :thirdContact="eventData.ext_26"
                                             />
                                             <ContactInfo
                                                     :name="eventData.ext_27"
                                                     :designation="eventData.ext_28"
-                                                    :contact1="eventData.ext_29"
-                                                    :contact2="eventData.ext_30"
-                                                    :contact3="eventData.ext_31"
+                                                    :firstContact="eventData.ext_29"
+                                                    :secondContact="eventData.ext_30"
+                                                    :thirdContact="eventData.ext_31"
                                             />
                                             <ContactInfo
                                                     :name="eventData.ext_32"
                                                     :designation="eventData.ext_33"
-                                                    :contact1="eventData.ext_34"
-                                                    :contact2="eventData.ext_35"
-                                                    :contact3="eventData.ext_36"
+                                                    :firstContact="eventData.ext_34"
+                                                    :secondContact="eventData.ext_35"
+                                                    :thirdContact="eventData.ext_36"
                                             />
                                         </div>
                                     </DisclosurePanel>
