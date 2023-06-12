@@ -1,48 +1,3 @@
-<script setup>
-import { AisInstantSearch, AisSearchBox, AisInfiniteHits, AisConfigure } from 'vue-instantsearch/vue3/es/index.js'
-import { createWidgetMixin } from 'vue-instantsearch/vue3/es';
-import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
-
-const indexName = 'events'
-const algolia = useAlgoliaRef()
-
-createWidgetMixin({ connector: connectInfiniteHits })
-
-const visibilityChanged = (isVisible) => {
-  if (isVisible && !this.state.isLastPage) {
-    this.state.showMore();
-  }
-}
-
-const playVideo = (event) => {
-  const _target = event.target;
-
-  _target.setAttribute('src', 'https://www.youtube.com/embed/' + _target.getAttribute('data-uid') + '?autoplay=1&mute=1&controls=0')
-}
-
-const getYoutubeImage = (item) => {
-  return `https://img.youtube.com/vi/${JSON.parse(item["videos_path_1(Additional items)"])["url"].split("v=")[1]}/0.jpg`;
-};
-
-const stopVideo = (event) => {
-  const _target = event.target;
-
-  _target.setAttribute('src', '');
-}
-
-const route = useRoute();
-
-const getFilters = computed(() => {
-  const todayTimeStamp = Math.round(+new Date() / 1000);
-  if (route.path === '/Pastevents') {
-    return `'end_dt_timestamp(Additional items)' < ${todayTimeStamp}`;
-  }
-});
-
-</script>
-
 <template>
   <div class="relative">
     <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
@@ -52,7 +7,7 @@ const getFilters = computed(() => {
     </div>
   </div>
   <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:pt-12 sm:px-6 lg:max-w-7xl lg:px-8">
-    <ais-instant-search :index-name="indexName" :search-client="algolia">
+    <ais-instant-search :index-name="'events'" :search-client="algolia">
       <ais-configure :filters="getFilters" />
       <ais-search-box />
       <ais-infinite-hits>
@@ -83,7 +38,48 @@ const getFilters = computed(() => {
     </ais-instant-search>
   </div>
 </template>
-<style>
+
+<script setup>
+import { AisInstantSearch, AisSearchBox, AisInfiniteHits, AisConfigure } from 'vue-instantsearch/vue3/es/index.js'
+import { createWidgetMixin } from 'vue-instantsearch/vue3/es';
+import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+const algolia = useAlgoliaRef()
+
+createWidgetMixin({ connector: connectInfiniteHits })
+
+const visibilityChanged = (isVisible) => {
+  if (isVisible && !this.state.isLastPage) {
+    this.state.showMore();
+  }
+}
+
+const playVideo = (event) => {
+  event.target?.setAttribute('src', 'https://www.youtube.com/embed/' + event.target?.getAttribute('data-uid') + '?autoplay=1&mute=1&controls=0')
+}
+
+const getYoutubeImage = (item) => {
+  return `https://img.youtube.com/vi/${JSON.parse(item["videos_path_1(Additional items)"])["url"].split("v=")[1]}/0.jpg`;
+};
+
+const stopVideo = (event) => {
+  event.target?.setAttribute('src', '');
+}
+
+const route = useRoute();
+
+const getFilters = computed(() => {
+  const todayTimeStamp = Math.round(+new Date() / 1000);
+  if (route.path === '/pastevents') {
+    return `'end_dt_timestamp(Additional items)' < ${todayTimeStamp}`;
+  }
+});
+
+</script>
+
+<style scoped>
 .ais-InfiniteHits-item {
   border: none;
   box-shadow: none;
