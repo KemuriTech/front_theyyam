@@ -23,7 +23,7 @@ const enabled = ref(false)
 const navigation = {
     main: [
         { name: 'Events', href: '/events' },
-        { name: 'Past Events', href: '/past' },
+        { name: 'Past Events', href: '/pastevents' },
     ],
     date: {
         year:(new Date()).getFullYear()

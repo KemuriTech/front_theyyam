@@ -39,8 +39,8 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
 const navigation = [
-  { name: 'Events', href: '/Events', current: true },
-  { name: 'Past Events', href: '/Pastevents', current: false },
+  { name: 'Events', href: '/events', current: true },
+  { name: 'Past Events', href: '/pastevents', current: false },
 ]
 </script>
 <style scoped>
