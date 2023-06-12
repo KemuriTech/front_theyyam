@@ -19,8 +19,8 @@ const playVideo = (event) => {
     _target.setAttribute('src', 'https://www.youtube.com/embed/'+_target.getAttribute('data-uid')+'?autoplay=1&mute=1&controls=0')
 }
 
-const getYoutubeImage = (item) => {
-    return `https://img.youtube.com/vi/${JSON.parse(item["videos_path_1(Additional items)"])["url"].split("v=")[1]}/0.jpg`;
+const getEventImage = (item) => {
+    return JSON.parse(item['photos_path(Additional items)'])['url'];
 };
 
 const stopVideo = (event) => {
@@ -42,8 +42,8 @@ const stopVideo = (event) => {
           <NuxtLink :to="`Event${item['Topic ID']}`" class="cursor-pointer">
             <figure>
               <img v-if='!JSON.parse(item["videos_path_1(Additional items)"])["url"]' :src="JSON.parse(item['photos_path(Additional items)'])['url']">
-              <iframe v-else class='bg-cover bg-center' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen  v-on:mouseover="playVideo" v-on:mouseleave="stopVideo" :data-uid='JSON.parse(item["videos_path_1(Additional items)"])["url"].split("v=")[1]'
-                      :style='`background-image: url("${getYoutubeImage(item)}");`'></iframe>
+              <iframe v-else class='bg-cover bg-center rounded' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen  v-on:mouseover="playVideo" v-on:mouseleave="stopVideo" :data-uid='JSON.parse(item["videos_path_1(Additional items)"])["url"].split("v=")[1]'
+                      :style='`background-image: url("${getEventImage(item)}");`'></iframe>
               <figcaption class="p-4">
                 <p
                     class="text-lg mb-4 font-bold leading-relaxed text-gray-800 dark:text-gray-300"
