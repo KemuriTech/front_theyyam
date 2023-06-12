@@ -1,4 +1,4 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+require('dotenv').config()
 export default defineNuxtConfig({
     srcDir: 'src',
     modules: ['@nuxtjs/tailwindcss', '@nuxtjs/algolia'],
@@ -8,5 +8,8 @@ export default defineNuxtConfig({
         instantSearch: {
             theme: 'algolia'
         }
-    }
+    },
+    css: [
+        '@/assets/css/common.css'
+    ],
 })
