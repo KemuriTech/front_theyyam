@@ -8,5 +8,8 @@ export default defineNuxtConfig({
         instantSearch: {
             theme: 'algolia'
         }
-    }
+    },
+    css: [
+        '@/assets/css/common.css'
+    ],
 })
