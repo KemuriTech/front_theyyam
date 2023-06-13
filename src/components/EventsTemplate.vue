@@ -38,6 +38,7 @@
     </ais-instant-search>
   </div>
 </template>
+
 <script setup>
 import { AisInstantSearch, AisSearchBox, AisInfiniteHits, AisConfigure } from 'vue-instantsearch/vue3/es/index.js'
 import { createWidgetMixin } from 'vue-instantsearch/vue3/es';
