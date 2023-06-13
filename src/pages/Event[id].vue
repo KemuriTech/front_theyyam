@@ -38,45 +38,6 @@ const MEDIA_TYPE = {
 
 const open = ref(false)
 
-const ContactInfo = {
-    props: [
-        'name',
-        'designation',
-        'contact1',
-        'contact2',
-        'contact3'
-    ],
-    methods: {
-        getTel(tel) {
-            return `tel:${tel}`;
-        }
-    },
-    template:`<div v-if="name||designation||contact1||contact2||contact3" class="border-b pb-2 mb-3">
-    <span v-if="name">{{name}}</span> <span v-if="designation">({{designation}})</span>
-    <div v-if="contact1"><a class="no-underline text-gray-600 font-normal" :href="getTel(contact1)">{{contact1}}</a></div>
-    <div v-if="contact2"><a class="no-underline text-gray-600 font-normal" :href="getTel(contact2)">{{contact2}}</a></div>
-    <div v-if="contact3"><a class="no-underline text-gray-600 font-normal" :href="getTel(contact3)">{{contact3}}</a></div>
-    </div>`
-}
-const GetMainMedia = {
-    setup() {
-        const { $getYTVideoUrl } = useNuxtApp()
-        return {
-            MEDIA_TYPE,
-            $getYTVideoUrl
-        }
-    },
-    props: [
-        'detail'
-    ],
-    template:`
-      <img v-if="detail.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="detail.url" alt="Temple" />
-      <div v-else-if="detail.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
-      <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$getYTVideoUrl(detail.url, 'mute=0&modestbranding=1&autoplay=1')"></iframe>
-      </div>
-    `
-}
-
 export default {
     components: {
         Dialog,
@@ -102,11 +63,9 @@ export default {
         PlusIcon,
         StarIcon,
         UserIcon,
-        ContactInfo,
-        GetMainMedia,
     },
     async setup() {
-        const { $formatDate } = useNuxtApp()
+        const { $formatDate, $getYTVideoUrl } = useNuxtApp()
         const { params } = useRoute();
         let eventData = {};
         await fetch(`https://theyyam.g.kuroco.app/rcms-api/1/event/${params.id}`, {
@@ -115,35 +74,81 @@ export default {
             .then(response => {
                 eventData = response.details
             })
-        return {
-            eventData,
-            open,
-            $formatDate
-        }
+      const contactInfos = [
+        {
+          id: 1,
+          name: eventData.ext_17 ?? '',
+          designation: eventData.ext_18 ?? '',
+          contacts: [
+            eventData.ext_19 ?? '',
+            eventData.ext_20 ?? '',
+            eventData.ext_21 ?? '',
+          ],
+        },
+        {
+          id: 2,
+          name: eventData.ext_22 ?? '',
+          designation: eventData.ext_23 ?? '',
+          contacts: [
+            eventData.ext_24 ?? '',
+            eventData.ext_25 ?? '',
+            eventData.ext_26 ?? '',
+          ],
+        },
+        {
+          id: 3,
+          name: eventData.ext_27 ?? '',
+          designation: eventData.ext_28 ?? '',
+          contacts: [
+            eventData.ext_29 ?? '',
+            eventData.ext_30 ?? '',
+            eventData.ext_31 ?? '',
+          ],
+        },
+        {
+          id: 4,
+          name: eventData.ext_32 ?? '',
+          designation: eventData.ext_33 ?? '',
+          contacts: [
+            eventData.ext_34 ?? '',
+            eventData.ext_35 ?? '',
+            eventData.ext_36 ?? '',
+          ],
+        },
+      ];
+        
+      return {
+        eventData,
+        open,
+        $formatDate,
+        $getYTVideoUrl,
+        MEDIA_TYPE,
+        contactInfos,
+      }
     },
     computed: {
         getAllMedia() {
             const mediaArr = [];
-
-            mediaArr.push({
-                url:this.eventData.ext_16.url,
-                type:MEDIA_TYPE.IMAGE
-            })
-
-            mediaArr.push({
-                url:this.eventData.ext_13.url.split("v=")[1],
-                type:MEDIA_TYPE.YT_VIDEO
-            })
-
-            mediaArr.push({
-                url:this.eventData.ext_14.url.split("v=")[1],
-                type:MEDIA_TYPE.YT_VIDEO
-            })
-
-            mediaArr.push({
-                url:this.eventData.ext_15.url.split("v=")[1],
-                type:MEDIA_TYPE.YT_VIDEO
-            })
+            
+        mediaArr.push({
+          url: this.eventData.ext_16?.url,
+          type: MEDIA_TYPE.IMAGE
+        })
+          
+        mediaArr.push({
+          url:this.eventData.ext_13?.url.split("v=")[1],
+          type: MEDIA_TYPE.YT_VIDEO
+        })
+          
+        mediaArr.push({
+          url:this.eventData.ext_14?.url.split("v=")[1],
+          type: MEDIA_TYPE.YT_VIDEO
+        })
+          
+        mediaArr.push({
+          url:this.eventData.ext_15?.url.split("v=")[1],
+          type: MEDIA_TYPE.YT_VIDEO
+        })
 
             return mediaArr;
         }
@@ -188,7 +193,10 @@ export default {
 
                         <TabPanels class="w-full aspect-w-1 aspect-h-1">
                             <TabPanel v-for="(media, id) in getAllMedia" :key="id">
-                                <GetMainMedia :detail="media"/>
+                              <img v-if="media.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="media.url" alt="Temple" />
+                              <div v-else-if="media.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
+                                <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$getYTVideoUrl(media.url, 'mute=0&modestbranding=1&autoplay=1')"></iframe>
+                              </div>                            
                             </TabPanel>
                         </TabPanels>
                     </TabGroup>
@@ -268,34 +276,11 @@ export default {
                                     </h3>
                                     <DisclosurePanel as="div" class="pb-6 prose prose-sm">
                                         <div class="grid grid-cols-2">
-                                            <ContactInfo
-                                                    :name="eventData.ext_17"
-                                                    :designation="eventData.ext_18"
-                                                    :contact1="eventData.ext_19"
-                                                    :contact2="eventData.ext_20"
-                                                    :contact3="eventData.ext_21"
-                                            />
-                                            <ContactInfo
-                                                    :name="eventData.ext_22"
-                                                    :designation="eventData.ext_23"
-                                                    :contact1="eventData.ext_24"
-                                                    :contact2="eventData.ext_25"
-                                                    :contact3="eventData.ext_26"
-                                            />
-                                            <ContactInfo
-                                                    :name="eventData.ext_27"
-                                                    :designation="eventData.ext_28"
-                                                    :contact1="eventData.ext_29"
-                                                    :contact2="eventData.ext_30"
-                                                    :contact3="eventData.ext_31"
-                                            />
-                                            <ContactInfo
-                                                    :name="eventData.ext_32"
-                                                    :designation="eventData.ext_33"
-                                                    :contact1="eventData.ext_34"
-                                                    :contact2="eventData.ext_35"
-                                                    :contact3="eventData.ext_36"
-                                            />
+                                          <ContactInfo
+                                              v-for="info in contactInfos"
+                                              :key="info.id"
+                                              :contact-info="info"
+                                          />
                                         </div>
                                     </DisclosurePanel>
                                 </Disclosure>
@@ -306,4 +291,5 @@ export default {
             </div>
         </main>
     </div>
+  <UpcomingEvents />
 </template>
