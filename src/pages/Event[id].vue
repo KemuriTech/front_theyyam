@@ -74,22 +74,66 @@ export default {
             .then(response => {
                 eventData = response.details
             })
-        return {
-            eventData,
-            open,
-            $formatDate,
-            $getYTVideoUrl,
-            MEDIA_TYPE
-        }
+      const contactInfos = [
+        {
+          id: 1,
+          name: eventData.ext_17 ?? '',
+          designation: eventData.ext_18 ?? '',
+          contacts: [
+            eventData.ext_19 ?? '',
+            eventData.ext_20 ?? '',
+            eventData.ext_21 ?? '',
+          ],
+        },
+        {
+          id: 2,
+          name: eventData.ext_22 ?? '',
+          designation: eventData.ext_23 ?? '',
+          contacts: [
+            eventData.ext_24 ?? '',
+            eventData.ext_25 ?? '',
+            eventData.ext_26 ?? '',
+          ],
+        },
+        {
+          id: 3,
+          name: eventData.ext_27 ?? '',
+          designation: eventData.ext_28 ?? '',
+          contacts: [
+            eventData.ext_29 ?? '',
+            eventData.ext_30 ?? '',
+            eventData.ext_31 ?? '',
+          ],
+        },
+        {
+          id: 4,
+          name: eventData.ext_32 ?? '',
+          designation: eventData.ext_33 ?? '',
+          contacts: [
+            eventData.ext_34 ?? '',
+            eventData.ext_35 ?? '',
+            eventData.ext_36 ?? '',
+          ],
+        },
+      ];
+        
+      return {
+        eventData,
+        open,
+        $formatDate,
+        $getYTVideoUrl,
+        MEDIA_TYPE,
+        contactInfos,
+      }
     },
     computed: {
         getAllMedia() {
             const mediaArr = [];
             
-            mediaArr.push({
-              url: this.eventData.ext_16?.url,
-              type: MEDIA_TYPE.IMAGE
-            })
+        mediaArr.push({
+          url: this.eventData.ext_16?.url,
+          type: MEDIA_TYPE.IMAGE
+        })
           
         mediaArr.push({
           url:this.eventData.ext_13?.url.split("v=")[1],
@@ -152,7 +196,8 @@ export default {
                               <img v-if="media.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="media.url" alt="Temple" />
                               <div v-else-if="media.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
                                 <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$getYTVideoUrl(media.url, 'mute=0&modestbranding=1&autoplay=1')"></iframe>
-                              </div>                            </TabPanel>
+                              </div>                            
+                            </TabPanel>
                         </TabPanels>
                     </TabGroup>
 
@@ -231,34 +276,11 @@ export default {
                                     </h3>
                                     <DisclosurePanel as="div" class="pb-6 prose prose-sm">
                                         <div class="grid grid-cols-2">
-                                            <ContactInfo
-                                                    :name="eventData.ext_17"
-                                                    :designation="eventData.ext_18"
-                                                    :firstContact="eventData.ext_19"
-                                                    :secondContact="eventData.ext_20"
-                                                    :thirdContact="eventData.ext_21"
-                                            />
-                                            <ContactInfo
-                                                    :name="eventData.ext_22"
-                                                    :designation="eventData.ext_23"
-                                                    :firstContact="eventData.ext_24"
-                                                    :secondContact="eventData.ext_25"
-                                                    :thirdContact="eventData.ext_26"
-                                            />
-                                            <ContactInfo
-                                                    :name="eventData.ext_27"
-                                                    :designation="eventData.ext_28"
-                                                    :firstContact="eventData.ext_29"
-                                                    :secondContact="eventData.ext_30"
-                                                    :thirdContact="eventData.ext_31"
-                                            />
-                                            <ContactInfo
-                                                    :name="eventData.ext_32"
-                                                    :designation="eventData.ext_33"
-                                                    :firstContact="eventData.ext_34"
-                                                    :secondContact="eventData.ext_35"
-                                                    :thirdContact="eventData.ext_36"
-                                            />
+                                          <ContactInfo
+                                              v-for="info in contactInfos"
+                                              :key="info.id"
+                                              :contact-info="info"
+                                          />
                                         </div>
                                     </DisclosurePanel>
                                 </Disclosure>
