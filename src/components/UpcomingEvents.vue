@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div v-show="$route.path === '/'" class="relative">
     <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
       aria-hidden="true">
       <div
@@ -11,15 +11,16 @@
       <h2 class="text-base font-semibold tracking-wider text-indigo-600">Be Part of the Tradition</h2>
     </div>
     <div class="flex items-center justify-center space-x-4">
-      <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">Upcoming Events</p>
+      <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-3xl">Upcoming Events</p>
     </div>
     <div class="flex items-center justify-end space-x-4">
-      <a href="/events" class="whitespace-nowrap text-sm font-medium text-indigo-600 hover:text-indigo-500">View
+      <NuxtLink :to="`events` " class="whitespace-nowrap text-sm font-medium text-indigo-600 hover:text-indigo-500">View
         all<span aria-hidden="true">
           <ArrowRightIcon class="h-5 w-5 inline-block -mt-1" aria-hidden="true" />
-        </span></a>
+        </span>
+      </NuxtLink>
     </div>
-    <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
+    <div class="w-full mt-6 grid grid-cols-1 gap-x-8 gap-y-8 justify-items-center sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
       <div v-for="event in upcomingEventData" :key="event.id" class="relative group">
         <NuxtLink :to="`event${event.topics_id}`" class="cursor-pointer">
           <div class="w-full aspect-h-3 rounded bg-gray-100">
@@ -29,7 +30,7 @@
               allowfullscreen v-on:mouseover="playVideo" v-on:mouseleave="stopVideo" :data-uid='getYTUID(event)'
               :style='`background-image: url("${getYoutubeImage(event)}");`'></iframe>
           </div>
-          <div class="mt-4 flex  text-left justify-between text-base font-medium text-gray-900 space-x-8 mb-1">
+          <div class="max-w-18 break-words mt-4 flex  text-left justify-between text-base font-medium text-gray-900 space-x-8 mb-1">
             <h3>
               <span aria-hidden="true" />
               {{ event.subject }}

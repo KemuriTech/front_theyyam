@@ -19,7 +19,7 @@
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
-              <a v-for="item in navigation" :key="item.name" :href="item.href" :class="['text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
+              <NuxtLink v-for="item in navigation" :key="item.name" :href="item.href" :class="['text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</NuxtLink>
             </div>
           </div>
         </div>
