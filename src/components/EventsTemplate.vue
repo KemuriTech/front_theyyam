@@ -44,7 +44,8 @@ import { AisInstantSearch, AisSearchBox, AisInfiniteHits, AisConfigure } from 'v
 import { createWidgetMixin } from 'vue-instantsearch/vue3/es';
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+
 
 const algolia = useAlgoliaRef()
 
@@ -68,12 +69,21 @@ const stopVideo = (event) => {
   event.target?.setAttribute('src', '');
 }
 
-const route = useRoute();
+const router = useRouter();
+
+const previousPath = ref('');
+
+router.beforeEach((to, from) => {
+  previousPath.value = from.path;
+});
 
 const getFilters = computed(() => {
   const todayTimeStamp = Math.round(+new Date() / 1000);
-  if (route.path === '/pastevents') {
+  if (router.currentRoute.value.path === '/pastevents' || previousPath.value ==='/pastevents') {
     return `'end_dt_timestamp(Additional items)' < ${todayTimeStamp}`;
+  }
+  if (router.currentRoute.value.path === '/events'  || previousPath.value ==='/events') {
+    return `'end_dt_timestamp(Additional items)' > ${todayTimeStamp}`;
   }
 });
 
