@@ -69,7 +69,7 @@ export default {
     },
 
     getYoutubeImage(item) {
-      return `https://img.youtube.com/vi/${this.getYTUID(item)}/0.jpg`;
+      return item.ext_16.url;
     },
 
     stopVideo(event) {

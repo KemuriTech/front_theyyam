@@ -38,7 +38,6 @@
     </ais-instant-search>
   </div>
 </template>
-
 <script setup>
 import { AisInstantSearch, AisSearchBox, AisInfiniteHits, AisConfigure } from 'vue-instantsearch/vue3/es/index.js'
 import { createWidgetMixin } from 'vue-instantsearch/vue3/es';
@@ -61,7 +60,7 @@ const playVideo = (event) => {
 }
 
 const getYoutubeImage = (item) => {
-  return `https://img.youtube.com/vi/${JSON.parse(item["videos_path_1(Additional items)"])["url"].split("v=")[1]}/0.jpg`;
+  return JSON.parse(item['photos_path(Additional items)'])['url'];
 };
 
 const stopVideo = (event) => {
@@ -79,7 +78,7 @@ const getFilters = computed(() => {
 
 </script>
 
-<style scoped>
+<style>
 .ais-InfiniteHits-item {
   border: none;
   box-shadow: none;
