@@ -65,12 +65,12 @@ export default {
         UserIcon,
     },
     async setup() {
-        const { $formatDate, $getYTVideoUrl } = useNuxtApp()
+        const { $formatter, $ytVideo, $api } = useNuxtApp()
         const { params } = useRoute();
         let eventData = {};
-        await fetch(`https://theyyam.g.kuroco.app/rcms-api/1/event/${params.id}`, {
-            method: 'GET',
-        }).then(response => response.json())
+
+        await $api.occasion.show(params.id)
+            .then(response => response.json())
             .then(response => {
                 eventData = response.details
             })
@@ -116,12 +116,12 @@ export default {
           ],
         },
       ];
-        
+
       return {
         eventData,
         open,
-        $formatDate,
-        $getYTVideoUrl,
+        $formatter,
+        $ytVideo,
         MEDIA_TYPE,
         contactInfos,
       }
@@ -129,24 +129,24 @@ export default {
     computed: {
         getAllMedia() {
             const mediaArr = [];
-            
+
         mediaArr.push({
           url: this.eventData.ext_16?.url,
           type: MEDIA_TYPE.IMAGE
         })
-          
+
         mediaArr.push({
-          url:this.eventData.ext_13?.url.split("v=")[1],
+          url:this.eventData.ext_13?.url?.split("v=")[1],
           type: MEDIA_TYPE.YT_VIDEO
         })
-          
+
         mediaArr.push({
-          url:this.eventData.ext_14?.url.split("v=")[1],
+          url:this.eventData.ext_14?.url?.split("v=")[1],
           type: MEDIA_TYPE.YT_VIDEO
         })
-          
+
         mediaArr.push({
-          url:this.eventData.ext_15?.url.split("v=")[1],
+          url:this.eventData.ext_15?.url?.split("v=")[1],
           type: MEDIA_TYPE.YT_VIDEO
         })
 
@@ -195,8 +195,8 @@ export default {
                             <TabPanel v-for="(media, id) in getAllMedia" :key="id">
                               <img v-if="media.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="media.url" alt="Temple" />
                               <div v-else-if="media.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
-                                <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$getYTVideoUrl(media.url, 'mute=0&modestbranding=1&autoplay=1')"></iframe>
-                              </div>                            
+                                <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$ytVideo.getYTVideoUrl(media.url, 'mute=0&modestbranding=1&autoplay=1')"></iframe>
+                              </div>
                             </TabPanel>
                         </TabPanels>
                     </TabGroup>
@@ -207,7 +207,7 @@ export default {
 
                         <div class="mt-3">
                             <h2 class="sr-only">Details</h2>
-                            <p class="text-lg	text-gray-700">{{$formatDate(eventData.ext_4, eventData.ext_5)}}</p>
+                            <p class="text-lg	text-gray-700">{{$formatter.formatDate(eventData.ext_4, eventData.ext_5)}}</p>
                             <p class="text-lg text-gray-700">{{ eventData.ext_7 }}</p>
                         </div>
 
