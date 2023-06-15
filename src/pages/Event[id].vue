@@ -80,22 +80,8 @@ export default {
                     url: eventData.ext_16.url,
                     type: MEDIA_TYPE.IMAGE
                 })
-                const _getAllYTUIDs = () => {
-                    return [
-                        $ytVideo.youtubeParser(eventData.ext_13?.url),
-                        $ytVideo.youtubeParser(eventData.ext_14?.url),
-                        $ytVideo.youtubeParser(eventData.ext_15?.url)
-                    ]
-                }
-                $ytVideo.getValidUID(() => _getAllYTUIDs())
-                    .then(ids => {
-                        _mediaArr.push(...ids.map((e, i) => ({
-                            url: e,
-                            type: MEDIA_TYPE.YT_VIDEO
-                        })))
 
-                        mediaArr.value = _mediaArr;
-                    })
+                mediaArr.value = _mediaArr;
             });
       const contactInfos = [
         {
@@ -149,6 +135,25 @@ export default {
         contactInfos,
         mediaArr
       }
+    },
+    mounted() {
+        const _mediaArr = this.mediaArr;
+        const _getAllYTUIDs = () => {
+            return [
+                this.$ytVideo.youtubeParser(this.eventData.ext_13?.url),
+                this.$ytVideo.youtubeParser(this.eventData.ext_14?.url),
+                this.$ytVideo.youtubeParser(this.eventData.ext_15?.url)
+            ]
+        }
+        this.$ytVideo.getValidUID(() => _getAllYTUIDs())
+            .then(ids => {
+                _mediaArr.push(...ids.map((e, i) => ({
+                    url: e,
+                    type: MEDIA_TYPE.YT_VIDEO
+                })))
+
+                this.mediaArr.value = _mediaArr;
+            })
     },
     methods: {
         getImage({type, url}) {
