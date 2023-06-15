@@ -3,7 +3,7 @@
     <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
       aria-hidden="true">
       <div
-        class="bg-clip-left relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-customPink to-customPurple opacity-30 sm:left-[10rem] sm:w-[72.1875rem]" />
+        class="bg-clip-left relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary to-secondary opacity-30 sm:left-[10rem] sm:w-[72.1875rem]" />
     </div>
   </div>
   <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -14,7 +14,7 @@
       <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-3xl">Upcoming Events</p>
     </div>
     <div class="flex items-center justify-end space-x-4">
-      <NuxtLink :to="`events` " class="whitespace-nowrap text-sm font-medium text-indigo-600 hover:text-indigo-500">View
+      <NuxtLink :to="`events`" class="whitespace-nowrap text-sm font-medium text-indigo-600 hover:text-indigo-500">View
         all<span aria-hidden="true">
           <ArrowRightIcon class="h-5 w-5 inline-block -mt-1" aria-hidden="true" />
         </span>
@@ -30,7 +30,7 @@
               allowfullscreen v-on:mouseover="playVideo" v-on:mouseleave="stopVideo" :data-uid='getYTUID(event)'
               :style='`background-image: url("${getYoutubeImage(event)}");`'></iframe>
           </div>
-          <div class="max-w-18 break-words mt-4 flex  text-left justify-between text-base font-medium text-gray-900 space-x-8 mb-1">
+          <div class="max-w-18 break-words mt-4 flex text-left justify-between text-base font-medium text-gray-900 space-x-8 mb-1">
             <h3>
               <span aria-hidden="true" />
               {{ event.subject }}
@@ -63,23 +63,23 @@ export default {
     return { upcomingEventData, $formatter };
   },
   methods: {
-    playVideo(event) {
+    playVideo: (event) => {
       const _target = event.target;
 
       _target.setAttribute('src', 'https://www.youtube.com/embed/' + _target.getAttribute('data-uid') + '?autoplay=1&mute=1&controls=0')
     },
 
-    getYoutubeImage(item) {
-      return item.ext_16.url;
+    getYoutubeImage: (item) => {
+      return item.ext_16?.url;
     },
 
-    stopVideo(event) {
+    stopVideo: (event) => {
       const _target = event.target;
 
       _target.setAttribute('src', '');
     },
 
-    isAnyYTVideo(item) {
+    isAnyYTVideo: (item) => {
       if (item?.ext_13?.url || item?.ext_14?.url || item?.ext_15?.url || item?.ext_16?.url) return true;
       return false;
     },

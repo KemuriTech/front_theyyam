@@ -46,7 +46,6 @@ import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
-
 const algolia = useAlgoliaRef()
 const router = useRouter();
 const previousPath = ref('');
