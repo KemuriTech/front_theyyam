@@ -169,13 +169,11 @@ export default {
 </script>
 
 <template>
-  <div class="relative">
-    <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
-         aria-hidden="true">
-      <div
-          class="bg-clip-left relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-customPink to-customPurple opacity-30 sm:left-[10rem] sm:w-[72.1875rem]" />
+    <div class="relative">
+        <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
+           <div class="bg-clip-left relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-customPink to-customPurple opacity-30 sm:left-[10rem] sm:w-[72.1875rem]"/>
+        </div>
     </div>
-  </div>
         <main class="max-w-7xl mx-auto sm:pt-16 sm:px-6 lg:px-8">
             <div class="max-w-2xl mx-auto lg:max-w-none">
                 <!-- Product -->

@@ -74,15 +74,15 @@ const router = useRouter();
 const previousPath = ref('');
 
 router.beforeEach((to, from) => {
-  previousPath.value = from.path;
+  previousPath.value = from.name;
 });
 
 const getFilters = computed(() => {
   const todayTimeStamp = Math.round(+new Date() / 1000);
-  if (router.currentRoute.value.path === '/pastevents' || previousPath.value ==='/pastevents') {
+  if (router.currentRoute.value.name === 'Pastevents' || previousPath.value ==='Pastevents') {
     return `'end_dt_timestamp(Additional items)' < ${todayTimeStamp}`;
   }
-  if (router.currentRoute.value.path === '/events'  || previousPath.value ==='/events') {
+  if (router.currentRoute.value.name === 'Events'  || previousPath.value ==='Events') {
     return `'end_dt_timestamp(Additional items)' > ${todayTimeStamp}`;
   }
 });
