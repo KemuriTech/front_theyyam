@@ -29,7 +29,7 @@
               </h3>
             </div>
             <p class="mt-1 text-sm text-gray-500 flex items-center space-x-2">
-              <span class="mr-1">{{ $formatDate(item["start_dt(Additional items)"], item["end_dt(Additional items)"])
+              <span class="mr-1">{{ $formatter.formatDate(item["start_dt(Additional items)"], item["end_dt(Additional items)"])
               }}</span>
             </p>
           </NuxtLink>

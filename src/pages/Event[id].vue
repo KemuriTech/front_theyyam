@@ -65,15 +65,38 @@ export default {
         UserIcon,
     },
     async setup() {
-        const { $formatDate, $getYTVideoUrl } = useNuxtApp()
+        const { $formatter, $ytVideo, $api } = useNuxtApp()
         const { params } = useRoute();
         let eventData = {};
-        await fetch(`https://theyyam.g.kuroco.app/rcms-api/1/event/${params.id}`, {
-            method: 'GET',
-        }).then(response => response.json())
+        const mediaArr = useState('mediaArr', () => ([]));
+
+        await $api.occasion.show(params.id)
+            .then(response => response.json())
             .then(response => {
-                eventData = response.details
-            })
+                eventData = response.details;
+                let _mediaArr = [];
+
+                _mediaArr.push({
+                    url: eventData.ext_16.url,
+                    type: MEDIA_TYPE.IMAGE
+                })
+                const _getAllYTUIDs = () => {
+                    return [
+                        $ytVideo.youtubeParser(eventData.ext_13?.url),
+                        $ytVideo.youtubeParser(eventData.ext_14?.url),
+                        $ytVideo.youtubeParser(eventData.ext_15?.url)
+                    ]
+                }
+                $ytVideo.getValidUID(() => _getAllYTUIDs())
+                    .then(ids => {
+                        _mediaArr.push(...ids.map((e, i) => ({
+                            url: e,
+                            type: MEDIA_TYPE.YT_VIDEO
+                        })))
+
+                        mediaArr.value = _mediaArr;
+                    })
+            });
       const contactInfos = [
         {
           id: 1,
@@ -116,42 +139,16 @@ export default {
           ],
         },
       ];
-        
+
       return {
         eventData,
         open,
-        $formatDate,
-        $getYTVideoUrl,
+        $formatter,
+        $ytVideo,
         MEDIA_TYPE,
         contactInfos,
+        mediaArr
       }
-    },
-    computed: {
-        getAllMedia() {
-            const mediaArr = [];
-            
-        mediaArr.push({
-          url: this.eventData.ext_16?.url,
-          type: MEDIA_TYPE.IMAGE
-        })
-          
-        mediaArr.push({
-          url:this.eventData.ext_13?.url.split("v=")[1],
-          type: MEDIA_TYPE.YT_VIDEO
-        })
-          
-        mediaArr.push({
-          url:this.eventData.ext_14?.url.split("v=")[1],
-          type: MEDIA_TYPE.YT_VIDEO
-        })
-          
-        mediaArr.push({
-          url:this.eventData.ext_15?.url.split("v=")[1],
-          type: MEDIA_TYPE.YT_VIDEO
-        })
-
-            return mediaArr;
-        }
     },
     methods: {
         getImage({type, url}) {
@@ -179,11 +176,11 @@ export default {
                 <!-- Product -->
                 <div class="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
                     <!-- Image gallery -->
-                    <TabGroup as="div" class="flex flex-col-reverse">
+                    <TabGroup v-if="mediaArr.length" as="div" class="flex flex-col-reverse">
                         <!-- Image selector -->
                         <div class="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                             <TabList class="grid grid-cols-4 gap-6">
-                                <Tab v-for="(media, id) in getAllMedia" :key="id" class="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50" v-slot="{ selected }">
+                                <Tab v-for="(media, id) in mediaArr" :key="id" class="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50" v-slot="{ selected }">
                                   <span class="sr-only">
                                     {{ media.type }}
                                   </span>
@@ -194,13 +191,12 @@ export default {
                                 </Tab>
                             </TabList>
                         </div>
-
-                        <TabPanels class="w-full aspect-w-1 aspect-h-1">
-                            <TabPanel v-for="(media, id) in getAllMedia" :key="id">
-                              <img v-if="media.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="media.url" alt="Temple" />
-                              <div v-else-if="media.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
-                                <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$getYTVideoUrl(media.url, 'mute=0&modestbranding=1&autoplay=1')"></iframe>
-                              </div>                            
+                        <TabPanels class="w-full aspect-w-1 aspect-h-1" >
+                            <TabPanel v-for="(media, id) in mediaArr" :key="id">
+                                <img v-if="media.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="media.url" alt="Temple" />
+                                <div v-else-if="media.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
+                                    <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$ytVideo.getYTVideoUrl(media.url, 'mute=0&modestbranding=1&autoplay=1')"></iframe>
+                                </div>
                             </TabPanel>
                         </TabPanels>
                     </TabGroup>
@@ -211,7 +207,7 @@ export default {
 
                         <div class="mt-3">
                             <h2 class="sr-only">Details</h2>
-                            <p class="text-lg	text-gray-700">{{$formatDate(eventData.ext_4, eventData.ext_5)}}</p>
+                            <p class="text-lg	text-gray-700">{{$formatter.formatDate(eventData.ext_4, eventData.ext_5)}}</p>
                             <p class="text-lg text-gray-700">{{ eventData.ext_7 }}</p>
                         </div>
 

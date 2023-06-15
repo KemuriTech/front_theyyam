@@ -37,7 +37,7 @@
             </h3>
           </div>
           <p class="mt-1 text-sm text-gray-500 flex items-center space-x-2">
-            <span class="mr-1">{{ $formatDate(event.ext_4, event.ext_5) }}</span>
+            <span class="mr-1">{{ $formatter.formatDate(event.ext_4, event.ext_5) }}</span>
           </p>
         </NuxtLink>
       </div>
@@ -51,7 +51,7 @@ export default {
   async setup() {
 
     let upcomingEventData = {};
-    let { $formatDate } = useNuxtApp();
+    let { $formatter } = useNuxtApp();
 
     await fetch(`https://theyyam.g.kuroco.app/rcms-api/1/latest-event?cnt=4`, {
       method: 'GET',
@@ -60,7 +60,7 @@ export default {
         upcomingEventData = response.list;
       });
 
-    return { upcomingEventData, $formatDate };
+    return { upcomingEventData, $formatter };
   },
   methods: {
     playVideo(event) {

@@ -52,6 +52,13 @@ const agreed = ref(false)
 
 export default {
     name: 'ContactUs',
+    setup() {
+        const { $spi } = useNuxtApp();
+
+        return {
+            $spi
+        }
+    },
     data() {
         return {
             form: {
@@ -75,33 +82,34 @@ export default {
             const _successMessage = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam beatae dolorem molestiae sunt suscipit tempore.";
             this.formResponse.isResponse = false;
 
-            const { data, pending, error, refresh } = await useFetch('https://theyyam.g.kuroco.app/rcms-api/1/contact-us', {
-                method: 'post',
-                body: {
+            await this.$api.contact.post({
                 name: this.form.name,
                 email: this.form.email,
                 body: this.form.message,
-                },
-            });
+            })
+                .then(async res => {
+                    let message = [];
+                    let type;
 
-            let message = [];
-            let type = '';
-
-            if(error.value) {
-                type = 'danger';
-
-                if (error.value?.data?.errors)
-                    message.push(...error.value.data.errors.map((e,i) => e.message));
-                else
+                    if(!res.ok) {
+                        type = 'danger';
+                        await res.text().then(text =>  JSON.parse(text).errors.map(e=>message.push(e.message)));
+                    }
+                    else {
+                        type = 'success';
+                        message = [_successMessage];
+                    }
+                    this.setResponse(type, message)
+                })
+                .catch(err => {
+                    const message = [];
                     message.push('Something went wrong! Please try again...');
 
-            } else {
-                type = 'success';
-                message = [_successMessage];
-            }
-
-            this.setResponse(type, message);
-            this.formResponse.isProcessing = false;
+                    this.setResponse('danger', message)
+                })
+                .finally(res => {
+                    this.formResponse.isProcessing = false;
+                });
         },
         setResponse(type, message) {
             this.formResponse.type = type;

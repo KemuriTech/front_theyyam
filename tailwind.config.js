@@ -6,6 +6,8 @@ module.exports = {
       colors: {
         customPink: '#ff80b5',
         customPurple: '#9089fc',
+        primary: '#dc2626', // red-600
+        secondary: '#eab308', // yellow-500
       },
     },
   },
