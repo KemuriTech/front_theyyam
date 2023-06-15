@@ -48,6 +48,8 @@ import { useRouter } from 'vue-router';
 
 
 const algolia = useAlgoliaRef()
+const router = useRouter();
+const previousPath = ref('');
 
 createWidgetMixin({ connector: connectInfiniteHits })
 
@@ -68,10 +70,6 @@ const getYoutubeImage = (item) => {
 const stopVideo = (event) => {
   event.target?.setAttribute('src', '');
 }
-
-const router = useRouter();
-
-const previousPath = ref('');
 
 router.beforeEach((to, from) => {
   previousPath.value = from.name;

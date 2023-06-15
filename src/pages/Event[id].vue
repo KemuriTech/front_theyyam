@@ -1,170 +1,3 @@
-<script>
-import { useRoute } from "vue-router";
-
-import { ref } from 'vue'
-import {
-    Dialog,
-    DialogOverlay,
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    Popover,
-    PopoverButton,
-    PopoverGroup,
-    PopoverPanel,
-    RadioGroup,
-    RadioGroupLabel,
-    RadioGroupOption,
-    Tab,
-    TabGroup,
-    TabList,
-    TabPanel,
-    TabPanels,
-    TransitionChild,
-    TransitionRoot,
-} from '@headlessui/vue'
-import {
-    UserIcon,
-    StarIcon
-} from '@heroicons/vue/20/solid';
-
-import {MinusIcon, PlusIcon} from "@heroicons/vue/20/solid";
-
-
-const MEDIA_TYPE = {
-    IMAGE: 'IMAGE',
-    YT_VIDEO: 'YT_VIDEO',
-}
-
-const open = ref(false)
-
-export default {
-    components: {
-        Dialog,
-        DialogOverlay,
-        Disclosure,
-        DisclosureButton,
-        DisclosurePanel,
-        Popover,
-        PopoverButton,
-        PopoverGroup,
-        PopoverPanel,
-        RadioGroup,
-        RadioGroupLabel,
-        RadioGroupOption,
-        Tab,
-        TabGroup,
-        TabList,
-        TabPanel,
-        TabPanels,
-        TransitionChild,
-        TransitionRoot,
-        MinusIcon,
-        PlusIcon,
-        StarIcon,
-        UserIcon,
-    },
-    async setup() {
-        const { $formatter, $ytVideo, $api } = useNuxtApp()
-        const { params } = useRoute();
-        let eventData = {};
-        const mediaArr = useState('mediaArr', () => ([]));
-
-        await $api.occasion.show(params.id)
-            .then(response => response.json())
-            .then(response => {
-                eventData = response.details;
-                let _mediaArr = [];
-
-                _mediaArr.push({
-                    url: eventData.ext_16.url,
-                    type: MEDIA_TYPE.IMAGE
-                })
-                const _getAllYTUIDs = () => {
-                    return [
-                        $ytVideo.youtubeParser(eventData.ext_13?.url),
-                        $ytVideo.youtubeParser(eventData.ext_14?.url),
-                        $ytVideo.youtubeParser(eventData.ext_15?.url)
-                    ]
-                }
-                $ytVideo.getValidUID(() => _getAllYTUIDs())
-                    .then(ids => {
-                        _mediaArr.push(...ids.map((e, i) => ({
-                            url: e,
-                            type: MEDIA_TYPE.YT_VIDEO
-                        })))
-
-                        mediaArr.value = _mediaArr;
-                    })
-            });
-      const contactInfos = [
-        {
-          id: 1,
-          name: eventData.ext_17 ?? '',
-          designation: eventData.ext_18 ?? '',
-          contacts: [
-            eventData.ext_19 ?? '',
-            eventData.ext_20 ?? '',
-            eventData.ext_21 ?? '',
-          ],
-        },
-        {
-          id: 2,
-          name: eventData.ext_22 ?? '',
-          designation: eventData.ext_23 ?? '',
-          contacts: [
-            eventData.ext_24 ?? '',
-            eventData.ext_25 ?? '',
-            eventData.ext_26 ?? '',
-          ],
-        },
-        {
-          id: 3,
-          name: eventData.ext_27 ?? '',
-          designation: eventData.ext_28 ?? '',
-          contacts: [
-            eventData.ext_29 ?? '',
-            eventData.ext_30 ?? '',
-            eventData.ext_31 ?? '',
-          ],
-        },
-        {
-          id: 4,
-          name: eventData.ext_32 ?? '',
-          designation: eventData.ext_33 ?? '',
-          contacts: [
-            eventData.ext_34 ?? '',
-            eventData.ext_35 ?? '',
-            eventData.ext_36 ?? '',
-          ],
-        },
-      ];
-
-      return {
-        eventData,
-        open,
-        $formatter,
-        $ytVideo,
-        MEDIA_TYPE,
-        contactInfos,
-        mediaArr
-      }
-    },
-    methods: {
-        getImage({type, url}) {
-            switch (type) {
-                case MEDIA_TYPE.IMAGE:
-                    return url;
-                case MEDIA_TYPE.YT_VIDEO:
-                    return `https://img.youtube.com/vi/${url}/0.jpg`;
-            }
-        },
-    }
-}
-
-
-</script>
-
 <template>
     <div class="relative">
         <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
@@ -292,3 +125,173 @@ export default {
         </main>
   <UpcomingEvents />
 </template>
+
+<script>
+import { useRoute } from "vue-router";
+
+import { ref } from 'vue'
+import {
+  Dialog,
+  DialogOverlay,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Popover,
+  PopoverButton,
+  PopoverGroup,
+  PopoverPanel,
+  RadioGroup,
+  RadioGroupLabel,
+  RadioGroupOption,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+  TransitionChild,
+  TransitionRoot,
+} from '@headlessui/vue'
+import {
+  UserIcon,
+  StarIcon
+} from '@heroicons/vue/20/solid';
+
+import {MinusIcon, PlusIcon} from "@heroicons/vue/20/solid";
+
+
+const MEDIA_TYPE = {
+  IMAGE: 'IMAGE',
+  YT_VIDEO: 'YT_VIDEO',
+}
+
+const open = ref(false)
+
+export default {
+  components: {
+    Dialog,
+    DialogOverlay,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    Popover,
+    PopoverButton,
+    PopoverGroup,
+    PopoverPanel,
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+    TransitionChild,
+    TransitionRoot,
+    MinusIcon,
+    PlusIcon,
+    StarIcon,
+    UserIcon,
+  },
+  async setup() {
+    const { $formatDate, $getYTVideoUrl } = useNuxtApp()
+    const { params } = useRoute();
+    let eventData = {};
+    await fetch(`https://theyyam.g.kuroco.app/rcms-api/1/event/${params.id}`, {
+      method: 'GET',
+    }).then(response => response.json())
+        .then(response => {
+          eventData = response.details
+        })
+    const contactInfos = [
+      {
+        id: 1,
+        name: eventData.ext_17 ?? '',
+        designation: eventData.ext_18 ?? '',
+        contacts: [
+          eventData.ext_19 ?? '',
+          eventData.ext_20 ?? '',
+          eventData.ext_21 ?? '',
+        ],
+      },
+      {
+        id: 2,
+        name: eventData.ext_22 ?? '',
+        designation: eventData.ext_23 ?? '',
+        contacts: [
+          eventData.ext_24 ?? '',
+          eventData.ext_25 ?? '',
+          eventData.ext_26 ?? '',
+        ],
+      },
+      {
+        id: 3,
+        name: eventData.ext_27 ?? '',
+        designation: eventData.ext_28 ?? '',
+        contacts: [
+          eventData.ext_29 ?? '',
+          eventData.ext_30 ?? '',
+          eventData.ext_31 ?? '',
+        ],
+      },
+      {
+        id: 4,
+        name: eventData.ext_32 ?? '',
+        designation: eventData.ext_33 ?? '',
+        contacts: [
+          eventData.ext_34 ?? '',
+          eventData.ext_35 ?? '',
+          eventData.ext_36 ?? '',
+        ],
+      },
+    ];
+
+    return {
+      eventData,
+      open,
+      $formatDate,
+      $getYTVideoUrl,
+      MEDIA_TYPE,
+      contactInfos,
+    }
+  },
+  computed: {
+    getAllMedia() {
+      const mediaArr = [];
+
+      mediaArr.push({
+        url: this.eventData.ext_16?.url,
+        type: MEDIA_TYPE.IMAGE
+      })
+
+      mediaArr.push({
+        url:this.eventData.ext_13?.url.split("v=")[1],
+        type: MEDIA_TYPE.YT_VIDEO
+      })
+
+      mediaArr.push({
+        url:this.eventData.ext_14?.url.split("v=")[1],
+        type: MEDIA_TYPE.YT_VIDEO
+      })
+
+      mediaArr.push({
+        url:this.eventData.ext_15?.url.split("v=")[1],
+        type: MEDIA_TYPE.YT_VIDEO
+      })
+
+      return mediaArr;
+    }
+  },
+  methods: {
+    getImage({type, url}) {
+      switch (type) {
+        case MEDIA_TYPE.IMAGE:
+          return url;
+        case MEDIA_TYPE.YT_VIDEO:
+          return `https://img.youtube.com/vi/${url}/0.jpg`;
+      }
+    },
+  }
+}
+
+
+</script>
