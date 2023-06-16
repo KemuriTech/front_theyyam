@@ -44,9 +44,11 @@ import { AisInstantSearch, AisSearchBox, AisInfiniteHits, AisConfigure } from 'v
 import { createWidgetMixin } from 'vue-instantsearch/vue3/es';
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 const algolia = useAlgoliaRef()
+const router = useRouter();
+const previousPath = ref('');
 
 createWidgetMixin({ connector: connectInfiniteHits })
 
@@ -61,25 +63,30 @@ const playVideo = (event) => {
 }
 
 const getYoutubeImage = (item) => {
-  return `https://img.youtube.com/vi/${JSON.parse(item["videos_path_1(Additional items)"])["url"].split("v=")[1]}/0.jpg`;
+  return JSON.parse(item['photos_path(Additional items)'])['url'];
 };
 
 const stopVideo = (event) => {
   event.target?.setAttribute('src', '');
 }
 
-const route = useRoute();
+router.beforeEach((to, from) => {
+  previousPath.value = from.name;
+});
 
 const getFilters = computed(() => {
   const todayTimeStamp = Math.round(+new Date() / 1000);
-  if (route.path === '/pastevents') {
+  if (router.currentRoute.value.name === 'Pastevents' || previousPath.value ==='Pastevents') {
     return `'end_dt_timestamp(Additional items)' < ${todayTimeStamp}`;
+  }
+  if (router.currentRoute.value.name === 'Events'  || previousPath.value ==='Events') {
+    return `'end_dt_timestamp(Additional items)' > ${todayTimeStamp}`;
   }
 });
 
 </script>
 
-<style scoped>
+<style>
 .ais-InfiniteHits-item {
   border: none;
   box-shadow: none;
