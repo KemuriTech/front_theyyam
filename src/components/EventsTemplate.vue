@@ -1,11 +1,5 @@
 <template>
-  <div class="relative">
-    <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
-      aria-hidden="true">
-      <div
-        class="bg-clip-left relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-customPink to-customPurple opacity-30 sm:left-[10rem] sm:w-[72.1875rem]" />
-    </div>
-  </div>
+<BgGradient />
   <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:pt-12 sm:px-6 lg:max-w-7xl lg:px-8">
     <ais-instant-search :index-name="'events'" :search-client="algolia">
       <ais-configure :filters="getFilters" />
@@ -44,11 +38,9 @@ import { AisInstantSearch, AisSearchBox, AisInfiniteHits, AisConfigure } from 'v
 import { createWidgetMixin } from 'vue-instantsearch/vue3/es';
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 import { computed } from 'vue';
-import { useRouter } from 'vue-router';
 
 const algolia = useAlgoliaRef()
-const router = useRouter();
-const previousPath = ref('');
+const props = defineProps(['mode']);
 
 createWidgetMixin({ connector: connectInfiniteHits })
 
@@ -70,18 +62,13 @@ const stopVideo = (event) => {
   event.target?.setAttribute('src', '');
 }
 
-router.beforeEach((to, from) => {
-  previousPath.value = from.name;
-});
-
 const getFilters = computed(() => {
   const todayTimeStamp = Math.round(+new Date() / 1000);
-  if (router.currentRoute.value.name === 'Pastevents' || previousPath.value ==='Pastevents') {
-    return `'end_dt_timestamp(Additional items)' < ${todayTimeStamp}`;
-  }
-  if (router.currentRoute.value.name === 'Events'  || previousPath.value ==='Events') {
-    return `'end_dt_timestamp(Additional items)' > ${todayTimeStamp}`;
-  }
+  return props.mode === 'pastevents'
+      ? `'end_dt_timestamp(Additional items)' < ${todayTimeStamp}`
+      : props.mode === 'events'
+          ? `'end_dt_timestamp(Additional items)' > ${todayTimeStamp}`
+          : null;
 });
 
 </script>

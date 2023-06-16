@@ -1,5 +1,5 @@
 <template>
-    <Popover class="relative backdrop-blur-sm bg-white/30 z-50">
+    <Popover class="relative backdrop-blur-sm z-50">
         <div class="flex justify-between items-center px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
             <div class="flex justify-start lg:w-0 lg:flex-1">
                 <NuxtLink to="/"

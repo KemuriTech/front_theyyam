@@ -1,3 +1,3 @@
 <template>
-  <EventsTemplate />
+  <EventsTemplate :mode="'pastevents'"/>
 </template>

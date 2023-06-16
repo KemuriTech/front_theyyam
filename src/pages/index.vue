@@ -92,7 +92,7 @@ const eventImg = 'land6.jpg';
                 </div>
             </div>
             <div class="relative">
-                <div class="absolute rounded-full bg-fuchsia-200 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob -z-10 top-5 -left-20"></div>
+                <div class="absolute rounded-full bg-secondary w-72 h-72 mix-blend-multiply filter blur-xl opacity-50 animate-blob -z-10 top-5 -left-20"></div>
             </div>
         </div>
     </section>
@@ -125,7 +125,7 @@ const eventImg = 'land6.jpg';
     <UpcomingEvents/>
         <div class="relative">
           <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
-            <div class="bg-clip-right relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[45deg] bg-gradient-to-tr from-customPink to-customPurple opacity-30 sm:left-[100rem] sm:w-[72.1875rem]" />
+            <div class="bg-clip-right relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[45deg] bg-gradient-to-tr from-primary to-secondary opacity-50 sm:left-[100rem] sm:w-[72.1875rem]" />
           </div>
         </div>
         <div class="mx-auto max-w-md px-4 text-center sm:px-6 sm:max-w-3xl lg:px-8 lg:max-w-7xl">
