@@ -28,7 +28,7 @@
                             <TabPanel v-for="(media, id) in mediaArr" :key="id">
                                 <img v-if="media.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="media.url" alt="Temple" />
                                 <div v-else-if="media.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
-                                    <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen :src="$ytVideo.getYTVideoUrl(media.url, 'mute=0&modestbranding=1&autoplay=1')"></iframe>
+                                    <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" allowfullscreen :src="$ytVideo.getYTVideoUrl(media.url, 'mute=1&modestbranding=1&autoplay=1')"></iframe>
                                 </div>
                             </TabPanel>
                         </TabPanels>
