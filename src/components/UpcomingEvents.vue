@@ -14,7 +14,7 @@
       <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-3xl">Upcoming Events</p>
     </div>
     <div class="flex items-center justify-end space-x-4">
-      <NuxtLink :to="`events`" class="whitespace-nowrap text-sm font-medium text-secondary text-secondary">View
+      <NuxtLink :to="`events`" class="whitespace-nowrap text-sm font-medium text-secondary hover:text-opacity-80">View
         all<span aria-hidden="true">
           <ArrowRightIcon class="h-5 w-5 inline-block -mt-1" aria-hidden="true" />
         </span>
