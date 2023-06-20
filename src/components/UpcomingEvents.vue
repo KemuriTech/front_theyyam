@@ -1,11 +1,5 @@
 <template>
-  <div v-show="$route.path === '/'" class="relative">
-    <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
-      aria-hidden="true">
-      <div
-        class="bg-clip-left relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary to-secondary opacity-30 sm:left-[10rem] sm:w-[72.1875rem]" />
-    </div>
-  </div>
+  <BgGradient v-show="$route.path === '/'"/>
   <div class="max-w-2xl mx-auto py-16 px-4 sm:pt-16 sm:pb-8 sm:px-6 lg:max-w-7xl lg:px-8">
     <div v-show="$route.path === '/'" class="text-center">
       <h2 class="text-base font-semibold tracking-wider text-secondary">Be Part of the Tradition</h2>
@@ -47,6 +41,7 @@
   
 <script>
 import { ArrowRightIcon } from "@heroicons/vue/20/solid"
+import BgGradient from "./BgGradient";
 export default {
   async setup() {
 
@@ -91,6 +86,7 @@ export default {
     }
   },
   components: {
+    BgGradient,
     ArrowRightIcon,
   },
 }
