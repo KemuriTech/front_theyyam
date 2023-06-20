@@ -1,4 +1,3 @@
 <template>
-  <EventsTemplate :mode="'events'"/>
+  <EventsTemplate />
 </template>
-

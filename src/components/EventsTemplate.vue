@@ -38,9 +38,12 @@ import { AisInstantSearch, AisSearchBox, AisInfiniteHits, AisConfigure } from 'v
 import { createWidgetMixin } from 'vue-instantsearch/vue3/es';
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import BgGradient from "./BgGradient";
 
 const algolia = useAlgoliaRef()
-const props = defineProps(['mode']);
+const router = useRouter();
+const previousPath = ref('');
 
 createWidgetMixin({ connector: connectInfiniteHits })
 
@@ -62,13 +65,18 @@ const stopVideo = (event) => {
   event.target?.setAttribute('src', '');
 }
 
+router.beforeEach((to, from) => {
+  previousPath.value = from.name;
+});
+
 const getFilters = computed(() => {
   const todayTimeStamp = Math.round(+new Date() / 1000);
-  return props.mode === 'pastevents'
-      ? `'end_dt_timestamp(Additional items)' < ${todayTimeStamp}`
-      : props.mode === 'events'
-          ? `'end_dt_timestamp(Additional items)' > ${todayTimeStamp}`
-          : null;
+  if (router.currentRoute.value.name === 'Pastevents' || previousPath.value ==='Pastevents') {
+    return `'end_dt_timestamp(Additional items)' < ${todayTimeStamp}`;
+  }
+  if (router.currentRoute.value.name === 'Events'  || previousPath.value ==='Events') {
+    return `'end_dt_timestamp(Additional items)' > ${todayTimeStamp}`;
+  }
 });
 
 </script>

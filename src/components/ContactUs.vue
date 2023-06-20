@@ -3,7 +3,7 @@
       <BgGradient />
         <div class="mx-auto max-w-2xl text-center">
             <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Contact Us</h2>
-            <p class="mt-2 text-lg leading-8 text-gray-600">Aute magna irure deserunt veniam aliqua magna enim voluptate.</p>
+            <p class="mt-2 text-lg leading-8 text-gray-600">Please fill the below details</p>
         </div>
 
         <div class="mx-auto max-w-xl sm:mt-20 lg:mt-10">
@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="mt-10">
-                    <button type="submit" :class="`block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${formResponse.isProcessing?'animate-pulse':''}`" :disabled="formResponse.isProcessing">
+                    <button type="submit" :class="`block w-full rounded-md bg-secondary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${formResponse.isProcessing?'animate-pulse':''}`" :disabled="formResponse.isProcessing">
                         Submit
                     </button>
                 </div>

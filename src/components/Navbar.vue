@@ -17,7 +17,7 @@
             </div>
             <PopoverGroup as="nav" class="hidden md:flex space-x-10">
                 <NuxtLink v-for="item in navigation" :key="item.name" :to="item.href"
-                          class="text-base font-medium text-gray-500 hover:text-gray-900"
+                          class="text-base font-medium text-gray-500 hover:text-trans-y"
                           :aria-current="item.current ? 'page' : undefined">{{ item.name }}
                 </NuxtLink>
             </PopoverGroup>

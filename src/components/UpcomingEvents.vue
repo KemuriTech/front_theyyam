@@ -6,15 +6,15 @@
         class="bg-clip-left relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary to-secondary opacity-30 sm:left-[10rem] sm:w-[72.1875rem]" />
     </div>
   </div>
-  <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+  <div class="max-w-2xl mx-auto py-16 px-4 sm:pt-16 sm:pb-8 sm:px-6 lg:max-w-7xl lg:px-8">
     <div v-show="$route.path === '/'" class="text-center">
-      <h2 class="text-base font-semibold tracking-wider text-indigo-600">Be Part of the Tradition</h2>
+      <h2 class="text-base font-semibold tracking-wider text-secondary">Be Part of the Tradition</h2>
     </div>
     <div class="flex items-center justify-center space-x-4">
       <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-3xl">Upcoming Events</p>
     </div>
     <div class="flex items-center justify-end space-x-4">
-      <NuxtLink :to="`events`" class="whitespace-nowrap text-sm font-medium text-indigo-600 hover:text-indigo-500">View
+      <NuxtLink :to="`events`" class="whitespace-nowrap text-sm font-medium text-secondary text-secondary">View
         all<span aria-hidden="true">
           <ArrowRightIcon class="h-5 w-5 inline-block -mt-1" aria-hidden="true" />
         </span>
