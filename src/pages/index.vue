@@ -170,7 +170,7 @@ const eventImg = 'land6.jpg';
                 <p class="mt-5 text-lg text-gray-300">Rhoncus sagittis risus arcu erat lectus bibendum. Ut in adipiscing quis in viverra tristique sem. Ornare feugiat viverra eleifend fusce orci in quis amet. Sit in et vitae tortor, massa. Dapibus laoreet amet lacus nibh integer quis. Eu vulputate diam sit tellus quis at.</p>
                 <div class="mt-12 grid grid-cols-1 gap-y-12 gap-x-6 sm:grid-cols-2">
                     <div class="inline-flex rounded-md shadow">
-                        <NuxtLink class="inline-flex text-white bg-blue-700 py-2 px-4 focus:outline-none hover:bg-opacity-80 hover:text-black rounded-md	text-sm bg-secondary" to="/events">Go To Events</NuxtLink>
+                        <NuxtLink class="inline-flex text-white bg-blue-700 py-2 px-4 focus:outline-none hover:bg-opacity-80 rounded-md text-sm bg-secondary" to="/events">Go To Events</NuxtLink>
                     </div>
                 </div>
             </div>

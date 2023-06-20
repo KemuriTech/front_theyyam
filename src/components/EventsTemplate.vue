@@ -39,7 +39,6 @@ import { createWidgetMixin } from 'vue-instantsearch/vue3/es';
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import BgGradient from "./BgGradient";
 
 const algolia = useAlgoliaRef()
 const router = useRouter();
