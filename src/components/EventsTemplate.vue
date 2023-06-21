@@ -1,10 +1,5 @@
 <template>
-    <div class="relative">
-        <div aria-hidden="true"
-             class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
-            <div class="bg-clip-left relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-customPink to-customPurple opacity-30 sm:left-[10rem] sm:w-[72.1875rem]"/>
-        </div>
-    </div>
+<BgGradient />
     <div class="max-w-2xl mx-auto py-16 sm:py-24 sm:pt-12 lg:max-w-7xl">
         <div class="px-2 sm:px-5 lg:px-6">
             <input id="search" v-model="searchInput" autocomplete="search" class="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

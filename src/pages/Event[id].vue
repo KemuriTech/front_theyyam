@@ -1,9 +1,5 @@
 <template>
-    <div class="relative">
-        <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
-           <div class="bg-clip-left relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-customPink to-customPurple opacity-30 sm:left-[10rem] sm:w-[72.1875rem]"/>
-        </div>
-    </div>
+    <BgGradient />
         <main class="max-w-7xl mx-auto sm:pt-16 sm:px-6 lg:px-8">
             <div class="max-w-2xl mx-auto lg:max-w-none">
                 <!-- Product -->
@@ -59,12 +55,12 @@
                                 <Disclosure as="div" v-slot="{ open }">
                                     <h3>
                                         <DisclosureButton class="group relative w-full py-6 flex justify-between items-center text-left">
-                      <span :class="[open ? 'text-indigo-600' : 'text-gray-900', 'text-sm font-medium']">
+                      <span :class="[open ? 'text-secondary' : 'text-gray-900', 'text-sm font-medium']">
                         Theyyams Performing Here
                       </span>
                                             <span class="ml-6 flex items-center">
                         <PlusIcon v-if="!open" class="block h-6 w-6 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
-                        <MinusIcon v-else class="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500" aria-hidden="true" />
+                        <MinusIcon v-else class="block h-6 w-6 text-secondary group-hover:bg-opacity-80 " aria-hidden="true" />
                       </span>
                                         </DisclosureButton>
                                     </h3>
@@ -77,12 +73,12 @@
                                 <Disclosure as="div" v-slot="{ open }">
                                     <h3>
                                         <DisclosureButton class="group relative w-full py-6 flex justify-between items-center text-left">
-                      <span :class="[open ? 'text-indigo-600' : 'text-gray-900', 'text-sm font-medium']">
+                      <span :class="[open ? 'text-secondary' : 'text-gray-900', 'text-sm font-medium']">
                         Address & Venue Directions
                       </span>
                                             <span class="ml-6 flex items-center">
                         <PlusIcon v-if="!open" class="block h-6 w-6 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
-                        <MinusIcon v-else class="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500" aria-hidden="true" />
+                        <MinusIcon v-else class="block h-6 w-6 text-secondary group-hover:bg-opacity-80 " aria-hidden="true" />
                       </span>
                                         </DisclosureButton>
                                     </h3>
@@ -98,12 +94,12 @@
                                 <Disclosure as="div" v-slot="{ open }">
                                     <h3>
                                         <DisclosureButton class="group relative w-full py-6 flex justify-between items-center text-left">
-                      <span :class="[open ? 'text-indigo-600' : 'text-gray-900', 'text-sm font-medium']">
+                      <span :class="[open ? 'text-secondary' : 'text-gray-900', 'text-sm font-medium']">
                         Contact Info
                       </span>
                                             <span class="ml-6 flex items-center">
                         <PlusIcon v-if="!open" class="block h-6 w-6 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
-                        <MinusIcon v-else class="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500" aria-hidden="true" />
+                        <MinusIcon v-else class="block h-6 w-6 text-secondary group-hover:bg-opacity-80 " aria-hidden="true" />
                       </span>
                                         </DisclosureButton>
                                     </h3>

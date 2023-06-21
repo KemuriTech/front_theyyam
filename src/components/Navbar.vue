@@ -1,5 +1,5 @@
 <template>
-    <Popover class="relative backdrop-blur-sm bg-white/30 z-50">
+    <Popover class="relative backdrop-blur-sm z-50">
         <div class="flex justify-between items-center px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
             <div class="flex justify-start lg:w-0 lg:flex-1">
                 <NuxtLink to="/"
@@ -17,7 +17,7 @@
             </div>
             <PopoverGroup as="nav" class="hidden md:flex space-x-10">
                 <NuxtLink v-for="item in navigation" :key="item.name" :to="item.href"
-                          class="text-base font-medium text-gray-500 hover:text-gray-900"
+                          class="text-base font-medium text-gray-500 text-trans-y"
                           :aria-current="item.current ? 'page' : undefined">{{ item.name }}
                 </NuxtLink>
             </PopoverGroup>

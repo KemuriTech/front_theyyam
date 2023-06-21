@@ -9,3 +9,17 @@
 .max-w-18 {
     max-width: 18rem;
 }
+
+.text-trans-y {
+    text-decoration: none;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(to right, #dc2626, gold 50%, rgb(107 114 128) 50%);
+    background-size: 200% 100%;
+    background-position: 100%;
+}
+
+.text-trans-y:hover {
+    transition: all 0.3s cubic-bezier(0.000, 0.000, 0.230, 1);
+    background-position: 0%;
+}
