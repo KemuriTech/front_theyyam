@@ -1,74 +1,74 @@
 <script setup>
-import {PuzzlePieceIcon, GlobeAltIcon, ServerIcon, ScaleIcon, CheckIcon} from '@heroicons/vue/24/outline'
+import {MusicalNoteIcon, AcademicCapIcon, EyeIcon, SparklesIcon, CheckIcon} from '@heroicons/vue/24/outline'
 
 const images = [
     [
         {
-            imageSrc: 'port1.jpg',
+            imageSrc: 'th_intro6.jpg',
         },
 
     ],
     [
         {
-            imageSrc: 'port2.jpg',
+            imageSrc: 'th_intro2.jpg',
         },
         {
-            imageSrc: 'port3.jpg',
+            imageSrc: 'th_intro1.jpg',
         },
         {
-            imageSrc: 'port1.jpg',
+            imageSrc: 'th_intro4.jpg',
         },
 
     ],
     [
         {
-            imageSrc: 'port4.jpg',
+            imageSrc: 'th_intro5.jpg',
         },
         {
-            imageSrc: 'port2.jpg',
+            imageSrc: 'th_intro3.jpg',
         },
     ],
 ];
 
 const metrics = [
-    { id: 1, stat: '1,500+', emphasis: 'Years', rest: 'of history: Theyyam is one of the oldest surviving sacred dance rituals in the world."' },
-    { id: 2, stat: '400+', emphasis: 'Unique Forms', rest: 'More than 400 distinct forms of Theyyam performances exist, each having its unique rituals, costumes, and makeup.' },
-    { id: 3, stat: '15,000+', emphasis: 'Performances Annually', rest: 'With over 15,000 Theyyam performances conducted annually, this festival is the beating heart of Kerala\'s cultural landscape.' },
-    { id: 4, stat: '1000+', emphasis: 'Venues', rest: 'Theyyam rituals take place across over 1,000 sacred groves and temples in North Kerala.' },
+    { id: 1, stat: '1,500+', emphasis: 'Years of history:', rest: 'Theyyam is one of the oldest surviving sacred dance rituals in the world."' },
+    { id: 2, stat: '400+', emphasis: 'Unique Forms:', rest: 'More than 400 distinct forms of Theyyam performances exist, each having its unique rituals, costumes, and makeup.' },
+    { id: 3, stat: '15,000+', emphasis: 'Performances Annually:', rest: 'With over 15,000 Theyyam performances conducted annually, this festival is the beating heart of Kerala\'s cultural landscape.' },
+    { id: 4, stat: '1000+', emphasis: 'Venues:', rest: 'Theyyam rituals take place across over 1,000 sacred groves and temples in North Kerala.' },
 ]
 
 const features = [
     {
-        name: 'consectetur adipisicing elit',
+        name: 'Vivid Cultural Immersion:',
         description:
-            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-        icon: GlobeAltIcon,
+            'Discover the rich tapestry of Indian mythology and tradition through a living and breathing form of art, deeply intertwined with the culture and the community.',
+        icon: AcademicCapIcon,
     },
     {
-        name: 'Maiores impedit perferendis suscipit',
+        name: 'Unique Spiritual Experience:',
         description:
-            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-        icon: ScaleIcon,
+            'Encounter a unique form of worship where the line between human and divine blurs, giving you an unmatched spiritual journey.',
+        icon: SparklesIcon,
     },
     {
-        name: 'Cupiditate blanditiis ratione',
+        name: 'Visual Extravaganza:',
         description:
-            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-        icon: ServerIcon,
+            'Marvel at the performers\' stunning costumes, detailed makeup, and elaborate ornaments that create a visual spectacle you won\'t forget.',
+        icon: EyeIcon,
     },
     {
-        name: 'Sit amet consectetur adipisicing',
+        name: 'Musical Delight:',
         description:
-            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-        icon: PuzzlePieceIcon,
+            'Get swept away by the mesmerizing rhythm of traditional drums and the trance-inducing chants that accompany each performance.',
+        icon: MusicalNoteIcon,
     },
 ]
 
-const videoName = 'video1.mp4';
+const videoName = 'Godsofmalabar.mp4';
 
-const section2Img = 'land2.jpg';
+const section2Img = 'th_bg_1.jpg';
 
-const eventImg = 'land6.jpg';
+const eventImg = 'th_bg_2.jpg';
 
 </script>
 <template>
@@ -87,7 +87,7 @@ const eventImg = 'land6.jpg';
             <div  id="pattern" class="sm:w-full lg:max-w-xl bg-contain bg-no-repeat md:ml-4 xl:mr-16 overflow-hidden lg:py-5 px-5">
                 <div class="w-full flex gap-5 lg:gap-10 justify-center">
                     <div v-for="(imageGroup, key) in images" :key="key" class="flex flex-col gap-5 lg:gap-10 justify-center" :data-key="key">
-                        <img v-for="(image, _key) in imageGroup" :key="_key" class="object-cover object-center rounded-xl lg:max-h-fit" alt="hero" :src="`/images/${image.imageSrc}`" />
+                        <img v-for="(image, _key) in imageGroup" :key="_key" class="object-cover object-center rounded-xl max-h-56" alt="hero" :src="`/images/${image.imageSrc}`" />
                     </div>
                 </div>
             </div>
@@ -124,7 +124,7 @@ const eventImg = 'land6.jpg';
     <UpcomingEvents/>
         <div class="relative">
           <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
-            <div class="bg-clip-right relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[45deg] bg-gradient-to-tr from-primary to-secondary opacity-50 sm:left-[100rem] sm:w-[72.1875rem]" />
+            <div class="bg-clip-right relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[45deg] bg-gradient-to-tr from-primary to-secondary opacity-30 sm:left-[100rem] sm:w-[72.1875rem]" />
           </div>
         </div>
         <div class="mx-auto max-w-md px-4 text-center sm:px-6 sm:max-w-3xl lg:px-8 lg:max-w-7xl">
@@ -137,6 +137,11 @@ const eventImg = 'land6.jpg';
                     <source id="videoSrc" :src="`/videos/${videoName}`" />
                 </video>
             </div>
+           <div class="video-credits text-base pt-2">
+             <p class="flex justify-end text-base text-gray-500 hover:text-black">
+               <a href="https://www.youtube.com/watch?v=qm7NbZWi3EY&t=12s">Gods of Malabar by Tom Dcruz</a>
+             </p>
+           </div>
             <div class="mt-10 pb-20">
                 <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
                     <div v-for="feature in features" :key="feature.name" class="relative">
@@ -165,12 +170,12 @@ const eventImg = 'land6.jpg';
         </div>
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8 xl:grid xl:grid-cols-2 xl:grid-flow-col-dense xl:gap-x-8">
             <div class="relative pt-12 pb-64 sm:pt-24 sm:pb-64 xl:col-start-2 xl:pb-24 xl:pr-10">
-                <h2 class="text-sm font-semibold text-secondary tracking-wide">Our Events</h2>
-                <p class="mt-3 text-3xl font-extrabold text-white">Lorem ipsum dolor sit amet, consectetur.</p>
-                <p class="mt-5 text-lg text-gray-300">Rhoncus sagittis risus arcu erat lectus bibendum. Ut in adipiscing quis in viverra tristique sem. Ornare feugiat viverra eleifend fusce orci in quis amet. Sit in et vitae tortor, massa. Dapibus laoreet amet lacus nibh integer quis. Eu vulputate diam sit tellus quis at.</p>
+                <h2 class="text-sm font-semibold text-secondary tracking-wide">Events</h2>
+                <p class="mt-3 text-3xl font-extrabold text-white">Explore the Events</p>
+                <p class="mt-5 text-lg text-gray-300">Ready to dive into the heart of Theyyam? Browse the wide range of events tailored to offer a truly immersive cultural experience. From divine Theyyam performances to traditional music event offers a unique lens through which to understand and appreciate the depth of this extraordinary festival.</p>
                 <div class="mt-12 grid grid-cols-1 gap-y-12 gap-x-6 sm:grid-cols-2">
                     <div class="inline-flex rounded-md shadow">
-                        <NuxtLink class="inline-flex text-white bg-blue-700 py-2 px-4 focus:outline-none hover:bg-opacity-80 rounded-md text-sm bg-secondary" to="/events">Go To Events</NuxtLink>
+                        <NuxtLink class="inline-flex text-white bg-blue-700 py-2 px-4 focus:outline-none hover:bg-opacity-80 rounded-md text-sm bg-secondary" to="/events">View Events</NuxtLink>
                     </div>
                 </div>
             </div>
