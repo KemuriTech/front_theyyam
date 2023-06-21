@@ -1,76 +1,3 @@
-<script setup>
-import {MusicalNoteIcon, AcademicCapIcon, EyeIcon, SparklesIcon, CheckIcon} from '@heroicons/vue/24/outline'
-
-const images = [
-    [
-        {
-            imageSrc: 'th_intro6.jpg',
-        },
-
-    ],
-    [
-        {
-            imageSrc: 'th_intro2.jpg',
-        },
-        {
-            imageSrc: 'th_intro1.jpg',
-        },
-        {
-            imageSrc: 'th_intro4.jpg',
-        },
-
-    ],
-    [
-        {
-            imageSrc: 'th_intro5.jpg',
-        },
-        {
-            imageSrc: 'th_intro3.jpg',
-        },
-    ],
-];
-
-const metrics = [
-    { id: 1, stat: '1,500+', emphasis: 'Years of history:', rest: 'Theyyam is one of the oldest surviving sacred dance rituals in the world."' },
-    { id: 2, stat: '400+', emphasis: 'Unique Forms:', rest: 'More than 400 distinct forms of Theyyam performances exist, each having its unique rituals, costumes, and makeup.' },
-    { id: 3, stat: '15,000+', emphasis: 'Performances Annually:', rest: 'With over 15,000 Theyyam performances conducted annually, this festival is the beating heart of Kerala\'s cultural landscape.' },
-    { id: 4, stat: '1000+', emphasis: 'Venues:', rest: 'Theyyam rituals take place across over 1,000 sacred groves and temples in North Kerala.' },
-]
-
-const features = [
-    {
-        name: 'Vivid Cultural Immersion:',
-        description:
-            'Discover the rich tapestry of Indian mythology and tradition through a living and breathing form of art, deeply intertwined with the culture and the community.',
-        icon: AcademicCapIcon,
-    },
-    {
-        name: 'Unique Spiritual Experience:',
-        description:
-            'Encounter a unique form of worship where the line between human and divine blurs, giving you an unmatched spiritual journey.',
-        icon: SparklesIcon,
-    },
-    {
-        name: 'Visual Extravaganza:',
-        description:
-            'Marvel at the performers\' stunning costumes, detailed makeup, and elaborate ornaments that create a visual spectacle you won\'t forget.',
-        icon: EyeIcon,
-    },
-    {
-        name: 'Musical Delight:',
-        description:
-            'Get swept away by the mesmerizing rhythm of traditional drums and the trance-inducing chants that accompany each performance.',
-        icon: MusicalNoteIcon,
-    },
-]
-
-const videoName = 'Godsofmalabar.mp4';
-
-const section2Img = 'th_bg_1.jpg';
-
-const eventImg = 'th_bg_2.jpg';
-
-</script>
 <template>
 
     <section class="text-black body-font overflow-hidden">
@@ -185,3 +112,77 @@ const eventImg = 'th_bg_2.jpg';
     <ContactUs />
 
 </template>
+
+<script setup>
+import {MusicalNoteIcon, AcademicCapIcon, EyeIcon, SparklesIcon, CheckIcon} from '@heroicons/vue/24/outline'
+
+const images = [
+  [
+    {
+      imageSrc: 'th_intro6.jpg',
+    },
+
+  ],
+  [
+    {
+      imageSrc: 'th_intro2.jpg',
+    },
+    {
+      imageSrc: 'th_intro1.jpg',
+    },
+    {
+      imageSrc: 'th_intro4.jpg',
+    },
+
+  ],
+  [
+    {
+      imageSrc: 'th_intro5.jpg',
+    },
+    {
+      imageSrc: 'th_intro3.jpg',
+    },
+  ],
+];
+
+const metrics = [
+  { id: 1, stat: '1,500+', emphasis: 'Years of history:', rest: 'Theyyam is one of the oldest surviving sacred dance rituals in the world."' },
+  { id: 2, stat: '400+', emphasis: 'Unique Forms:', rest: 'More than 400 distinct forms of Theyyam performances exist, each having its unique rituals, costumes, and makeup.' },
+  { id: 3, stat: '15,000+', emphasis: 'Performances Annually:', rest: 'With over 15,000 Theyyam performances conducted annually, this festival is the beating heart of Kerala\'s cultural landscape.' },
+  { id: 4, stat: '1000+', emphasis: 'Venues:', rest: 'Theyyam rituals take place across over 1,000 sacred groves and temples in North Kerala.' },
+]
+
+const features = [
+  {
+    name: 'Vivid Cultural Immersion:',
+    description:
+        'Discover the rich tapestry of Indian mythology and tradition through a living and breathing form of art, deeply intertwined with the culture and the community.',
+    icon: AcademicCapIcon,
+  },
+  {
+    name: 'Unique Spiritual Experience:',
+    description:
+        'Encounter a unique form of worship where the line between human and divine blurs, giving you an unmatched spiritual journey.',
+    icon: SparklesIcon,
+  },
+  {
+    name: 'Visual Extravaganza:',
+    description:
+        'Marvel at the performers\' stunning costumes, detailed makeup, and elaborate ornaments that create a visual spectacle you won\'t forget.',
+    icon: EyeIcon,
+  },
+  {
+    name: 'Musical Delight:',
+    description:
+        'Get swept away by the mesmerizing rhythm of traditional drums and the trance-inducing chants that accompany each performance.',
+    icon: MusicalNoteIcon,
+  },
+]
+
+const videoName = 'Godsofmalabar.mp4';
+
+const section2Img = 'th_bg_1.jpg';
+
+const eventImg = 'th_bg_2.jpg';
+
+</script>

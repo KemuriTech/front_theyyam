@@ -41,7 +41,6 @@
   
 <script>
 import { ArrowRightIcon } from "@heroicons/vue/20/solid"
-import BgGradient from "./BgGradient";
 export default {
   async setup() {
 
@@ -86,7 +85,6 @@ export default {
     }
   },
   components: {
-    BgGradient,
     ArrowRightIcon,
   },
 }
