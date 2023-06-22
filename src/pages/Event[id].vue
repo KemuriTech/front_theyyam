@@ -48,7 +48,7 @@
                             </div>
                         </div>
 
-                        <section aria-labelledby="details-heading" class="mt-12">
+                      <section v-if="eventData.ext_6 || eventData.ext_9 || eventData.ext_10 || eventData.ext_11 || eventData.ext_12 || contactInfos.length" aria-labelledby="details-heading" class="mt-12">
                             <h2 id="details-heading" class="sr-only">Additional details</h2>
 
                             <div class="border-t divide-y divide-gray-200">
