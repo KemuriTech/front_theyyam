@@ -14,7 +14,7 @@
             <div  id="pattern" class="sm:w-full lg:max-w-xl bg-contain bg-no-repeat md:ml-4 xl:mr-16 overflow-hidden lg:py-5 px-5">
                 <div class="w-full flex gap-5 lg:gap-10 justify-center">
                     <div v-for="(imageGroup, key) in images" :key="key" class="flex flex-col gap-5 lg:gap-10 justify-center" :data-key="key">
-                        <img v-for="(image, _key) in imageGroup" :key="_key" class="object-cover object-center rounded-xl max-h-56" alt="hero" :src="`/images/${image.imageSrc}`" />
+                        <img v-for="(image, _key) in imageGroup" :key="_key" class="object-cover object-center rounded-xl" alt="hero" :src="`/images/${image.imageSrc}`" width="200" height="300"/>
                     </div>
                 </div>
             </div>
@@ -179,7 +179,7 @@ const features = [
   },
 ]
 
-const videoName = 'Godsofmalabar.mp4';
+const videoName = 'Godsofmalabarcomp.mp4';
 
 const section2Img = 'th_bg_1.jpg';
 

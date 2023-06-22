@@ -7,7 +7,7 @@
         </div>
 
         <div class="mx-auto max-w-xl sm:mt-20 lg:mt-10">
-            <template v-if="formResponse.isResponse">
+            <template v-if="formResponse.isResponse" class="text-center">
                 <div v-for="(message, number) in formResponse.messages" :key="number">
                     <ui-alert :message="message" :type="formResponse.type" />
                 </div>
@@ -77,7 +77,7 @@ export default {
       event.preventDefault();
 
       this.formResponse.isProcessing = true;
-      const _successMessage = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam beatae dolorem molestiae sunt suscipit tempore.";
+      const _successMessage = "Thank you for contacting us. We will get back to you soon!";
       this.formResponse.isResponse = false;
 
       await this.$api.contact.post({
