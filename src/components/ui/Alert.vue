@@ -12,35 +12,35 @@ import { computed } from "vue";
 
 
 const props = defineProps({
-    type: {
-        default:'success',
-        type: String,
-    },
-    message : {
-        type: String
-    }
+  type: {
+    default:'success',
+    type: String,
+  },
+  message : {
+    type: String
+  }
 });
 
 const getColor = computed(() => {
-    switch (props.type) {
-        case 'success':
-            return 'bg-lime-500';
-        case 'danger':
-            return 'bg-rose-500';
-        case 'warning':
-            return 'bg-amber-500';
-        case 'info':
-            return 'bg-cyan-500';
-        default:
-            return "bg-lime-500";
-    }
+  switch (props.type) {
+  case 'success':
+    return 'bg-lime-500';
+  case 'danger':
+    return 'bg-rose-500';
+  case 'warning':
+    return 'bg-amber-500';
+  case 'info':
+    return 'bg-cyan-500';
+  default:
+    return "bg-lime-500";
+  }
 })
 
 const closeAlert = (event) => {
-    let element = event.target;
-    while(element.nodeName !== "BUTTON"){
-        element = element.parentNode;
-    }
-    element.parentNode.parentNode.removeChild(element.parentNode);
+  let element = event.target;
+  while(element.nodeName !== "BUTTON"){
+    element = element.parentNode;
+  }
+  element.parentNode.parentNode.removeChild(element.parentNode);
 }
 </script>

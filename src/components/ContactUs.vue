@@ -47,72 +47,72 @@ import { ref } from 'vue'
 const agreed = ref(false)
 
 export default {
-    name: 'ContactUs',
-    setup() {
-        const { $spi } = useNuxtApp();
+  name: 'ContactUs',
+  setup() {
+    const { $spi } = useNuxtApp();
 
-        return {
-            $spi
-        }
+    return {
+      $spi
+    }
+  },
+  data() {
+    return {
+      form: {
+        name        : '',
+        email       : '',
+        message     : '',
+      },
+      formResponse: {
+        isResponse  : false,
+        type        : '',
+        messages    : [],
+        isProcessing : false,
+      }
+    }
+  },
+  methods: {
+    async submitHandler(event) {
+      event.preventDefault();
+
+      this.formResponse.isProcessing = true;
+      const _successMessage = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam beatae dolorem molestiae sunt suscipit tempore.";
+      this.formResponse.isResponse = false;
+
+      await this.$api.contact.post({
+        name: this.form.name,
+        email: this.form.email,
+        body: this.form.message,
+      })
+        .then(async res => {
+          let message = [];
+          let type;
+
+          if(!res.ok) {
+            type = 'danger';
+            await res.text().then(text =>  JSON.parse(text).errors.map(e=>message.push(e.message)));
+          }
+          else {
+            type = 'success';
+            message = [_successMessage];
+          }
+          this.setResponse(type, message)
+        })
+        .catch(err => {
+          const message = [];
+          message.push('Something went wrong! Please try again...');
+
+          this.setResponse('danger', message)
+        })
+        .finally(res => {
+          this.formResponse.isProcessing = false;
+        });
     },
-    data() {
-        return {
-            form: {
-                name        : '',
-                email       : '',
-                message     : '',
-            },
-            formResponse: {
-                isResponse  : false,
-                type        : '',
-                messages    : [],
-                isProcessing : false,
-            }
-        }
-    },
-    methods: {
-        async submitHandler(event) {
-            event.preventDefault();
-
-            this.formResponse.isProcessing = true;
-            const _successMessage = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam beatae dolorem molestiae sunt suscipit tempore.";
-            this.formResponse.isResponse = false;
-
-            await this.$api.contact.post({
-                name: this.form.name,
-                email: this.form.email,
-                body: this.form.message,
-            })
-                .then(async res => {
-                    let message = [];
-                    let type;
-
-                    if(!res.ok) {
-                        type = 'danger';
-                        await res.text().then(text =>  JSON.parse(text).errors.map(e=>message.push(e.message)));
-                    }
-                    else {
-                        type = 'success';
-                        message = [_successMessage];
-                    }
-                    this.setResponse(type, message)
-                })
-                .catch(err => {
-                    const message = [];
-                    message.push('Something went wrong! Please try again...');
-
-                    this.setResponse('danger', message)
-                })
-                .finally(res => {
-                    this.formResponse.isProcessing = false;
-                });
-        },
-        setResponse(type, message) {
-            this.formResponse.type = type;
-            this.formResponse.messages = message;
-            this.formResponse.isResponse = true;
-        }
-    },
+    setResponse(type, message) {
+      this.formResponse.type = type;
+      this.formResponse.messages = message;
+      this.formResponse.isResponse = true;
+    }
+  },
 
 }
 

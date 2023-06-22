@@ -6,9 +6,9 @@ const BASE_URL = 'theyyam.g.kuroco.app';
 const LANDING_PAGE_URL = `https://${BASE_URL}`;
 
 export {
-    SERVICE_NAME,
-    KUROCO_API_VER,
-    KUROCO_API_PREFIX,
-    BASE_URL,
-    LANDING_PAGE_URL,
+  SERVICE_NAME,
+  KUROCO_API_VER,
+  KUROCO_API_PREFIX,
+  BASE_URL,
+  LANDING_PAGE_URL,
 };

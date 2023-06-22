@@ -69,8 +69,8 @@ import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/vue/24/outline'
 import {SERVICE_NAME} from "~/constants";
 
 const navigation = [
-    {name: 'Events', href: '/events', current: true},
-    {name: 'Past Events', href: '/pastevents', current: false},
+  {name: 'Events', href: '/events', current: true},
+  {name: 'Past Events', href: '/pastevents', current: false},
 ]
 </script>
 <style scoped>

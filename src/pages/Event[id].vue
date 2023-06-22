@@ -164,29 +164,16 @@ const open = ref(false)
 
 export default {
   components: {
-    Dialog,
-    DialogOverlay,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
-    Popover,
-    PopoverButton,
-    PopoverGroup,
-    PopoverPanel,
-    RadioGroup,
-    RadioGroupLabel,
-    RadioGroupOption,
     Tab,
     TabGroup,
     TabList,
     TabPanel,
     TabPanels,
-    TransitionChild,
-    TransitionRoot,
     MinusIcon,
     PlusIcon,
-    StarIcon,
-    UserIcon,
   },
   async setup() {
     const { $formatter, $ytVideo, $api } = useNuxtApp()
@@ -195,18 +182,18 @@ export default {
     const mediaArr = useState('mediaArr', () => ([]));
 
     await $api.occasion.show(params.id)
-        .then(response => response.json())
-        .then(response => {
-          eventData = response.details;
-          let _mediaArr = [];
+      .then(response => response.json())
+      .then(response => {
+        eventData = response.details;
+        let _mediaArr = [];
 
-          _mediaArr.push({
-            url: eventData.ext_16.url,
-            type: MEDIA_TYPE.IMAGE
-          })
+        _mediaArr.push({
+          url: eventData.ext_16.url,
+          type: MEDIA_TYPE.IMAGE
+        })
 
-          mediaArr.value = _mediaArr;
-        });
+        mediaArr.value = _mediaArr;
+      });
     const contactInfos = [
       {
         id: 1,
@@ -270,22 +257,22 @@ export default {
       ]
     }
     this.$ytVideo.getValidUID(() => _getAllYTUIDs())
-        .then(ids => {
-          _mediaArr.push(...ids.map((e, i) => ({
-            url: e,
-            type: MEDIA_TYPE.YT_VIDEO
-          })))
+      .then(ids => {
+        _mediaArr.push(...ids.map((e, i) => ({
+          url: e,
+          type: MEDIA_TYPE.YT_VIDEO
+        })))
 
-          this.mediaArr.value = _mediaArr;
-        })
+        this.mediaArr.value = _mediaArr;
+      })
   },
   methods: {
     getImage({type, url}) {
       switch (type) {
-        case MEDIA_TYPE.IMAGE:
-          return url;
-        case MEDIA_TYPE.YT_VIDEO:
-          return `https://img.youtube.com/vi/${url}/0.jpg`;
+      case MEDIA_TYPE.IMAGE:
+        return url;
+      case MEDIA_TYPE.YT_VIDEO:
+        return `https://img.youtube.com/vi/${url}/0.jpg`;
       }
     },
   }

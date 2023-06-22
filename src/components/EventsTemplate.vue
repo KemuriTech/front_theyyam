@@ -56,114 +56,114 @@ const items = useState('items', () => ([]));
 const extraParam = router.currentRoute.value.name;
 const isProcessing = ref(false);
 const pageInfo = ref({
-    pageID: 1,
-    lastPage: 1,
+  pageID: 1,
+  lastPage: 1,
 });
 const searchInput = ref('');
 
 const initializeData = () => {
-    if (pageInfo.value.pageID == 1) {
-        items.value = [];
-    }
+  if (pageInfo.value.pageID == 1) {
+    items.value = [];
+  }
 }
 
 onMounted(() => {
-    scroll();
+  scroll();
 })
 
 function debounce(func, timeout = 1000) {
-    let timer;
-    return (...args) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            func.apply(this, args);
-        }, timeout);
-    };
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, timeout);
+  };
 }
 
 
 const scroll = () => {
-    window.onscroll = () => {
-        let bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight === document.documentElement.offsetHeight;
-        if (bottomOfWindow && !isProcessing.value && pageInfo.value.lastPage > pageInfo.value.pageID) {
-            pageInfo.value.pageID++;
-            fetchData();
-        }
+  window.onscroll = () => {
+    let bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight === document.documentElement.offsetHeight;
+    if (bottomOfWindow && !isProcessing.value && pageInfo.value.lastPage > pageInfo.value.pageID) {
+      pageInfo.value.pageID++;
+      fetchData();
     }
+  }
 };
 
 const getPageInfo = (arr) => {
-    return {
-        pageID: arr.pageNo,
-        lastPage: arr.endPageNo
-    };
+  return {
+    pageID: arr.pageNo,
+    lastPage: arr.endPageNo
+  };
 }
 
 const buildFilterQuery = () => {
-    const queryInputs = {
-        subject: searchInput.value,
-    };
-    const filterQuery = Object.entries(queryInputs)
-                        .reduce((queries, [col, value]) => {
-                            if (value !== '') {
-                                queries.push(`${col} icontains "${value}"`);
-                            }
-                            return queries;
-                        }, [])
-                        .join(' AND ');
-    return filterQuery;
+  const queryInputs = {
+    subject: searchInput.value,
+  };
+  const filterQuery = Object.entries(queryInputs)
+    .reduce((queries, [col, value]) => {
+      if (value !== '') {
+        queries.push(`${col} icontains "${value}"`);
+      }
+      return queries;
+    }, [])
+    .join(' AND ');
+  return filterQuery;
 }
 const fetchData = async () => {
-    const params = {
-        pageID: pageInfo.value.pageID,
-    };
+  const params = {
+    pageID: pageInfo.value.pageID,
+  };
 
-    if (searchInput.value) {
-        params.filter = buildFilterQuery();
-    }
+  if (searchInput.value) {
+    params.filter = buildFilterQuery();
+  }
 
-    isProcessing.value = true;
-    initializeData();
+  isProcessing.value = true;
+  initializeData();
 
-    await $api
-        [extraParam === 'Pastevents' ? 'pastEvents' : 'occasions']
-        .get(params)
-        .then(response => response.json())
-        .then(res => {
-            pageInfo.value = getPageInfo(res.pageInfo);
+  await $api
+    [extraParam === 'Pastevents' ? 'pastEvents' : 'occasions']
+    .get(params)
+    .then(response => response.json())
+    .then(res => {
+      pageInfo.value = getPageInfo(res.pageInfo);
 
-            if (pageInfo.value.pageID == 1) {
-                items.value = res.list;
-                return;
-            }
-            const _item = [...items.value, ...res.list];
-            items.value = _item;
-        })
-        .finally(res => {
-            isProcessing.value = false
-        })
+      if (pageInfo.value.pageID == 1) {
+        items.value = res.list;
+        return;
+      }
+      const _item = [...items.value, ...res.list];
+      items.value = _item;
+    })
+    .finally(res => {
+      isProcessing.value = false
+    })
 }
 
 fetchData();
 const hitSearchAPI = () => debounce(()=>{
-    pageInfo.value.pageID = 1;
-    return fetchData();
+  pageInfo.value.pageID = 1;
+  return fetchData();
 })
 
 watch(searchInput, hitSearchAPI());
 
 const playVideo = (event) => {
-    event.target?.setAttribute('src', 'https://www.youtube.com/embed/' + event.target?.getAttribute('data-uid') + '?autoplay=1&mute=1&controls=0')
+  event.target?.setAttribute('src', 'https://www.youtube.com/embed/' + event.target?.getAttribute('data-uid') + '?autoplay=1&mute=1&controls=0')
 }
 
 const getYoutubeImage = (item) => item?.ext_16?.url;
 
 const stopVideo = (event) => {
-    event.target?.setAttribute('src', '');
+  event.target?.setAttribute('src', '');
 }
 
 router.beforeEach((to, from) => {
-    previousPath.value = from.name;
+  previousPath.value = from.name;
 });
 
 </script>
