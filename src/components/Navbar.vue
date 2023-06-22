@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div class="py-6 px-5">
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 gap-4">
                             <NuxtLink @click="close" v-for="item in navigation" :key="item.name" :to="item.href"
                                       class="text-base font-medium text-gray-900 hover:text-gray-700"
                                       :aria-current="item.current ? 'page' : undefined">{{ item.name }}
@@ -69,6 +69,7 @@ import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/vue/24/outline'
 import {SERVICE_NAME} from "~/constants";
 
 const navigation = [
+  {name: 'Home', href: '/', current: true},
   {name: 'Events', href: '/events', current: true},
   {name: 'Past Events', href: '/pastevents', current: false},
 ]
