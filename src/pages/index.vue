@@ -66,7 +66,7 @@
             </div>
            <div class="video-credits text-base pt-2">
              <p class="flex justify-end text-base text-gray-500 hover:text-black">
-               <a href="https://www.youtube.com/watch?v=qm7NbZWi3EY&t=12s">Gods of Malabar by Tom Dcruz</a>
+               <a href="https://www.youtube.com/watch?v=qm7NbZWi3EY&t=12s" target="_blank">Gods of Malabar by Tom Dcruz</a>
              </p>
            </div>
             <div class="mt-10 pb-20">
