@@ -12,13 +12,17 @@
                     <div class="image-figure aspect-w-4 aspect-h-3 rounded-lg overflow-hidden bg-gray-100">
                         <img v-if='!item?.ext_13?.url'
                              :src="item?.ext_16?.url"/>
-                        <iframe v-else :data-uid='item?.ext_13?.url?.split("v=")[1]'
+                      <div v-else
+                           v-on:mouseleave="stopVideo"
+                           v-on:mouseover="playVideo"
+                      >
+                        <iframe :data-uid='item?.ext_13?.url?.split("v=")[1]'
                                 :style='`background-image: url("${getYoutubeImage(item)}");`'
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen class='bg-cover bg-center' frameborder="0"
-                                v-on:mouseleave="stopVideo"
-                                v-on:mouseover="playVideo">
+                                allowfullscreen class='bg-cover bg-center pointer-events-none' frameborder="0"
+                        >
                         </iframe>
+                      </div>
                     </div>
                     <div class="mt-4 flex text-left justify-between text-base font-medium text-gray-900 space-x-8 mb-1">
                         <h3>
@@ -155,13 +159,13 @@ const hitSearchAPI = () => debounce(()=>{
 watch(searchInput, hitSearchAPI());
 
 const playVideo = (event) => {
-  event.target?.setAttribute('src', 'https://www.youtube.com/embed/' + event.target?.getAttribute('data-uid') + '?autoplay=1&mute=1&controls=0')
+  event.target?.firstElementChild?.setAttribute('src', 'https://www.youtube.com/embed/' + event.target?.firstElementChild?.getAttribute('data-uid') + '?autoplay=1&mute=1&controls=0')
 }
 
 const getYoutubeImage = (item) => item?.ext_16?.url;
 
 const stopVideo = (event) => {
-  event.target?.setAttribute('src', '');
+  event.target?.firstElementChild?.setAttribute('src', '');
 }
 
 router.beforeEach((to, from) => {
