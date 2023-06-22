@@ -7,9 +7,11 @@
         </div>
 
         <div class="mx-auto max-w-xl sm:mt-20 lg:mt-10">
-            <div v-for="message in formResponse.messages" v-if="formResponse.isResponse">
-                <ui-alert :message="message" :type="formResponse.type" />
-            </div>
+            <template v-if="formResponse.isResponse">
+                <div v-for="(message, number) in formResponse.messages" :key="number">
+                    <ui-alert :message="message" :type="formResponse.type" />
+                </div>
+            </template>
             <form v-if="(formResponse.isResponse && formResponse.type !== 'success') || formResponse.type === ''" class="" v-on:submit="submitHandler">
                 <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                     <div>

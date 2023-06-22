@@ -7,7 +7,7 @@
                    placeholder="Search Here" type="text"/>
         </div>
         <div class="w-full mt-6 grid grid-cols-1 gap-x-8 gap-y-8 justify-items-center sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4 px-4 sm:px-6 lg:px-8">
-            <div v-for="item in items">
+            <div v-for="(item, number) in items" :key="number">
                 <NuxtLink :to="`event${item.topics_id}`" class="cursor-pointer">
                     <div class="image-figure aspect-w-4 aspect-h-3 rounded-lg overflow-hidden bg-gray-100">
                         <img v-if='!item?.ext_13?.url'
@@ -33,7 +33,9 @@
                     </p>
                 </NuxtLink>
             </div>
-            <ui-skeletons-event-card-skeleton v-if="isProcessing" v-for="key in 8" :key="key" />
+            <template v-if="isProcessing">
+                <ui-skeletons-event-card-skeleton v-for="key in 8" :key="key" />
+            </template>
         </div>
         <div v-if="!items.length && !isProcessing">
             <div class="text-center">
