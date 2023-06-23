@@ -24,7 +24,7 @@
                         </iframe>
                       </div>
                     </div>
-                    <div class="mt-4 flex text-left justify-between text-base font-medium text-gray-900 space-x-8 mb-1">
+                    <div class="mt-4 flex text-left justify-between text-base font-medium text-gray-900 space-x-8 mb-1 w-64">
                         <h3>
                             <span/>
                             {{ item.subject }}
