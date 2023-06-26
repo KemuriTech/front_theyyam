@@ -132,7 +132,7 @@ const fetchData = async () => {
   initializeData();
 
   await $api
-    [extraParam === 'Pastevents' ? 'pastEvents' : 'occasions']
+    [extraParam === 'past' ? 'pastEvents' : 'occasions']
     .get(params)
     .then(response => response.json())
     .then(res => {
