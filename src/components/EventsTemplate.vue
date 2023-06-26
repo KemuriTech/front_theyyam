@@ -8,7 +8,7 @@
         </div>
         <div class="w-full mt-6 grid grid-cols-1 gap-x-8 gap-y-8 justify-items-center sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 xl:grid-cols-4 px-4 sm:px-6 lg:px-8">
             <div v-for="(item, number) in items" :key="number">
-                <NuxtLink :to="`event${item.topics_id}`" class="cursor-pointer">
+                <NuxtLink :to="`event/${item.topics_id}`" class="cursor-pointer">
                     <div class="image-figure aspect-w-4 aspect-h-3 rounded-lg overflow-hidden bg-gray-100">
                         <img v-if='!item?.ext_13?.url'
                              :src="item?.ext_16?.url"/>
@@ -28,7 +28,7 @@
                         <h3>
                             <span/>
                             {{ item.subject }}
-                        </h3> 
+                        </h3>
                     </div>
                     <p class="mt-1 text-sm text-gray-500 flex items-center space-x-2">
                       <span class="mr-1">{{
