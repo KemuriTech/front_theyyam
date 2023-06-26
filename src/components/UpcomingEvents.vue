@@ -20,10 +20,14 @@
         <NuxtLink :to="`/event/${event.topics_id}`" class="cursor-pointer">
           <div class="w-full aspect-h-3 rounded bg-gray-100">
             <img v-if="!isAnyYTVideo(event)" :src="event.ext_16.url" class="object-center object-cover h-full w-full" />
-            <iframe v-else class='bg-cover bg-center rounded' frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen v-on:mouseover="playVideo" v-on:mouseleave="stopVideo" :data-uid='getYTUID(event)'
-              :style='`background-image: url("${getYoutubeImage(event)}");`'></iframe>
+            <div v-else
+                 v-on:mouseleave="stopVideo"
+                 v-on:mouseover="playVideo"
+            >
+              <iframe :data-uid="getYTUID(event)" :style='`background-image: url("${getYoutubeImage(event)}");`'
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen class="bg-cover bg-center rounded pointer-events-none" frameborder="0"></iframe>
+            </div>
           </div>
           <div class="max-w-18 break-words mt-4 flex text-left justify-between text-base font-medium text-gray-900 space-x-8 mb-1">
             <h3>
@@ -59,9 +63,7 @@ export default {
   },
   methods: {
     playVideo: (event) => {
-      const _target = event.target;
-
-      _target.setAttribute('src', 'https://www.youtube.com/embed/' + _target.getAttribute('data-uid') + '?autoplay=1&mute=1&controls=0')
+      event.target?.firstElementChild?.setAttribute('src', 'https://www.youtube.com/embed/' + event.target?.firstElementChild?.getAttribute('data-uid') + '?autoplay=1&mute=1&controls=0')
     },
 
     getYoutubeImage: (item) => {
@@ -69,9 +71,7 @@ export default {
     },
 
     stopVideo: (event) => {
-      const _target = event.target;
-
-      _target.setAttribute('src', '');
+      event.target?.firstElementChild?.setAttribute('src', '');
     },
 
     isAnyYTVideo: (item) => {
