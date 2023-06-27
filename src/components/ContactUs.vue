@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="mt-10">
-                    <button type="submit" :class="`block w-full rounded-md bg-secondary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${formResponse.isProcessing?'animate-pulse':''}`" :disabled="formResponse.isProcessing">
+                    <button type="submit" :class="`block w-full rounded-md bg-secondary px-3.5 py-2.5 text-center text-sm text-white shadow-sm hover:bg-opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${formResponse.isProcessing?'animate-pulse':''}`" :disabled="formResponse.isProcessing">
                         Submit
                     </button>
                 </div>
