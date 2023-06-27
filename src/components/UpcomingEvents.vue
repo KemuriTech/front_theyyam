@@ -16,7 +16,7 @@
     </div>
     <div class="w-full mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-8 sm:gap-y-10
     justify-items-center">
-    <div v-for="event in upcomingEventData" :key="event.id" class="relative group">
+      <div v-for="event in upcomingEventData" :key="event.id" class="relative group">
         <NuxtLink :to="`/event/${event.topics_id}`" class="cursor-pointer">
           <div class="w-full aspect-h-3 rounded bg-gray-100">
             <img v-if="!isAnyYTVideo(event)" :src="event.ext_16.url" class="object-center object-cover h-full w-full" />
@@ -45,14 +45,14 @@
 </template>
   
 <script>
-import { ArrowRightIcon } from "@heroicons/vue/20/solid"
+import { ArrowRightIcon } from '@heroicons/vue/20/solid'
 export default {
   async setup() {
 
     let upcomingEventData = {};
     let { $formatter } = useNuxtApp();
 
-    await fetch(`https://theyyam.g.kuroco.app/rcms-api/1/latest-event?cnt=4`, {
+    await fetch('https://theyyam.g.kuroco.app/rcms-api/1/latest-event?cnt=4', {
       method: 'GET',
     }).then(response => response.json())
       .then(response => {
@@ -79,7 +79,7 @@ export default {
       return false;
     },
     splitYTUID(url) {
-      return url.split("v=")[1] ?? null;
+      return url.split('v=')[1] ?? null;
     },
     getYTUID(item) {
       return this.splitYTUID(item?.ext_13?.url) ?? this.splitYTUID(item?.ext_14?.url) ?? this.splitYTUID(item?.ext_15?.url) ?? this.splitYTUID(item?.ext_16?.url);
