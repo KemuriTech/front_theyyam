@@ -52,6 +52,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { watch } from 'vue';
+import { SERVICE_NAME, SITE_DESC, FRONTEND_BASE_URL } from '../constants';
 
 
 const router = useRouter();
@@ -172,4 +173,11 @@ router.beforeEach((to, from) => {
   previousPath.value = from.name;
 });
 
+useHead({
+  title: SERVICE_NAME,
+  meta: [
+    { hid: 'description', name: 'description', content: SITE_DESC },
+    { hid: 'og:image', property: 'og:image', content: `https://${FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+  ],
+})
 </script>

@@ -115,6 +115,7 @@
 
 <script setup>
 import { MusicalNoteIcon, AcademicCapIcon, EyeIcon, SparklesIcon, CheckIcon } from '@heroicons/vue/24/outline'
+import { SERVICE_NAME, SITE_DESC, FRONTEND_BASE_URL } from '../constants';
 
 const images = [
   [
@@ -185,4 +186,11 @@ const section2Img = 'th_bg_1.jpg';
 
 const eventImg = 'th_bg_2.jpg';
 
+useHead({
+  title: SERVICE_NAME,
+  meta: [
+    { hid: 'description', name: 'description', content: SITE_DESC },
+    { hid: 'og:image', property: 'og:image', content: `https://${FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+  ],
+})
 </script>

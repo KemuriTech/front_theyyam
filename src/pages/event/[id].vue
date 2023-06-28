@@ -22,6 +22,9 @@
           </div>
           <TabPanels class="w-full aspect-w-1 aspect-h-1" >
             <TabPanel v-for="(media, id) in mediaArr" :key="id">
+              <Head>
+                <Meta :content="media.url" name="og:image"/>
+              </Head>
               <img v-if="media.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="media.url" alt="Temple" />
               <div v-else-if="media.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
                 <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" allowfullscreen :src="$ytVideo.getYTVideoUrl(media.url, 'mute=1&modestbranding=1&autoplay=1')"></iframe>
@@ -32,6 +35,10 @@
 
         <!-- Product info -->
         <div class="mt-8 px-4 sm:px-0 sm:mt-16 lg:mt-0">
+          <Head>
+            <Title>{{ eventData.subject }}</Title>
+            <Meta :content="eventData.ext_3" name="description"/>
+          </Head>
           <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">{{ eventData.subject }}</h1>
 
           <div class="mt-3">
