@@ -8,4 +8,11 @@ export default defineNuxtConfig({
   css: [
     '@/assets/css/common.css'
   ],
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: 'en'
+      },
+    }
+  }
 })
