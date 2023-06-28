@@ -41,10 +41,10 @@
           </Head>
           <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">{{ eventData.subject }}</h1>
 
-          <div class="mt-3">
+          <div class="mt-3" v-if="eventData?.ext_4 || eventData?.ext_5 || eventData?.ext_7">
             <h2 class="sr-only">Details</h2>
-            <p class="text-lg text-gray-700">{{$formatter.formatDate(eventData?.ext_4, eventData?.ext_5)}}</p>
-            <p class="text-lg text-gray-700">{{ eventData.ext_7 }}</p>
+            <p class="text-lg text-gray-700">{{$formatter.formatDate(eventData?.ext_4, eventData?.ext_5)}}
+              <span v-if="eventData.ext_7">({{ eventData.ext_7 }})</span></p>
           </div>
 
           <div class="mt-6">
