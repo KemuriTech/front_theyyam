@@ -23,7 +23,7 @@
           <TabPanels class="w-full aspect-w-1 aspect-h-1" >
             <TabPanel v-for="(media, id) in mediaArr" :key="id">
               <Head>
-                <Meta :content="media.url" name="og:image"/>
+                <Meta :content="media.url" property="og:image"/>
               </Head>
               <img v-if="media.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="media.url" alt="Temple" />
               <div v-else-if="media.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
