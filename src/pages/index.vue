@@ -39,7 +39,9 @@
         <p class="mt-5 text-lg text-gray-300">Theyyam is more than just a festival, it's a window into the rich tapestry of Kerala's cultural heritage. This sacred dance ritual, known to be over 1,500 years old, brings to life ancient tales and honors divine figures through spectacular performances filled with vibrant colors, hypnotic rhythms, and awe-inspiring passion. Experience an unforgettable blend of art, religion, and tradition at the Theyyam Festival.</p>
         <div class="mt-12 grid grid-cols-1 gap-y-12 gap-x-6 sm:grid-cols-2">
           <p v-for="item in metrics" :key="item.id">
-            <span class="block text-2xl font-bold text-white">{{ item.stat }}</span>
+            <span class="block text-2xl font-bold text-white">
+              <span ref="counter" class="counter">0</span>
+            </span>
             <span class="mt-1 block text-base text-gray-300"
             ><span class="font-medium text-white">{{ item.emphasis }}</span> {{ item.rest }}</span
             >
@@ -116,6 +118,7 @@
 <script setup>
 import { MusicalNoteIcon, AcademicCapIcon, EyeIcon, SparklesIcon, CheckIcon } from '@heroicons/vue/24/outline'
 import { SERVICE_NAME, SITE_DESC, FRONTEND_BASE_URL } from '../constants';
+import { ref, onMounted } from 'vue';
 
 const images = [
   [
@@ -152,6 +155,40 @@ const metrics = [
   { id: 3, stat: '15,000+', emphasis: 'Performances Annually:', rest: 'With over 15,000 Theyyam performances conducted annually, this festival is the beating heart of Kerala\'s cultural landscape.' },
   { id: 4, stat: '1000+', emphasis: 'Venues:', rest: 'Theyyam rituals take place across over 1,000 sacred groves and temples in North Kerala.' },
 ]
+
+const animateCounter = (element, startValue, endValue, duration) => {
+  let startTimestamp;
+  const step = (timestamp) => {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    element.textContent = formatStat(Math.floor(progress * (endValue - startValue) + startValue));
+    if (progress < 1) window.requestAnimationFrame(step);
+  };
+  window.requestAnimationFrame(step);
+};
+
+const formatStat = (value) => {
+  return value.toLocaleString() + '+';
+};
+
+const counter = ref(null)
+
+onMounted(() => {
+  const counters = Array.from(counter.value);
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const counter = entry.target;
+        const index = counters.indexOf(counter);
+        const endValue = parseInt(metrics[index].stat.replace(/[+,]/g, ''), 10);
+        animateCounter(counter, 0, endValue, 1500);
+        observer.unobserve(counter);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  counters.forEach(counter => observer.observe(counter));
+});
 
 const features = [
   {
