@@ -17,7 +17,15 @@ export default defineNuxtConfig({
             t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
           })(window, document, "clarity", "script", "hkr0anyws4");
-        `, type: 'text/javascript' }
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-2TD6T9L2NP');`,
+          type: 'text/javascript' 
+        },
+        { src: "https://www.googletagmanager.com/gtag/js?id=G-2TD6T9L2NP",
+          async:true
+        },
       ],
       htmlAttrs: {
         lang: 'en'
