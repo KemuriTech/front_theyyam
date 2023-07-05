@@ -46,13 +46,14 @@
   
 <script>
 import { ArrowRightIcon } from '@heroicons/vue/20/solid'
+import { BASE_URL } from '../constants';
 export default {
   async setup() {
 
     let upcomingEventData = {};
     let { $formatter } = useNuxtApp();
 
-    await fetch('https://theyyam.g.kuroco.app/rcms-api/1/latest-event?cnt=4', {
+    await fetch(`https://${BASE_URL}/rcms-api/1/latest-event?cnt=4`, {
       method: 'GET',
     }).then(response => response.json())
       .then(response => {

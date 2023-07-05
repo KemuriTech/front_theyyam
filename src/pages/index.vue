@@ -3,7 +3,7 @@
   <section class="text-black body-font overflow-hidden">
     <div class="container mx-auto flex px-5 py-5 md:flex-row flex-col items-center ">
       <div class="lg:flex-grow flex flex-col md:items-start md:text-left sm:mb-5 mb-16 md:mb-0 items-center text-center">
-        <h1 class="title-font tracking-wide text-5xl md:text-7xl mb-4 font-bold ">Theyyam Festival
+        <h1 class="title-font tracking-wide text-5xl md:text-7xl mb-4 font-bold ">{{SERVICE_NAME}}
         </h1>
         <p class="mb-8 text-lg leading-8 text-gray-600">Experience the Vibrancy of Tradition at the Theyyam Festival - A Sacred Dance That Transcends Time</p>
         <div class="flex justify-center">
