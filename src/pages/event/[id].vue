@@ -63,7 +63,7 @@
                 <h3>
                   <DisclosureButton class="group relative w-full py-6 flex justify-between items-center text-left">
                     <span :class="[open ? 'text-secondary' : 'text-gray-900', 'text-sm font-medium']">
-                      Theyyams Performing Here
+                      Performers
                     </span>
                     <span class="ml-6 flex items-center">
                       <PlusIcon v-if="!open" class="block h-6 w-6 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
