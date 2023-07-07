@@ -28,6 +28,7 @@
     "instantsearch.js": "^4.54.1",
     "vue-instantsearch": "^4.8.9",
     "vue-intersection-observer": "^0.1.9",
-    "vue-observe-visibility": "^1.0.0"
+    "vue-observe-visibility": "^1.0.0",
+    "vue3-google-map": "^0.15.0"
   }
 }

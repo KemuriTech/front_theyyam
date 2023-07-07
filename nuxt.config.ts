@@ -8,6 +8,11 @@ export default defineNuxtConfig({
   css: [
     '@/assets/css/common.css'
   ],
+  runtimeConfig: {
+    public: {
+      googleAPIkey: process.env.GOOGLE_API_KEY,
+    }
+  },
   app: {
     head: {
       script: [

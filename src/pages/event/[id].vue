@@ -92,6 +92,19 @@
                 <DisclosurePanel as="div" class="pb-6 prose prose-sm">
                   <p>{{ eventData.ext_9 }}</p>
                   <p>{{ eventData.ext_10 }}</p>
+                  <GoogleMap :api-key="`${config.googleAPIkey}`" style="width: 100%; height: 500px" :center="{ lat: eventData.ext_11, lng: eventData.ext_12 }" :zoom="15">
+                    <Marker :options="{ position: { lat: eventData.ext_11, lng: eventData.ext_12 } }" >
+                      <InfoWindow>
+                        <div class="font-bold" id="content">
+                          <p id="firstHeading" class="firstHeading mt-0">{{eventData.subject}}</p>
+                          <a v-if="eventData.ext_11 && eventData.ext_12" :href="`https://www.google.com/maps/search/?api=1&query=${eventData.ext_11}%2C${eventData.ext_12}`" target="_blank" class="py-0 mb-1 text-center no-underline text-gray-600 font-normal">
+                            Open in Google Maps
+                            <svg class="inline mb-0.5 fill-gray-600" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="12" height="12" viewBox="0 0 48 48" ><path d="M 40.960938 4.9804688 A 2.0002 2.0002 0 0 0 40.740234 5 L 28 5 A 2.0002 2.0002 0 1 0 28 9 L 36.171875 9 L 22.585938 22.585938 A 2.0002 2.0002 0 1 0 25.414062 25.414062 L 39 11.828125 L 39 20 A 2.0002 2.0002 0 1 0 43 20 L 43 7.2460938 A 2.0002 2.0002 0 0 0 40.960938 4.9804688 z M 12.5 8 C 8.3826878 8 5 11.382688 5 15.5 L 5 35.5 C 5 39.617312 8.3826878 43 12.5 43 L 32.5 43 C 36.617312 43 40 39.617312 40 35.5 L 40 26 A 2.0002 2.0002 0 1 0 36 26 L 36 35.5 C 36 37.446688 34.446688 39 32.5 39 L 12.5 39 C 10.553312 39 9 37.446688 9 35.5 L 9 15.5 C 9 13.553312 10.553312 12 12.5 12 L 22 12 A 2.0002 2.0002 0 1 0 22 8 L 12.5 8 z"/></svg>
+                          </a>
+                        </div>
+                      </InfoWindow>
+                    </Marker>
+                  </GoogleMap>
                   <a v-if="eventData.ext_11 && eventData.ext_12" :href="`https://www.google.com/maps/search/?api=1&query=${eventData.ext_11}%2C${eventData.ext_12}`" target="_blank" class="py-2.5 text-center no-underline text-gray-600 font-normal">
                     Open in Google Maps
                     <svg class="inline mb-0.5 fill-gray-600" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="12" height="12" viewBox="0 0 48 48" ><path d="M 40.960938 4.9804688 A 2.0002 2.0002 0 0 0 40.740234 5 L 28 5 A 2.0002 2.0002 0 1 0 28 9 L 36.171875 9 L 22.585938 22.585938 A 2.0002 2.0002 0 1 0 25.414062 25.414062 L 39 11.828125 L 39 20 A 2.0002 2.0002 0 1 0 43 20 L 43 7.2460938 A 2.0002 2.0002 0 0 0 40.960938 4.9804688 z M 12.5 8 C 8.3826878 8 5 11.382688 5 15.5 L 5 35.5 C 5 39.617312 8.3826878 43 12.5 43 L 32.5 43 C 36.617312 43 40 39.617312 40 35.5 L 40 26 A 2.0002 2.0002 0 1 0 36 26 L 36 35.5 C 36 37.446688 34.446688 39 32.5 39 L 12.5 39 C 10.553312 39 9 37.446688 9 35.5 L 9 15.5 C 9 13.553312 10.553312 12 12.5 12 L 22 12 A 2.0002 2.0002 0 1 0 22 8 L 12.5 8 z"/></svg>
@@ -160,6 +173,7 @@ import {
 } from '@heroicons/vue/20/solid';
 
 import { MinusIcon, PlusIcon } from '@heroicons/vue/20/solid';
+import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map';
 
 
 const MEDIA_TYPE = {
@@ -181,8 +195,12 @@ export default {
     TabPanels,
     MinusIcon,
     PlusIcon,
+    GoogleMap,
+    Marker,
+    InfoWindow
   },
   async setup() {
+    const config = useRuntimeConfig()
     const { $formatter, $ytVideo, $api, $router } = useNuxtApp()
     const { params } = useRoute();
     let eventData = {};
@@ -284,7 +302,8 @@ export default {
       $ytVideo,
       MEDIA_TYPE,
       contactInfos,
-      mediaArr
+      mediaArr,
+      config,
     }
   },
   mounted() {
@@ -320,3 +339,8 @@ export default {
 
 
 </script>
+<style>
+.gm-style img {
+  margin: unset!important;
+}
+</style>
