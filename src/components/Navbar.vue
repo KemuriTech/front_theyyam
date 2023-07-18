@@ -71,6 +71,7 @@ const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'Events', href: '/events', current: true },
   { name: 'Past Events', href: '/past', current: false },
+  { name: 'Map View', href: '/map', current: true },
 ]
 </script>
 <style scoped>
