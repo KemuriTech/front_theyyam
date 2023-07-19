@@ -5,7 +5,7 @@ const KUROCO_API_VER = 1;
 const KUROCO_API_PREFIX = 'rcms-api';
 const BASE_URL = `${SITE_KEY}.g.kuroco.app`;
 const LANDING_PAGE_URL = `https://${BASE_URL}`;
-const FRONTEND_BASE_URL = `${SITE_KEY}-festival.vercel.app`;
+const FRONTEND_BASE_URL = `${SITE_KEY}festival.com`;
 const SITE_DESC = 'Experience the Vibrancy of Tradition at the Theyyam Festival - A Sacred Dance That Transcends Time';
 
 export {

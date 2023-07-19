@@ -20,6 +20,7 @@ const navigation = {
     { name: 'Home', href: '/' },
     { name: 'Events', href: '/events' },
     { name: 'Past Events', href: '/past' },
+    { name: 'Map View', href: '/map' },
   ],
   date: {
     year:(new Date()).getFullYear()

@@ -2,21 +2,23 @@
   <GoogleMap :api-key="`${config.googleAPIkey}`" :center="mapCenter" :zoom="11" class="px-6" style="width: 100%; height: 950px" @click="closeInfoWindow()">
     <Marker v-for="(event, id) in eventData" :key="event.id" :options="{ position: { lat: event.ext_11, lng: event.ext_12 } }" @mousedown="openInfoWindow(id)">
       <InfoWindow v-if="selectedMarkerId === id">
-        <div v-if="isPageLoaded" id="content" class="font-bold">
-          <h3 id="firstHeading" class="firstHeading mt-0">{{ event.subject }}</h3>
-          <img :src="`${event.ext_16.url}`" alt="Temple" class="w-full h-[10rem] object-center object-cover sm:rounded-lg py-2"/>
-          <p class="text-md text-gray-700 py-2">{{ $formatter.formatDate(event.ext_4, event.ext_5) }}</p>
-          <div class="pb-2">
-            <p class="text-gray-700 line-clamp-3 text-sm w-[18rem]">{{ event.ext_3 }}</p>
+        <NuxtLink :to="`/event/${event.topics_id}`" target="_blank">
+          <div v-if="isPageLoaded" id="content">
+            <h3 id="firstHeading" class="firstHeading mt-0 font-bold">{{ event.subject }}</h3>
+            <img :src="`${event.ext_16.url}`" alt="Temple" class="w-full h-[10rem] object-center object-cover sm:rounded-lg py-2"/>
+            <p class="text-md text-gray-700 py-2">{{ $formatter.formatDate(event.ext_4, event.ext_5) }}</p>
+            <div class="pb-2">
+              <p class="text-gray-700 text-base line-clamp-3 text-sm w-[20rem]">{{ event.ext_3 }}</p>
+            </div>
+            <span class="py-0 mb-1 text-center no-underline text-gray-600 font-normal">
+              View event
+              <svg class="inline mb-0.5 fill-gray-600" height="12" viewBox="0 0 48 48" width="12" x="0px"
+                   xmlns="http://www.w3.org/2000/svg" y="0px">
+                <path d="M 40.960938 4.9804688 A 2.0002 2.0002 0 0 0 40.740234 5 L 28 5 A 2.0002 2.0002 0 1 0 28 9 L 36.171875 9 L 22.585938 22.585938 A 2.0002 2.0002 0 1 0 25.414062 25.414062 L 39 11.828125 L 39 20 A 2.0002 2.0002 0 1 0 43 20 L 43 7.2460938 A 2.0002 2.0002 0 0 0 40.960938 4.9804688 z M 12.5 8 C 8.3826878 8 5 11.382688 5 15.5 L 5 35.5 C 5 39.617312 8.3826878 43 12.5 43 L 32.5 43 C 36.617312 43 40 39.617312 40 35.5 L 40 26 A 2.0002 2.0002 0 1 0 36 26 L 36 35.5 C 36 37.446688 34.446688 39 32.5 39 L 12.5 39 C 10.553312 39 9 37.446688 9 35.5 L 9 15.5 C 9 13.553312 10.553312 12 12.5 12 L 22 12 A 2.0002 2.0002 0 1 0 22 8 L 12.5 8 z"/>
+              </svg>
+            </span>
           </div>
-          <NuxtLink :to="`/event/${event.topics_id}`" class="py-0 mb-1 text-center no-underline text-gray-600 font-normal" target="_blank">
-            View event
-            <svg class="inline mb-0.5 fill-gray-600" height="12" viewBox="0 0 48 48" width="12" x="0px"
-                 xmlns="http://www.w3.org/2000/svg" y="0px">
-              <path d="M 40.960938 4.9804688 A 2.0002 2.0002 0 0 0 40.740234 5 L 28 5 A 2.0002 2.0002 0 1 0 28 9 L 36.171875 9 L 22.585938 22.585938 A 2.0002 2.0002 0 1 0 25.414062 25.414062 L 39 11.828125 L 39 20 A 2.0002 2.0002 0 1 0 43 20 L 43 7.2460938 A 2.0002 2.0002 0 0 0 40.960938 4.9804688 z M 12.5 8 C 8.3826878 8 5 11.382688 5 15.5 L 5 35.5 C 5 39.617312 8.3826878 43 12.5 43 L 32.5 43 C 36.617312 43 40 39.617312 40 35.5 L 40 26 A 2.0002 2.0002 0 1 0 36 26 L 36 35.5 C 36 37.446688 34.446688 39 32.5 39 L 12.5 39 C 10.553312 39 9 37.446688 9 35.5 L 9 15.5 C 9 13.553312 10.553312 12 12.5 12 L 22 12 A 2.0002 2.0002 0 1 0 22 8 L 12.5 8 z"/>
-            </svg>
-          </NuxtLink>
-        </div>
+        </NuxtLink>
       </InfoWindow>
     </Marker>
   </GoogleMap>
@@ -24,6 +26,7 @@
 
 <script>
 import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map';
+import { FRONTEND_BASE_URL } from '../constants';
 
 export default {
   data() {
@@ -39,6 +42,13 @@ export default {
     InfoWindow,
   },
   async setup() {
+    useHead({
+      title: 'Find Theyyam Events Near You | Interactive Map of Theyyam Performances | Theyyam Festival',
+      meta: [
+        { hid: 'description', name: 'description', content: 'Explore our interactive map to discover Theyyam events happening near you. Stay updated on the vibrant Theyyam performances and never miss a ritual dance again. Locate and join the tradition!' },
+        { hid: 'og:image', property: 'og:image', content: `https://${FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+      ],
+    })
     const config = useRuntimeConfig()
     const { $formatter, $api } = useNuxtApp()
     let eventData = {};
