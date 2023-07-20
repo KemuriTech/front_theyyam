@@ -10,13 +10,13 @@
       <div v-for="(item, number) in items" :key="number">
         <NuxtLink :to="`event/${item.topics_id}`" class="cursor-pointer">
           <div class="image-figure aspect-w-4 aspect-h-3 rounded-lg overflow-hidden bg-gray-100">
-            <img v-if='!item?.ext_13?.url'
-                 :src="item?.ext_16?.url"/>
+            <img v-if='!item?.videos?.length'
+                 :src="item?.photo?.url"/>
             <div v-else
                  v-on:mouseleave="stopVideo"
                  v-on:mouseover="playVideo"
             >
-              <iframe :data-uid='item?.ext_13?.url?.split("v=")[1]'
+              <iframe :data-uid='JSON.stringify(getUIDs(item))'
                       :style='`background-image: url("${getYoutubeImage(item)}");`'
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowfullscreen class='bg-cover bg-center pointer-events-none' frameborder="0"
@@ -32,7 +32,7 @@
           </div>
           <p class="mt-1 text-sm text-gray-500 flex items-center space-x-2">
             <span class="mr-1">{{
-              $formatter.formatDate(item.ext_4, item.ext_5)
+              $formatter.formatDate(item.start_dt, item.end_dt)
             }}</span>
           </p>
         </NuxtLink>
@@ -52,8 +52,8 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { watch } from 'vue';
+import { useYTValidate } from '~/stores/ytValidate';
 import { SERVICE_NAME, SITE_DESC, FRONTEND_BASE_URL } from '../constants';
-
 
 const router = useRouter();
 const previousPath = ref(null);
@@ -67,6 +67,8 @@ const pageInfo = ref({
   lastPage: 1,
 });
 const searchInput = ref('');
+const ytStore = useYTValidate();
+const { validateYTVideo } = ytStore;
 
 const initializeData = () => {
   if (pageInfo.value.pageID == 1) {
@@ -159,14 +161,34 @@ const hitSearchAPI = () => debounce(()=>{
 
 watch(searchInput, hitSearchAPI());
 
-const playVideo = (event) => {
-  event.target?.firstElementChild?.setAttribute('src', 'https://www.youtube.com/embed/' + event.target?.firstElementChild?.getAttribute('data-uid') + '?autoplay=1&mute=1&controls=0')
+const playVideo =  async event => {
+  const ytUIDs = JSON.parse(event.target?.firstElementChild?.getAttribute('data-uid'));
+  let ytCurrentLength = 0;
+
+  while (ytCurrentLength < ytUIDs.length) {
+    await validateYTVideo(ytUIDs[ytCurrentLength])
+      .then(res=> {
+        if (res.isValid) {
+          event.target?.firstElementChild?.setAttribute('src', `https://www.youtube.com/embed/${res.uid}?autoplay=1&mute=1&controls=0`);
+          ytCurrentLength = ytUIDs.length;
+        }
+      });
+    ytCurrentLength++;
+  }
 }
 
-const getYoutubeImage = (item) => item?.ext_16?.url;
+const getYoutubeImage = (item) => item?.photo?.url;
 
 const stopVideo = (event) => {
   event.target?.firstElementChild?.setAttribute('src', '');
+}
+
+const splitYTUID = (url) => {
+  return url.split('v=')[1] ?? null;
+}
+
+const getUIDs = item => {
+  return item?.videos?.map(e=>splitYTUID(e.url));
 }
 
 router.beforeEach((to, from) => {

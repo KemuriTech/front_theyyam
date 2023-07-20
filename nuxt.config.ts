@@ -3,7 +3,8 @@ export default defineNuxtConfig({
   srcDir: 'src',
   modules: [
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
+    '@pinia/nuxt',
   ],
   css: [
     '@/assets/css/common.css'
@@ -26,9 +27,9 @@ export default defineNuxtConfig({
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'G-2TD6T9L2NP');`,
-          type: 'text/javascript' 
+        type: 'text/javascript' 
         },
-        { src: "https://www.googletagmanager.com/gtag/js?id=G-2TD6T9L2NP",
+        { src: 'https://www.googletagmanager.com/gtag/js?id=G-2TD6T9L2NP',
           async:true
         },
         { id:'vwoCode',
@@ -48,10 +49,10 @@ export default defineNuxtConfig({
         }
       ],
       link: [
-          {
-            rel: 'preconnect',
-            href:"https://dev.visualwebsiteoptimizer.com"
-          }
+        {
+          rel: 'preconnect',
+          href:'https://dev.visualwebsiteoptimizer.com'
+        }
       ],
       htmlAttrs: {
         lang: 'en'

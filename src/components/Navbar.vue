@@ -67,6 +67,7 @@
 import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { SERVICE_NAME } from '~/constants';
+
 const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'Events', href: '/events', current: true },

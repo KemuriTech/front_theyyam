@@ -5,6 +5,7 @@ interface APIInstance {
     occasion: APIModule,
     occasions: APIModule,
     pastEvents: APIModule,
+    upcomingEvents: APIModule,
     allEvents: APIModule,
 }
 
@@ -14,6 +15,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         occasion: new APIModule('event'),
         occasions: new APIModule('events'),
         pastEvents: new APIModule('past-events'),
+        upcomingEvents: new APIModule('latest-event'),
         allEvents: new APIModule('all-events'),
     };
 

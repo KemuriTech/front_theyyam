@@ -116,9 +116,9 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
 import { MusicalNoteIcon, AcademicCapIcon, EyeIcon, SparklesIcon, CheckIcon } from '@heroicons/vue/24/outline'
 import { SERVICE_NAME, SITE_DESC, FRONTEND_BASE_URL } from '../constants';
-import { ref, onMounted } from 'vue';
 
 const images = [
   [

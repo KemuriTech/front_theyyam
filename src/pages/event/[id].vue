@@ -37,29 +37,29 @@
         <div class="mt-8 px-4 sm:px-0 sm:mt-16 lg:mt-0">
           <Head>
             <Title>{{ eventData.subject }}</Title>
-            <Meta :content="eventData.ext_3" name="description"/>
+            <Meta :content="eventData.description" name="description"/>
           </Head>
           <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">{{ eventData.subject }}</h1>
 
-          <div class="mt-3" v-if="eventData?.ext_4 || eventData?.ext_5 || eventData?.ext_7">
+          <div class="mt-3" v-if="eventData?.start_dt || eventData?.end_dt || eventData?.malayalam_calendar">
             <h2 class="sr-only">Details</h2>
-            <p class="text-lg text-gray-700">{{$formatter.formatDate(eventData?.ext_4, eventData?.ext_5)}}
-              <span v-if="eventData.ext_7">({{ eventData.ext_7 }})</span></p>
+            <p class="text-lg text-gray-700">{{$formatter.formatDate(eventData?.start_dt, eventData?.end_dt)}}
+              <span v-if="eventData.malayalam_calendar">({{ eventData.malayalam_calendar }})</span></p>
           </div>
 
           <div class="mt-6">
             <h3 class="sr-only">Description</h3>
 
             <div class="text-base text-gray-700 space-y-6">
-              {{ eventData.ext_3 }}
+              {{ eventData.description }}
             </div>
           </div>
 
-          <section v-if="eventData.ext_6 || eventData.ext_9 || eventData.ext_10 || eventData.ext_11 || eventData.ext_12 || contactInfos.length" aria-labelledby="details-heading" class="mt-12">
+          <section v-if="eventData.performers || eventData.venue_address || eventData.venue_direction_notes || eventData.venue_lat || eventData.venue_long || contactInfos.length" aria-labelledby="details-heading" class="mt-12">
             <h2 id="details-heading" class="sr-only">Additional details</h2>
 
             <div class="border-t divide-y divide-gray-200">
-              <Disclosure v-if="eventData.ext_6" as="div" v-slot="{ open }">
+              <Disclosure v-if="eventData.performers" as="div" v-slot="{ open }">
                 <h3>
                   <DisclosureButton class="group relative w-full py-6 flex justify-between items-center text-left">
                     <span :class="[open ? 'text-secondary' : 'text-gray-900', 'text-sm font-medium']">
@@ -73,11 +73,11 @@
                 </h3>
                 <DisclosurePanel as="div" class="pb-6 prose prose-sm">
                   <p>
-                    {{ eventData.ext_6 }}
+                    {{ eventData.performers }}
                   </p>
                 </DisclosurePanel>
               </Disclosure>
-              <Disclosure v-if="eventData.ext_9 || eventData.ext_10" as="div" v-slot="{ open }">
+              <Disclosure v-if="eventData.venue_address || eventData.venue_direction_notes" as="div" v-slot="{ open }">
                 <h3>
                   <DisclosureButton class="group relative w-full py-6 flex justify-between items-center text-left">
                     <span :class="[open ? 'text-secondary' : 'text-gray-900', 'text-sm font-medium']">
@@ -90,13 +90,13 @@
                   </DisclosureButton>
                 </h3>
                 <DisclosurePanel as="div" class="pb-6 prose prose-sm">
-                  <p class="mb-2">{{ eventData.ext_9 }}</p>
-                  <p class="my-2">{{ eventData.ext_10 }}</p>
+                  <p class="mb-2">{{ eventData.venue_address }}</p>
+                  <p class="my-2">{{ eventData.venue_direction_notes }}</p>
                   <div class="pt-2 mb-2">
-                    <GoogleMap :api-key="`${config.googleAPIkey}`" style="width: 100%; height: 500px" :center="{ lat: eventData.ext_11, lng: eventData.ext_12 }" :zoom="15">
-                      <Marker :options="{ position: { lat: eventData.ext_11, lng: eventData.ext_12 } }" >
+                    <GoogleMap :api-key="`${config.googleAPIkey}`" style="width: 100%; height: 500px" :center="{ lat: eventData.venue_lat, lng: eventData.venue_long }" :zoom="15">
+                      <Marker :options="{ position: { lat: eventData.venue_lat, lng: eventData.venue_long } }" >
                         <InfoWindow>
-                          <NuxtLink v-if="eventData.ext_11 && eventData.ext_12" :to="`https://www.google.com/maps/search/?api=1&query=${eventData.ext_11}%2C${eventData.ext_12}`" class='no-underline' target="_blank">
+                          <NuxtLink v-if="eventData.venue_lat && eventData.venue_long" :href="`https://www.google.com/maps/search/?api=1&query=${eventData.venue_lat}%2C${eventData.venue_long}`" class="no-underline" target="_blank">
                             <div class="font-bold" id="content">
                               <p id="firstHeading" class="firstHeading mt-0">{{eventData.subject}}</p>
                               <span class="py-0 mb-1 text-center text-gray-600 font-normal">
@@ -109,7 +109,7 @@
                       </Marker>
                     </GoogleMap>
                   </div>
-                  <a v-if="eventData.ext_11 && eventData.ext_12" :href="`https://www.google.com/maps/search/?api=1&query=${eventData.ext_11}%2C${eventData.ext_12}`" target="_blank" class="py-2.5 text-center no-underline text-gray-600 font-normal">
+                  <a v-if="eventData.venue_lat && eventData.venue_long" :href="`https://www.google.com/maps/search/?api=1&query=${eventData.venue_lat}%2C${eventData.venue_long}`" target="_blank" class="py-2.5 text-center no-underline text-gray-600 font-normal">
                     Open in Google Maps
                     <svg class="inline mb-0.5 fill-gray-600" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="12" height="12" viewBox="0 0 48 48" ><path d="M 40.960938 4.9804688 A 2.0002 2.0002 0 0 0 40.740234 5 L 28 5 A 2.0002 2.0002 0 1 0 28 9 L 36.171875 9 L 22.585938 22.585938 A 2.0002 2.0002 0 1 0 25.414062 25.414062 L 39 11.828125 L 39 20 A 2.0002 2.0002 0 1 0 43 20 L 43 7.2460938 A 2.0002 2.0002 0 0 0 40.960938 4.9804688 z M 12.5 8 C 8.3826878 8 5 11.382688 5 15.5 L 5 35.5 C 5 39.617312 8.3826878 43 12.5 43 L 32.5 43 C 36.617312 43 40 39.617312 40 35.5 L 40 26 A 2.0002 2.0002 0 1 0 36 26 L 36 35.5 C 36 37.446688 34.446688 39 32.5 39 L 12.5 39 C 10.553312 39 9 37.446688 9 35.5 L 9 15.5 C 9 13.553312 10.553312 12 12.5 12 L 22 12 A 2.0002 2.0002 0 1 0 22 8 L 12.5 8 z"/></svg>
                   </a>
@@ -219,85 +219,15 @@ export default {
 
         eventData = response.details;
         let _mediaArr = [];
-        if (eventData?.ext_16?.url) {
+        if (eventData?.photo?.url) {
           _mediaArr.push({
-            url: eventData?.ext_16?.url,
+            url: eventData?.photo?.url,
             type: MEDIA_TYPE.IMAGE
           })
         }
         mediaArr.value = _mediaArr;
       });
-    const contactInfos = [];
-
-    if (eventData?.ext_17
-      || eventData?.ext_18
-      || eventData?.ext_19
-      || eventData?.ext_20
-      || eventData?.ext_21) {
-      contactInfos.push(
-        {
-          name: eventData.ext_17 ?? '',
-          designation: eventData.ext_18 ?? '',
-          contacts: [
-            eventData.ext_19 ?? '',
-            eventData.ext_20 ?? '',
-            eventData.ext_21 ?? '',
-          ],
-        },
-      )
-    }
-    if (eventData?.ext_22
-      || eventData?.ext_23
-      || eventData?.ext_24
-      || eventData?.ext_25
-      || eventData?.ext_26) {
-      contactInfos.push(
-        {
-          name: eventData.ext_22 ?? '',
-          designation: eventData.ext_23 ?? '',
-          contacts: [
-            eventData.ext_24 ?? '',
-            eventData.ext_25 ?? '',
-            eventData.ext_26 ?? '',
-          ],
-        },
-      )
-    }
-    if (eventData?.ext_27
-      || eventData?.ext_28
-      || eventData?.ext_29
-      || eventData?.ext_30
-      || eventData?.ext_31) {
-      contactInfos.push(
-        {
-          name: eventData.ext_27 ?? '',
-          designation: eventData.ext_28 ?? '',
-          contacts: [
-            eventData.ext_29 ?? '',
-            eventData.ext_30 ?? '',
-            eventData.ext_31 ?? '',
-          ],
-        },
-      )
-    }
-    if (eventData?.ext_32
-      || eventData?.ext_33
-      || eventData?.ext_34
-      || eventData?.ext_35
-      || eventData?.ext_36) {
-      contactInfos.push(
-        {
-          name: eventData.ext_32 ?? '',
-          designation: eventData.ext_33 ?? '',
-          contacts: [
-            eventData.ext_34 ?? '',
-            eventData.ext_35 ?? '',
-            eventData.ext_36 ?? '',
-          ],
-        },
-      )
-    }
-
+    const contactInfos = eventData?.contacts ?? [];
 
     return {
       eventData,
@@ -313,11 +243,7 @@ export default {
   mounted() {
     const _mediaArr = this.mediaArr;
     const _getAllYTUIDs = () => {
-      return [
-        this.$ytVideo.youtubeParser(this.eventData.ext_13?.url),
-        this.$ytVideo.youtubeParser(this.eventData.ext_14?.url),
-        this.$ytVideo.youtubeParser(this.eventData.ext_15?.url)
-      ]
+      return this.eventData?.videos?.map(e=>this.$ytVideo.youtubeParser(e.url));
     }
     this.$ytVideo.getValidUID(() => _getAllYTUIDs())
       .then(ids => {

@@ -19,12 +19,12 @@
       <div v-for="event in upcomingEventData" :key="event.id" class="relative group">
         <NuxtLink :to="`/event/${event.topics_id}`" class="cursor-pointer">
           <div class="w-full aspect-h-3 rounded bg-gray-100">
-            <img v-if="!isAnyYTVideo(event)" :src="event.ext_16.url" class="object-center object-cover h-full w-full" />
+            <img v-if="!isAnyYTVideo(event)" :src="event.photo?.url" class="object-center object-cover h-full w-full" />
             <div v-else
                  v-on:mouseleave="stopVideo"
                  v-on:mouseover="playVideo"
             >
-              <iframe :data-uid="getYTUID(event)" :style='`background-image: url("${getYoutubeImage(event)}");`'
+              <iframe :data-uid="JSON.stringify(getYTUID(event))" :style='`background-image: url("${getYoutubeImage(event)}");`'
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowfullscreen class="bg-cover bg-center rounded pointer-events-none" frameborder="0"></iframe>
             </div>
@@ -36,7 +36,7 @@
             </h3>
           </div>
           <p class="mt-1 text-sm text-gray-500 flex items-center space-x-2">
-            <span class="mr-1">{{ $formatter.formatDate(event.ext_4, event.ext_5) }}</span>
+            <span class="mr-1">{{ $formatter.formatDate(event.start_dt, event.end_dt) }}</span>
           </p>
         </NuxtLink>
       </div>
@@ -45,17 +45,20 @@
 </template>
   
 <script>
-import { ArrowRightIcon } from '@heroicons/vue/20/solid'
-import { BASE_URL } from '../constants';
+import { ArrowRightIcon } from '@heroicons/vue/20/solid';
+import { useYTValidate } from '~/stores/ytValidate';
+
 export default {
   async setup() {
 
     let upcomingEventData = {};
     let { $formatter } = useNuxtApp();
+    const { $api } = useNuxtApp();
 
-    await fetch(`https://${BASE_URL}/rcms-api/1/latest-event?cnt=4`, {
-      method: 'GET',
-    }).then(response => response.json())
+    await $api
+      .upcomingEvents
+      .get({ cnt:4 })
+      .then(response => response.json())
       .then(response => {
         upcomingEventData = response.list;
       });
@@ -63,12 +66,27 @@ export default {
     return { upcomingEventData, $formatter };
   },
   methods: {
-    playVideo: (event) => {
-      event.target?.firstElementChild?.setAttribute('src', 'https://www.youtube.com/embed/' + event.target?.firstElementChild?.getAttribute('data-uid') + '?autoplay=1&mute=1&controls=0')
+    playVideo: async event => {
+      const ytStore = useYTValidate();
+      const { validateYTVideo } = ytStore;
+
+      const ytUIDs = JSON.parse(event.target?.firstElementChild?.getAttribute('data-uid'));
+      let ytCurrentLength = 0;
+
+      while (ytCurrentLength < ytUIDs.length) {
+        await validateYTVideo(ytUIDs[ytCurrentLength])
+          .then(res=> {
+            if (res.isValid) {
+              event.target?.firstElementChild?.setAttribute('src', `https://www.youtube.com/embed/${res.uid}?autoplay=1&mute=1&controls=0`);
+              ytCurrentLength = ytUIDs.length;
+            }
+          });
+        ytCurrentLength++;
+      }
     },
 
     getYoutubeImage: (item) => {
-      return item.ext_16?.url;
+      return item.photo?.url;
     },
 
     stopVideo: (event) => {
@@ -76,14 +94,17 @@ export default {
     },
 
     isAnyYTVideo: (item) => {
-      if (item?.ext_13?.url || item?.ext_14?.url || item?.ext_15?.url || item?.ext_16?.url) return true;
-      return false;
+      return item.videos?.length;
     },
     splitYTUID(url) {
       return url.split('v=')[1] ?? null;
     },
     getYTUID(item) {
-      return this.splitYTUID(item?.ext_13?.url) ?? this.splitYTUID(item?.ext_14?.url) ?? this.splitYTUID(item?.ext_15?.url) ?? this.splitYTUID(item?.ext_16?.url);
+      const _item = [];
+
+      item?.videos?.forEach(e=>_item.push(this.splitYTUID(e.url)));
+
+      return _item;
     }
   },
   components: {
