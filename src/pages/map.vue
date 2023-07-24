@@ -1,21 +1,21 @@
 <template>
   <BgGradient />
-  <div class="max-w-2xl mx-auto py-16 sm:py-4 sm:pt-12 lg:max-w-7xl">
+  <div class="max-w-2xl mx-auto pt-2 sm:py-4 sm:pt-12 lg:max-w-7xl">
     <div class="flex items-center pb-3">
       <div class="px-6 w-[16rem] md:w-[18rem]">
         <datepicker :key="datepickerKey" v-model="filter" :formatter="pickerFormat" :placeholder="'Filter By Date'" />
       </div>
     </div>
     <GoogleMap :key="mapKey" :api-key="`${config.googleAPIkey}`" :center="mapCenter" :zoom="11" class="px-6" style="width: 100%; height: 820px" @click="closeInfoWindow()">
-      <Marker v-for="(event, id) in filteredEventData" :key="event.id" :options="{ position: { lat: event.ext_11, lng: event.ext_12 } }" @mousedown="openInfoWindow(id)">
+      <Marker v-for="(event, id) in filteredEventData" :key="event.id" :options="{ position: { lat: event.venue_lat, lng: event.venue_long } }" @mousedown="openInfoWindow(id)">
         <InfoWindow v-if="selectedMarkerId === id">
           <NuxtLink :to="`/event/${event.topics_id}`" target="_blank">
             <div v-if="isPageLoaded" id="content">
               <h3 id="firstHeading" class="firstHeading mt-0 font-bold">{{ event.subject }}</h3>
-              <img :src="`${event.ext_16.url}`" alt="Temple" class="w-full h-[10rem] object-center object-cover sm:rounded-lg py-2"/>
-              <p class="text-md text-gray-700 py-2">{{ $formatter.formatDate(event.ext_4, event.ext_5) }}</p>
+              <img :src="`${event.photo?.url}`" alt="Temple" class="w-full h-[10rem] object-center object-cover sm:rounded-lg py-2"/>
+              <p class="text-md text-gray-700 py-2">{{ $formatter.formatDate(event.start_dt, event.end_dt) }}</p>
               <div class="pb-2">
-                <p class="text-gray-700 text-base line-clamp-3 text-sm w-[20rem]">{{ event.ext_3 }}</p>
+                <p class="text-gray-700 text-base line-clamp-3 text-sm w-[20rem]">{{ event.description }}</p>
               </div>
               <span class="py-0 mb-1 text-center no-underline text-gray-600 font-normal">
                 View event
@@ -88,8 +88,8 @@ let filteredEventData = computed(() => {
   const toDate = new Date(filter.value.toDate);
   toDate.setHours(23, 59, 59, 999);
   return eventData.filter((event) => {
-    const eventFromDate = new Date(event.ext_4);
-    const eventToDate = new Date(event.ext_5);
+    const eventFromDate = new Date(event.start_dt);
+    const eventToDate = new Date(event.end_dt);
     return eventFromDate >= fromDate && eventToDate <= toDate;
   });
 });
@@ -97,8 +97,8 @@ let filteredEventData = computed(() => {
 const setMapCenter = (data = filteredEventData.value) => {
   if (data.length > 0) {
     hasContent.value = true;
-    const latSum = data.reduce((total, event) => total + parseFloat(event.ext_11), 0);
-    const lngSum = data.reduce((total, event) => total + parseFloat(event.ext_12), 0);
+    const latSum = data.reduce((total, event) => total + parseFloat(event.venue_lat), 0);
+    const lngSum = data.reduce((total, event) => total + parseFloat(event.venue_long), 0);
     const avgLat = latSum / data.length;
     const avgLng = lngSum / data.length;
     mapCenter.value = { lat: avgLat, lng: avgLng };
