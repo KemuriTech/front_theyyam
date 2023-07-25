@@ -8,6 +8,12 @@ const LANDING_PAGE_URL = `https://${BASE_URL}`;
 const FRONTEND_BASE_URL = `${SITE_KEY}festival.com`;
 const SITE_DESC = 'Experience the Vibrancy of Tradition at the Theyyam Festival - A Sacred Dance That Transcends Time';
 
+const USER = 'USER';
+const NOTIFICATION_TYPE = {
+  SUCCESS: 'SUCCESS',
+  WARNING: 'WARNING'
+};
+
 export {
   SITE_DESC,
   FRONTEND_BASE_URL,
@@ -17,4 +23,6 @@ export {
   BASE_URL,
   LANDING_PAGE_URL,
   SITE_KEY,
+  USER,
+  NOTIFICATION_TYPE
 };

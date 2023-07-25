@@ -7,6 +7,8 @@ interface APIInstance {
     pastEvents: APIModule,
     upcomingEvents: APIModule,
     allEvents: APIModule,
+    auth: APIModule,
+    logout: APIModule,
 }
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -17,6 +19,8 @@ export default defineNuxtPlugin((nuxtApp) => {
         pastEvents: new APIModule('past-events'),
         upcomingEvents: new APIModule('latest-event'),
         allEvents: new APIModule('all-events'),
+        auth: new APIModule('login'),
+        logout: new APIModule('logout'),
     };
 
     return {
