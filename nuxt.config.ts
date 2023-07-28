@@ -5,6 +5,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/eslint-module',
     '@pinia/nuxt',
+    '@sidebase/nuxt-auth'
   ],
   css: [
     '@/assets/css/common.css'
@@ -57,6 +58,30 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'en'
       },
+    }
+  },
+  auth: {
+    baseURL: 'https://theyyam.g.kuroco.app/rcms-api/4',
+    provider: {
+      type: 'local',
+      endpoints: {
+        signIn: { path: '/login', method: 'post' },
+        signOut: { path: '/logout', method: 'post' },
+        signUp: { path: '/logout', method: 'post' },
+        getSession: { path: '/profile' }
+      },
+      token: {
+        signInResponseTokenPointer: '/access_token/value',
+        type: '',
+        headerName: 'X-RCMS-API-ACCESS-TOKEN'
+      },
+      pages: {
+        login: '/login',
+      }
+    },
+    session: {
+      enableRefreshPeriodically: false,
+      enableRefreshOnWindowFocus: false,
     }
   }
 })

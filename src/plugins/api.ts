@@ -1,26 +1,27 @@
-import APIModule from "~/repositories/apiModule";
+import PublicAPIModule from "~/repositories/api/publicApiModule";
+import AuthAPIModule from "~/repositories/api/AuthApiModule";
 
 interface APIInstance {
-    contact: APIModule,
-    occasion: APIModule,
-    occasions: APIModule,
-    pastEvents: APIModule,
-    upcomingEvents: APIModule,
-    allEvents: APIModule,
-    auth: APIModule,
-    logout: APIModule,
+    contact: PublicAPIModule,
+    occasion: PublicAPIModule,
+    occasions: PublicAPIModule,
+    pastEvents: PublicAPIModule,
+    upcomingEvents: PublicAPIModule,
+    allEvents: PublicAPIModule,
+    auth: PublicAPIModule,
+    logout: PublicAPIModule,
 }
 
 export default defineNuxtPlugin((nuxtApp) => {
     const modules: APIInstance = {
-        contact: new APIModule('contact-us'),
-        occasion: new APIModule('event'),
-        occasions: new APIModule('events'),
-        pastEvents: new APIModule('past-events'),
-        upcomingEvents: new APIModule('latest-event'),
-        allEvents: new APIModule('all-events'),
-        auth: new APIModule('login'),
-        logout: new APIModule('logout'),
+        contact: new PublicAPIModule('contact-us'),
+        occasion: new PublicAPIModule('event'),
+        occasions: new PublicAPIModule('events'),
+        pastEvents: new PublicAPIModule('past-events'),
+        upcomingEvents: new PublicAPIModule('latest-event'),
+        allEvents: new PublicAPIModule('all-events'),
+        auth: new PublicAPIModule('profile'),
+        logout: new PublicAPIModule('logout'),
     };
 
     return {

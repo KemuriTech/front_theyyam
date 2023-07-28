@@ -29,19 +29,20 @@
         </NuxtLink>
       </nav>
       <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+        <a
+          v-if="status === 'authenticated'"
+          class="text-base font-medium text-gray-500 text-trans-y"
+          href="#"
+          @click="logoutHandler"
+        >Sign Out</a>
         <NuxtLink
-          v-if="!user.grant_token"
+          v-else
           class="text-base font-medium text-gray-500 text-trans-y"
           to="/login"
         >
           Login
         </NuxtLink>
-        <a
-          v-else
-          class="text-base font-medium text-gray-500 text-trans-y"
-          href="#"
-          @click="logoutHandler"
-        >Sign Out</a>
+
       </div>
     </div>
     <transition
@@ -91,19 +92,19 @@
                 @click="close"
               >{{ item.name }}
               </NuxtLink>
+              <a
+                v-if="status === 'authenticated'"
+                class="text-base font-medium text-gray-900 hover:text-gray-700"
+                href="#"
+                @click="logoutHandler(), close()"
+              >Sign Out</a>
               <NuxtLink
-                v-if="!user.grant_token"
+                v-else
                 class="text-base font-medium text-gray-900 hover:text-gray-700"
                 to="/login"
                 @click="close"
               >Login
               </NuxtLink>
-              <a
-                v-else
-                class="text-base font-medium text-gray-900 hover:text-gray-700"
-                href="#"
-                @click="logoutHandler(), close()"
-              >Sign Out</a>
             </div>
           </div>
         </div>
@@ -120,9 +121,7 @@ import {
 } from '@headlessui/vue';
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import { NOTIFICATION_TYPE, SERVICE_NAME } from '~/constants';
-import { useUser } from '~/stores/user';
 import { useNotification } from '~/stores/notification';
-import { storeToRefs } from 'pinia';
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
@@ -130,17 +129,12 @@ const navigation = [
   { name: 'Past Events', href: '/past', current: false },
   { name: 'Map View', href: '/map', current: true }
 ];
-const userStore = useUser();
-const { user } = storeToRefs(userStore);
-const { setUserDetails } = userStore;
 const { $api } = useNuxtApp();
 const { addNotification } = useNotification();
-
+const { signOut, status } = useAuth();
 const logoutHandler = async () => {
-  await $api.logout
-    .post()
-    .then((res) => {
-      setUserDetails({});
+  await signOut({ redirect:false })
+    .then(() => {
       redirectAfterLogout();
       addNotification('Signed out successfully.', NOTIFICATION_TYPE.SUCCESS);
     })

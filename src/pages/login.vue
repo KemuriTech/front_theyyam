@@ -79,9 +79,17 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import { useUser } from '~/stores/user';
 import { NOTIFICATION_TYPE } from '~/constants';
 import { useNotification } from '~/stores/notification';
+
+definePageMeta({
+  middleware: defineNuxtRouteMiddleware((to, from) => {
+    const { status } = useAuth();
+    if (status.value === 'authenticated') {
+      navigateTo('/');
+    }
+  }),
+});
 
 useHead({
   bodyAttrs: {
@@ -100,49 +108,34 @@ const state = reactive({
     login_save: 0,
   },
 });
-const { setUserDetails } = useUser();
+const { signIn } = useAuth();
 const formResponse = reactive({
   isResponse: false,
   type: '',
   messages: [],
   isProcessing: false,
 });
-const { $api } = useNuxtApp();
 const { addNotification } = useNotification();
 const loginHandler = async (event) => {
   event.preventDefault();
   formResponse.isProcessing = true;
   formResponse.isResponse = false;
 
-  const _successMessage = 'Successfully Logged in.';
+  await signIn({ ...state.form, login_save: state.form.login_save ? 1 : 0 },  { redirect:false })
+    .then(() => {
+      const _successMessage = 'Successfully Logged in.';
 
-  await $api.auth
-    .post({ ...state.form, login_save: state.form.login_save ? 1 : 0 })
-    .then(async (res) => {
-      let message = [];
-      let type;
-
-      if (!res.ok) {
-        type = 'danger';
-        await res
-          .text()
-          .then((text) =>
-            JSON.parse(text).errors.map((e) => message.push(e.message))
-          );
-        setResponse(type, message);
-      } else {
-        await res.text().then((_res) => {
-          let data = JSON.parse(_res);
-          addNotification(_successMessage, NOTIFICATION_TYPE.SUCCESS);
-          setUserDetails({ grant_token: data.grant_token });
-          redirectAfterLogin();
-        });
-      }
+      addNotification(_successMessage, NOTIFICATION_TYPE.SUCCESS);
+      redirectAfterLogin();
     })
-    .catch((err) => {
-      const message = [];
-      message.push('Something went wrong! Please try again...');
-      setResponse('danger', message);
+    .catch(err => {
+      let message = [];
+      let type = 'danger';
+      err?.data?.errors?.map((e) => message.push(e.message));
+      if (!message.length) {
+        message.push('Something went wrong! Please try again...');
+      }
+      setResponse(type, message);
     })
     .finally((res) => {
       formResponse.isProcessing = false;

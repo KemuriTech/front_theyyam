@@ -1,15 +1,12 @@
-import {
-  KUROCO_API_VER,
-  KUROCO_API_PREFIX,
-  LANDING_PAGE_URL
-} from '../constants';
 class APIModule {
 
   constructor(resource) {
-    this.resource = `${LANDING_PAGE_URL}/${KUROCO_API_PREFIX}/${KUROCO_API_VER}/${resource}`;
+    this.resource = resource;
+    this.headers = {};
   }
 
   get(param) {
+    this._setupHeader();
     const serialize = (obj) => {
       var str = [];
       for (var p in obj)
@@ -19,13 +16,14 @@ class APIModule {
       return str.join('&');
     }
 
-
     return fetch(`${this.resource}?${serialize(param)}`, {
       method: 'GET',
+      headers: this.headers
     });
   }
 
   show(id, param) {
+    this._setupHeader();
     const serialize = (obj) => {
       var str = [];
       for (var p in obj)
@@ -38,11 +36,14 @@ class APIModule {
 
     return fetch(`${this.resource}/${id}?${serialize(param)}`, {
       method: 'GET',
+      headers: this.headers
     });
   }
 
   post(payload, endpointConfig = {}) {
+    this._setupHeader();
     endpointConfig.headers = {
+      ...this.headers,
       ...endpointConfig?.headers,
       'Content-Type': 'application/json'
     }
@@ -51,6 +52,19 @@ class APIModule {
       body : JSON.stringify(payload),
       ...endpointConfig
     })
+  }
+
+  _setupHeader() {
+    const {
+      status,
+      token,
+    } = useAuth();
+
+    if (status.value === 'authenticated') {
+      this.headers = {
+        'X-RCMS-API-ACCESS-TOKEN': token.value
+      }
+    }
   }
 }
 
