@@ -1,5 +1,5 @@
 import PublicAPIModule from "~/repositories/api/publicApiModule";
-import AuthAPIModule from "~/repositories/api/AuthApiModule";
+import AuthAPIModule from "~/repositories/api/authApiModule";
 
 interface APIInstance {
     contact: PublicAPIModule,
