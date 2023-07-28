@@ -10,6 +10,7 @@ interface APIInstance {
     allEvents: PublicAPIModule,
     auth: PublicAPIModule,
     logout: PublicAPIModule,
+    token: AuthAPIModule,
 }
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -22,6 +23,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         allEvents: new PublicAPIModule('all-events'),
         auth: new PublicAPIModule('profile'),
         logout: new PublicAPIModule('logout'),
+        token: new AuthAPIModule('token'),
     };
 
     return {
