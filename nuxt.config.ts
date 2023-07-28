@@ -70,7 +70,7 @@ export default defineNuxtConfig({
     }
   },
   auth: {
-    baseURL: 'https://theyyam.g.kuroco.app/rcms-api/6',
+    baseURL: `https://${process.env.BASE_URL}/${process.env.KUROCO_API_PREFIX}/${process.env.KUROCO_API_VER_AUTH}`,
     provider: {
       type: 'local',
       endpoints: {
