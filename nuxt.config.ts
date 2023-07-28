@@ -13,6 +13,15 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       googleAPIkey: process.env.GOOGLE_API_KEY,
+      SERVICE_NAME: process.env.SERVICE_NAME,
+      SITE_KEY: process.env.SITE_KEY,
+      KUROCO_API_VER: process.env.KUROCO_API_VER,
+      KUROCO_API_PREFIX: process.env.KUROCO_API_PREFIX,
+      BASE_URL: process.env.BASE_URL,
+      LANDING_PAGE_URL: process.env.LANDING_PAGE_URL,
+      FRONTEND_BASE_URL: process.env.FRONTEND_BASE_URL,
+      SITE_DESC: process.env.SITE_DESC ,
+      KUROCO_API_VER_AUTH: process.env.KUROCO_API_VER_AUTH,
     }
   },
   app: {

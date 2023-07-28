@@ -35,21 +35,20 @@
 
 <script setup>
 import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map';
-import { FRONTEND_BASE_URL } from '../constants';
 import { ref, computed, onMounted , watch } from 'vue';
 import Datepicker from 'vue-tailwind-datepicker';
 import MapAlert from '../components/ui/MapAlert';
 import BgGradient from '../components/BgGradient';
+const config = useRuntimeConfig();
 
 useHead({
   title: 'Find Theyyam Events Near You | Interactive Map of Theyyam Performances | Theyyam Festival',
   meta: [
     { hid: 'description', name: 'description', content: 'Explore our interactive map to discover Theyyam events happening near you. Stay updated on the vibrant Theyyam performances and never miss a ritual dance again. Locate and join the tradition!' },
-    { hid: 'og:image', property: 'og:image', content: `https://${FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+    { hid: 'og:image', property: 'og:image', content: `https://${config.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
   ],
 })
 
-const config = useRuntimeConfig()
 const { $formatter, $api } = useNuxtApp()
 const isPageLoaded = ref(false);
 const selectedMarkerId = ref(null);
