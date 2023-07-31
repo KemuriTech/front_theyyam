@@ -189,11 +189,13 @@ if (query.oauth === 'success' && query.grant_token !== undefined) {
   const grantToken = query.grant_token;
   $api.token.post({ grant_token: grantToken })
     .then((response) => {
-      if (response.access_token?.value !== undefined) {
-        addNotification(_successMessage, NOTIFICATION_TYPE.SUCCESS);
-        rawToken.value=response.access_token.value;
+      if (response.access_token.value !== '') {
+        rawToken.value=response.access_token.value
+          .then(() => {
+            addNotification(_successMessage, NOTIFICATION_TYPE.SUCCESS);
+            redirectAfterLogin();
+          })
       }
-      redirectAfterLogin();
     });
 }
 </script>
