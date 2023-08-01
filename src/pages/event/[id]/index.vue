@@ -39,8 +39,12 @@
             <Title>{{ eventData.subject }}</Title>
             <Meta :content="eventData.description" name="description"/>
           </Head>
-          <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">{{ eventData.subject }}</h1>
-
+          <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 inline align-middle">{{ eventData.subject }}</h1>
+          <div v-if="status === 'authenticated'" class="inline-flex px-3">
+            <NuxtLink :to="`/event/${eventData.topics_id}/edit`" class="w-full rounded-md bg-secondary px-3.5 py-1.5 text-center text-sm text-white shadow-sm hover:bg-opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              Edit
+            </NuxtLink>
+          </div>
           <div class="mt-3" v-if="eventData?.start_dt || eventData?.end_dt || eventData?.malayalam_calendar">
             <h2 class="sr-only">Details</h2>
             <p class="text-lg text-gray-700">{{$formatter.formatDate(eventData?.start_dt, eventData?.end_dt)}}
@@ -225,6 +229,7 @@ export default {
     const { params } = useRoute();
     let eventData = {};
     const mediaArr = useState('mediaArr', () => ([]));
+    const { status } = useAuth();
 
     await $api.occasion.show(params.id)
       .then(response => response.json())
@@ -244,7 +249,6 @@ export default {
         mediaArr.value = _mediaArr;
       });
     const contactInfos = eventData?.contacts ?? [];
-
     return {
       eventData,
       open,
@@ -254,6 +258,7 @@ export default {
       contactInfos,
       mediaArr,
       config,
+      status
     }
   },
   mounted() {

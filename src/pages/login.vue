@@ -178,7 +178,10 @@ const setResponse = (type, message) => {
 };
 
 const redirectAfterLogin = async () => {
-  await navigateTo('/');
+  let path = '/';
+  if (route.redirectedFrom !== undefined)
+    path = route.redirectedFrom.path;
+  await navigateTo(path);
 };
 
 const googleLoginHandler = () => {

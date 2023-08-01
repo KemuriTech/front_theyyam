@@ -49,7 +49,7 @@ class APIModule {
     }
     return fetch(this.resource, {
       method: 'POST',
-      body : JSON.stringify(payload),
+      body: JSON.stringify(payload),
       ...endpointConfig
     })
   }
@@ -65,6 +65,20 @@ class APIModule {
         'X-RCMS-API-ACCESS-TOKEN': token.value
       }
     }
+  }
+
+  update(id, payload, endpointConfig = {}) {
+    this._setupHeader();
+    endpointConfig.headers = {
+      ...this.headers,
+      ...endpointConfig?.headers,
+      'Content-Type': 'application/json'
+    }
+    return fetch(`${this.resource}/${id}`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      ...endpointConfig
+    })
   }
 }
 
