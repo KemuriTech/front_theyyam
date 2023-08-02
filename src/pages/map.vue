@@ -7,7 +7,7 @@
       </div>
     </div>
     <GoogleMap :key="mapKey" :api-key="`${config.googleAPIkey}`" :center="mapCenter" :zoom="11" class="px-6" style="width: 100%; height: 820px" @click="closeInfoWindow()">
-      <Marker v-for="(event, id) in filteredEventData" :key="event.id" :options="{ position: { lat: event.venue_lat, lng: event.venue_long } }" @mousedown="openInfoWindow(id)">
+      <Marker v-for="(event, id) in validData" :key="event.id" :options="{ position: { lat: event.venue_lat, lng: event.venue_long } }" @mousedown="openInfoWindow(id)">
         <InfoWindow v-if="selectedMarkerId === id">
           <NuxtLink :to="`/event/${event.topics_id}`" target="_blank">
             <div v-if="isPageLoaded" id="content">
@@ -93,7 +93,13 @@ let filteredEventData = computed(() => {
   });
 });
 
-const setMapCenter = (data = filteredEventData.value) => {
+const validData = filteredEventData.value.filter(event => (
+  event.hasOwnProperty('venue_lat') && event.hasOwnProperty('venue_long') &&
+    typeof event.venue_lat === 'number' && typeof event.venue_long === 'number' &&
+    !isNaN(parseFloat(event.venue_lat)) && !isNaN(parseFloat(event.venue_long))
+));
+
+const setMapCenter = (data = validData) => {
   if (data.length > 0) {
     hasContent.value = true;
     const latSum = data.reduce((total, event) => total + parseFloat(event.venue_lat), 0);
