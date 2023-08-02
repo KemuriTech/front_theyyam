@@ -73,12 +73,12 @@
             </button>
           </div>
         </form>
-        <div class="w-full flex items-center justify-between py-3">
+        <div class="w-full flex items-center justify-between py-8">
           <hr class="w-full bg-gray-400">
           <p class="text-base font-medium leading-4 px-2.5 text-gray-400">OR</p>
           <hr class="w-full bg-gray-400  ">
         </div>
-        <div class="flex justify-center py-5">
+        <div class="flex justify-center">
           <button @click="googleLoginHandler" class="flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
             <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-0.5 0 48 48" version="1.1">
               <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -92,7 +92,7 @@
                 </g>
               </g>
             </svg>
-            <span>Sign in with Google</span>
+            <span>Continue with Google</span>
           </button>
         </div>
       </div>
