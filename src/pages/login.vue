@@ -100,12 +100,13 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import { NOTIFICATION_TYPE } from '~/constants';
 import { useNotification } from '~/stores/notification';
 import { useRoute } from 'vue-router';
 const  config=useRuntimeConfig();
 const { rawToken } = useAuthState();
+const { getSession } = useAuth();
 
 definePageMeta({
   middleware: defineNuxtRouteMiddleware((to, from) => {
@@ -190,15 +191,27 @@ const googleLoginHandler = () => {
 
 if (query.oauth === 'success' && query.grant_token !== undefined) {
   const grantToken = query.grant_token;
-  $api.token.post({ grant_token: grantToken })
-    .then((response) => {
-      if (response.access_token.value !== '') {
-        rawToken.value=response.access_token.value
-          .then(() => {
-            addNotification(_successMessage, NOTIFICATION_TYPE.SUCCESS);
-            redirectAfterLogin();
-          })
+  nextTick(async () => {
+    try {
+      const response = await $api.token.create({ grant_token: grantToken });
+      if (response.data._rawValue.access_token?.value !== '') {
+        rawToken.value = response.data._rawValue.access_token.value;
+        getSession({ required:true });
+        addNotification(_successMessage, NOTIFICATION_TYPE.SUCCESS);
+        redirectAfterLogin();
       }
-    });
+    } catch (error) {
+      let message = [];
+      let type = 'danger';
+      error?.data?.errors?.map((e) => message.push(e.message));
+      if (!message.length) {
+        message.push('Something went wrong! Please try again...');
+      }
+      setResponse(type, message);
+    }
+  });
+}
+if (query.oauth === 'fail') {
+  setResponse('danger', ['Not authorized to login']);
 }
 </script>

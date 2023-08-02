@@ -1,3 +1,4 @@
+import { useFetch } from 'nuxt/app';
 class APIModule {
 
   constructor(resource) {
@@ -48,6 +49,19 @@ class APIModule {
       'Content-Type': 'application/json'
     }
     return fetch(this.resource, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      ...endpointConfig
+    })
+  }
+
+  create(payload, endpointConfig = {}) {
+    endpointConfig.headers = {
+      ...this.headers,
+      ...endpointConfig?.headers,
+      'Content-Type': 'application/json'
+    }
+    return useFetch(this.resource, {
       method: 'POST',
       body: JSON.stringify(payload),
       ...endpointConfig
