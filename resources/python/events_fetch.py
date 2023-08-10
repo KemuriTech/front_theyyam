@@ -19,17 +19,20 @@ from datetime import date
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
-driver = webdriver.Chrome(executable_path=os.path.dirname(os.path.realpath(__file__))+"/chromedriver",chrome_options=chrome_options)
+driver = webdriver.Chrome()
 
 today = date.today()
+
+# Function to create a BeautifulSoup object from a URL
 def getSoup(r):
   r = requests.get(r)
   soup = BeautifulSoup(r.content,features="html.parser")
   return soup
-
+  
+# Function to extract selected data from the temple page
 def get_sel_data(id):
   sel_data = {}
-  driver.get('https://www.keralatourism.org/theyyamcalendar/temple.php?id='+id)
+  driver.get('https://www.keralatourism.org/theyyamcalendar/temple.php?id=' + str(id))
   map_loc = driver.find_element(By.CSS_SELECTOR, 'iframe').get_attribute('src')
   sel_data['map_loc'] =  map_loc
   urls = list()
@@ -39,11 +42,14 @@ def get_sel_data(id):
   contact_info = driver.find_element(By.CSS_SELECTOR, '.mb-4').find_elements(By.CSS_SELECTOR, 'p')
   sel_data['contact_info'] = contact_info[2:-1]
   return sel_data
-
-def get_event_dict(id):
+  
+# Function to get event data based on temple id
+def get_event_dict(id): 
   global today
   event_data = {}
-  event_soup = getSoup('https://www.keralatourism.org/theyyamcalendar/temple.php?id='+id)
+  event_soup = getSoup('https://www.keralatourism.org/theyyamcalendar/temple.php?id=' + str(id))
+
+  # Populate basic event data
   event_data['official_url(Additional items)'] = '{"url":"https://www.keralatourism.org/theyyamcalendar/temple.php?id=' + id + '","title":""}'
   event_data['Date'] = today
   event_data['Category'] = 'Events'
@@ -103,35 +109,61 @@ def get_event_dict(id):
   event_data['photos_path(Additional items)']   = '{"url":"https://www.keralatourism.org/theyyamcalendar/'+event_soup.find_all("img")[1]["src"] + '","title":""}'
   contact_direction_p = event_soup.find('div',{'class':'mb-4'}).find_all('p')
   event_data['venue_direction_notes(Additional items)'] = contact_direction_p[len(contact_direction_p)-1].text
-  for (index,val) in enumerate(sel_data['contact_info']):
+  
+  # Process to populate contact details with Kuroco content grouping structure
+  __RCMS_CONTENT_BOUNDARY__ = '__RCMS_CONTENT_BOUNDARY__'
+  contact_values = {
+    'name': [],
+    'designation': [],
+    'details': []
+   }
+  contact_detail_arrays = [[] for _ in range(4)]
+  for val in sel_data['contact_info']:
     curr_info_total = val.text.splitlines()
+    name, designation, current_contact_details = None, None, []
     for curr_info in curr_info_total:
-      if 'Name:' in curr_info:
-        name_index = 'contact_'+str(index+1)+'_name'
-        event_data[name_index + '(Additional items)'] = curr_info.split(': ')[1]
-      if 'Designation:' in curr_info:
-        des_index = 'contact_'+str(index+1)+'_designation'
-        event_data[des_index + '(Additional items)'] = curr_info.split(': ')[1]
-      if 'Contact no:' in curr_info:
-        for (curr_index,no) in enumerate(curr_info.split(': ')[1].split(',')):
-          no_index = 'contact_'+str(index+1)+'_contact_details_'+str(curr_index+1)
-
-          event_data[no_index + '(Additional items)'] = no
+        if 'Name:' in curr_info:
+            name = curr_info.split(': ')[1]
+        if 'Designation:' in curr_info:
+            designation = curr_info.split(': ')[1]
+        if 'Contact no:' in curr_info:
+            current_contact_details.extend(curr_info.split(': ')[1].split(','))
+    if name:
+        contact_values['name'].append(name)
+    if designation:
+        contact_values['designation'].append(designation)
+    if current_contact_details:
+        for i, contact_detail in enumerate(current_contact_details):
+            contact_detail_arrays[i].append(contact_detail)
+            
+    # Process and concatenate values for each field in contact_values and store in event data.
+    for field, values in contact_values.items():
+        if field == 'details':
+            for i, details_array in enumerate(contact_detail_arrays):
+                concatenated_details = [detail.replace(',', __RCMS_CONTENT_BOUNDARY__) for detail in details_array]
+                concatenated_value = __RCMS_CONTENT_BOUNDARY__.join(concatenated_details)
+                event_data[f'contact_details_{i+1}(Additional items)'] = concatenated_value
+        else:
+            concatenated_value = __RCMS_CONTENT_BOUNDARY__.join(values)
+            event_data[f'contact_{field}(Additional items)'] = concatenated_value
   return event_data
 
-soup = getSoup('https://www.keralatourism.org/theyyamcalendar/')
-pages = soup.find_all('span', {'class','page'})
-last = pages[len(pages)-1].text
-
+# Store events fields in CSV.        
 with open('events.csv', 'w') as csvfile:
-  fields = ['official_url(Additional items)', 'Date', 'Category', 'Title','description(Additional items)','start_dt(Additional items)','end_dt(Additional items)','performers(Additional items)','malayalam_calendar(Additional items)','venue_name(Additional items)','venue_address(Additional items)','venue_direction_notes(Additional items)','venue_lat(Additional items)','venue_long(Additional items)','videos_path_1(Additional items)','videos_path_2(Additional items)','videos_path_3(Additional items)','photos_path(Additional items)','contact_1_name(Additional items)','contact_1_designation(Additional items)','contact_1_contact_details_1(Additional items)','contact_1_contact_details_2(Additional items)','contact_1_contact_details_3(Additional items)','contact_2_name(Additional items)','contact_2_designation(Additional items)','contact_2_contact_details_1(Additional items)','contact_2_contact_details_2(Additional items)','contact_2_contact_details_3(Additional items)','contact_3_name(Additional items)','contact_3_designation(Additional items)','contact_3_contact_details_1(Additional items)','contact_3_contact_details_2(Additional items)','contact_3_contact_details_3(Additional items)','contact_4_name(Additional items)','contact_4_designation(Additional items)','contact_4_contact_details_1(Additional items)','contact_4_contact_details_2(Additional items)','contact_4_contact_details_3(Additional items)']
+  fields = ['official_url(Additional items)', 'Date', 'Category', 'Title','description(Additional items)','start_dt(Additional items)','end_dt(Additional items)','performers(Additional items)','malayalam_calendar(Additional items)','venue_name(Additional items)','venue_address(Additional items)','venue_direction_notes(Additional items)','venue_lat(Additional items)','venue_long(Additional items)','videos_path_1(Additional items)','videos_path_2(Additional items)','videos_path_3(Additional items)','photos_path(Additional items)','contact_name(Additional items)','contact_designation(Additional items)','contact_details_1(Additional items)','contact_details_2(Additional items)','contact_details_3(Additional items)','contact_details_4(Additional items)']
   writer = csv.DictWriter(csvfile, fieldnames=fields)
-  writer.writeheader()
-  for page in range(1,int(last)+1):
-    if page != 1:
-      soup =  getSoup('https://www.keralatourism.org/theyyamcalendar/index.php?page='+str(page)+'#searchshow')
-    for i in soup.find_all('tr'):
-      try:
-        writer.writerow(get_event_dict(i['onclick'][i['onclick'].index('(')+1:-1]))
-      except Exception as e:
+  writer.writeheader()  
+  
+  # Main process to load each page until page exists, and get event data
+  i = 1
+  while True: 
+    try:
+        event_data = get_event_dict(str(i))
+        print(f"Fetching data for event {i} - Title: {event_data['Title']}")
+        writer.writerow(event_data)
+        i += 1
+    except Exception as e:
         print(e)
+        print("No more events. Exiting loop.")
+        break
+driver.quit()
