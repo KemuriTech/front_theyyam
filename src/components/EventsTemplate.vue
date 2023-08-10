@@ -2,9 +2,14 @@
   <BgGradient />
   <div class="max-w-2xl mx-auto py-16 sm:py-24 sm:pt-12 lg:max-w-7xl">
     <div class="px-2 sm:px-5 lg:px-6">
-      <input id="search" v-model="searchInput" autocomplete="search" class="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-             name="search"
-             placeholder="Search Here" type="text"/>
+      <div class="flex">
+        <div class="sm:w-[12rem] md:w-[15rem] pr-2">
+          <datepicker v-model="dateFilter" :formatter="pickerFormat" :placeholder="'Filter By Date'" />
+        </div>
+        <div class="flex-grow">
+          <input  id="search" v-model="searchInput" autocomplete="search" class="relative block w-full opacity-100 pl-3 pr-12 py-2.5 rounded-lg overflow-hidden border-solid text-sm text-vtd-secondary-700 placeholder-vtd-secondary-400 transition-colors bg-white border border-vtd-secondary-300 focus:border-vtd-primary-300 focus:ring focus:ring-vtd-primary-500 focus:ring-opacity-10 focus:outline-none dark:bg-vtd-secondary-800 dark:border-vtd-secondary-700 dark:text-vtd-secondary-100 dark:placeholder-vtd-secondary-500 dark:focus:border-vtd-primary-500 dark:focus:ring-opacity-20" placeholder="Search here" type="text"/>
+        </div>
+      </div>
     </div>
     <div class="w-full mt-6 grid grid-cols-1 gap-x-8 gap-y-8 justify-items-center sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 xl:grid-cols-4 px-4 sm:px-6 lg:px-8">
       <div v-for="(item, number) in items" :key="number">
@@ -51,13 +56,16 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { watch } from 'vue';
+import { watch , ref } from 'vue';
 import { useYTValidate } from '~/stores/ytValidate';
+import Datepicker from 'vue-tailwind-datepicker';
+import dayjs from 'dayjs'
 const config = useRuntimeConfig();
 
 const router = useRouter();
 const previousPath = ref(null);
 const { $api } = useNuxtApp();
+const filter = ref('');
 
 const items = useState('items', () => ([]));
 const extraParam = router.currentRoute.value.name;
@@ -67,6 +75,14 @@ const pageInfo = ref({
   lastPage: 1,
 });
 const searchInput = ref('');
+const dateFilter = ref({
+  fromDate: null,
+  toDate: null,
+});
+const pickerFormat = ref({
+  date: 'DD MMM YYYY',
+  month: 'MMM'
+})
 const ytStore = useYTValidate();
 const { validateYTVideo } = ytStore;
 
@@ -108,14 +124,23 @@ const getPageInfo = (arr) => {
   };
 }
 
+const formatPickerDate = (dateString) => {
+  return dayjs(dateString).format('YYYY-MM-DD')
+}
+
 const buildFilterQuery = () => {
   const queryInputs = {
     subject: searchInput.value,
   };
+  const fromDate = formatPickerDate(dateFilter.value.fromDate);
+  const toDate = formatPickerDate(dateFilter.value.toDate);
   const filterQuery = Object.entries(queryInputs)
     .reduce((queries, [col, value]) => {
       if (value !== '') {
         queries.push(`${col} icontains "${value}"`);
+      }
+      if (fromDate !== '' && toDate !== '') {
+        queries.push(`ext_4 >= "${fromDate}" AND ext_5 <= "${toDate}"`)
       }
       return queries;
     }, [])
@@ -127,7 +152,7 @@ const fetchData = async () => {
     pageID: pageInfo.value.pageID,
   };
 
-  if (searchInput.value) {
+  if (searchInput.value || dateFilter.value.fromDate &&  dateFilter.value.toDate) {
     params.filter = buildFilterQuery();
   }
 
@@ -160,6 +185,7 @@ const hitSearchAPI = () => debounce(()=>{
 })
 
 watch(searchInput, hitSearchAPI());
+watch(dateFilter, hitSearchAPI());
 
 const playVideo =  async event => {
   const ytUIDs = JSON.parse(event.target?.firstElementChild?.getAttribute('data-uid'));
