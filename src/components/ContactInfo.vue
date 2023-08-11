@@ -1,9 +1,13 @@
 <template>
-  <div v-if="showContactInfo">
-    <span v-if="contactInfo.name">{{ contactInfo.name }}</span>
-    <span v-if="contactInfo.designation">({{ contactInfo.designation }})</span>
-    <div v-for="phone in contactInfo.phones" :key="phone">
-      <a class="no-underline text-gray-600 font-normal" :href="formattedTel(phone)">{{ phone }}</a>
+  <div>
+    <div>
+      <div v-if="showContactInfo">
+        <span>{{ contactInfo.name }}</span>
+        <span v-if="contactInfo.designation"> ({{ contactInfo.designation }})</span>
+        <div v-for="phone in contactInfo.phones" :key="phone">
+          <a class="no-underline text-gray-600 font-normal" :href="formattedTel(phone)">{{ phone }}</a>
+        </div>
+      </div>
     </div>
   </div>
 </template>

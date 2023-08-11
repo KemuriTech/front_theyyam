@@ -54,7 +54,7 @@
                       <input
                         type="text"
                         class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        v-model="eventData.details.contacts[index].name"
+                        v-model="contact.name"
                       />
                     </div>
                   </div>
@@ -64,7 +64,7 @@
                       <input
                         type="text"
                         class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        v-model="eventData.details.contacts[index].designation"
+                        v-model="contact.designation"
                       />
                     </div>
                   </div>
@@ -74,7 +74,7 @@
                       <input
                         type="text"
                         class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        v-model="eventData.details.contacts[index].phones[pIndex]"
+                        v-model="contact.phones[pIndex]"
                       />
                     </div>
                   </div>
@@ -277,20 +277,13 @@ await $api.occasion.show(params.id)
     if (!response.details) {
       return $router.push({ path: '/events' })
     }
-    const contacts = Array.apply(null, { length: 4 }).map((e, index)=>(
-      {
-        name:response.details.contacts[index]?.name,
-        designation:response.details.contacts[index]?.designation,
-        phones: Array.apply(null, { length: 3 })
-          .map((_e, _index)=>response?.details.contacts[index]?.phones?.[_index]),
-      }));
     const videos = Array.apply(null, { length:3 }).map((e, index) => (
       {
         url: response.details.videos[index]?.url,
         title: response.details.videos[index]?.title,
       }));
 
-    eventData.details = { ...response.details, contacts, videos };
+    eventData.details = { ...response.details, videos };
   });
 
 const getErrors = () => {
@@ -356,16 +349,18 @@ const submitHandler = async event => {
     },
   };
   
-  for (let i = 0; i < eventData.details.contacts.length && i < 4; i++) {
-    const contactIndex = 17 + i * 5;
-    const contact = eventData.details.contacts[i];
-
-    requestBody[`ext_${contactIndex}`] = contact.name;
-    requestBody[`ext_${contactIndex + 1}`] = contact.designation;
-    requestBody[`ext_${contactIndex + 2}`] = contact.phones[1];
-    requestBody[`ext_${contactIndex + 3}`] = contact.phones[2];
-    requestBody[`ext_${contactIndex + 4}`] = contact.phones[3];
-  }
+  const contactsPayload = (eventData?.details?.contacts || []).map(contact => {
+    const name = contact.name || '';
+    const designation = contact.designation || '';
+    const phones = (contact.phones || []).slice(0, 3).map(phone => phone || '');
+    return { name, designation, phones };
+  });
+  
+  requestBody['ext_17'] = contactsPayload.map(contact => contact.name || '');
+  requestBody['ext_18'] = contactsPayload.map(contact => contact.designation || '');
+  requestBody['ext_19'] = contactsPayload.map(contact => contact.phones[0] || '');
+  requestBody['ext_20'] = contactsPayload.map(contact => contact.phones[1] || '');
+  requestBody['ext_21'] = contactsPayload.map(contact => contact.phones[2] || '');
   
   for (let i = 0; i < 3; i++) {
     if (eventData.details.videos[i]?.url) {
@@ -388,6 +383,7 @@ const submitHandler = async event => {
       }
       else {
         addNotification('Content Updated Successfully.', NOTIFICATION_TYPE.SUCCESS);
+        $router.push({ path: `/event/${eventData.details.topics_id}` })
       }
     })
     .finally((res) => {
