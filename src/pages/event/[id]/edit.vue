@@ -196,13 +196,22 @@
                     />
                   </div>
                 </div>
+                <div class="col-span-6">
+                  <label class="block text-sm font-medium text-gray-700">Select Venue Location On Map</label>
+                  <div class="mt-1 flex rounded-md shadow-sm">
+                    <GoogleMap :api-key="`${config.googleAPIkey}`" style="width: 100%; height: 500px" :center="{ lat: markerPosition.lat, lng: markerPosition.lng }" :zoom="15" @click='getLatLng'>
+                      <Marker :options="{ position: { lat: markerPosition.lat , lng: markerPosition.lng } }" />
+                    </GoogleMap>
+                  </div>
+                </div>
                 <div class="col-span-6 sm:col-span-3">
                   <label class="block text-sm font-medium text-gray-700">Venue Latitude</label>
                   <div class="mt-1 flex rounded-md shadow-sm">
                     <input
-                      type="text"
+                      type="number"
+                      step="any"
                       class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      v-model="eventData.details.venue_lat"
+                      v-model="markerPosition.lat"
                     />
                   </div>
                 </div>
@@ -210,9 +219,10 @@
                   <label class="block text-sm font-medium text-gray-700">Venue Longitude</label>
                   <div class="mt-1 flex rounded-md shadow-sm">
                     <input
-                      type="text"
+                      type="number"
+                      step="any"
                       class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      v-model="eventData.details.venue_long"
+                      v-model="markerPosition.lng"
                     />
                   </div>
                 </div>
@@ -245,9 +255,13 @@
 import { useRoute } from 'vue-router';
 import { NOTIFICATION_TYPE } from '~/constants';
 import { useNotification } from '~/stores/notification';
+import { GoogleMap, Marker } from 'vue3-google-map';
+import { onMounted, ref } from 'vue';
 
 definePageMeta({ middleware: 'auth' })
 
+const config = useRuntimeConfig();
+const markerPosition = ref({ lat: 0, lng: 0 });
 const { $api, $router } = useNuxtApp()
 const { params } = useRoute();
 const eventData = reactive({
@@ -286,6 +300,18 @@ await $api.occasion.show(params.id)
     eventData.details = { ...response.details, videos };
   });
 
+onMounted(async () => {
+  markerPosition.value = {
+    lat: eventData.details.venue_lat,
+    lng: eventData.details.venue_long
+  };
+});
+const getLatLng = (event) => {
+  const lat = parseFloat(event.latLng.lat().toFixed(5));
+  const lng = parseFloat(event.latLng.lng().toFixed(5));
+  markerPosition.value = { lat, lng };
+};
+
 const getErrors = () => {
   const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
   const latExp = /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/;
@@ -303,11 +329,14 @@ const getErrors = () => {
     errArr.push('Video 3 URL incorrect')
   }
   // lat and long both must have either value or empty
-  if ((eventData.details.venue_long && eventData.details.venue_lat === '')
-    || (eventData.details.venue_lat && eventData.details.venue_long === '')
-  || (eventData.details.venue_lat && eventData.details.venue_long
-      && (!latExp.test(eventData.details.venue_lat) || !longExp.test(eventData.details.venue_long)))) {
-    errArr.push('invalid Venue Lat and Long')
+  const lat = markerPosition.value.lat;
+  const lng = markerPosition.value.lng;
+  if (lat === '' && lng !== '') {
+    errArr.push('Venue Lat cannot be empty');
+  } else if (lat !== '' && lng === '') {
+    errArr.push('Venue Long cannot be empty');
+  } else if (!latExp.test(lat) || !longExp.test(lng)) {
+    errArr.push('Invalid Venue Lat and Long');
   }
 
   return errArr;
@@ -341,8 +370,8 @@ const submitHandler = async event => {
     ext_8: eventData.details.venue_name,
     ext_9: eventData.details.venue_address,
     ext_10: eventData.details.venue_direction_notes,
-    ext_11: parseFloat(eventData.details.venue_lat),
-    ext_12: parseFloat(eventData.details.venue_long),
+    ext_11: markerPosition.value.lat,
+    ext_12: markerPosition.value.lng,
     ext_16: {
       url: eventData.details.photo.url,
       title: ''
