@@ -199,8 +199,8 @@
                 <div class="col-span-6">
                   <label class="block text-sm font-medium text-gray-700">Select Venue Location On Map</label>
                   <div class="mt-1 flex rounded-md shadow-sm">
-                    <GoogleMap :api-key="`${config.googleAPIkey}`" style="width: 100%; height: 500px" :center="{ lat: markerPosition.lat, lng: markerPosition.lng }" :zoom="15" @click='getLatLng'>
-                      <Marker :options="{ position: { lat: markerPosition.lat , lng: markerPosition.lng } }" />
+                    <GoogleMap :api-key="`${config.googleAPIkey}`" style="width: 100%; height: 500px" :center="{ lat: markerPosition.lat, lng: markerPosition.lng }" :zoom="15">
+                      <Marker :options="{ position: { lat: markerPosition.lat , lng: markerPosition.lng}, draggable: true  }" @dragend="getLatLng" />
                     </GoogleMap>
                   </div>
                 </div>
