@@ -59,6 +59,7 @@ import { useRouter } from 'vue-router';
 import { watch , ref } from 'vue';
 import { useYTValidate } from '~/stores/ytValidate';
 import Datepicker from 'vue-tailwind-datepicker';
+import { searchExt } from '../constants';
 import dayjs from 'dayjs'
 const config = useRuntimeConfig();
 
@@ -124,9 +125,7 @@ const getPageInfo = (arr) => {
   };
 }
 
-const formatPickerDate = (dateString) => {
-  return dayjs(dateString).format('YYYY-MM-DD')
-}
+const formatPickerDate = (dateString) => (dateString === null ? '' : dayjs(dateString).format('YYYY-MM-DD'));
 
 const buildFilterQuery = () => {
   const queryInputs = {
@@ -137,7 +136,11 @@ const buildFilterQuery = () => {
   const filterQuery = Object.entries(queryInputs)
     .reduce((queries, [col, value]) => {
       if (value !== '') {
-        queries.push(`${col} icontains "${value}"`);
+        const query = searchExt.map(ext => {
+          const extCondition = `ext_${ext} icontains "${value}"`;
+          return `${col} icontains "${value}" OR ${extCondition}`;
+        }).join(' OR ');
+        queries.push(query);
       }
       if (fromDate !== '' && toDate !== '') {
         queries.push(`ext_4 >= "${fromDate}" AND ext_5 <= "${toDate}"`)
