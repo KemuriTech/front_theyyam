@@ -291,7 +291,7 @@ const getLatLng = (event) => {
 };
 
 const getErrors = () => {
-  const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+  const regExp = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|live\/|v\/)?)([\w\-]+)(\S+)?$/;
 
   const errArr = [];
 
@@ -304,7 +304,7 @@ const getErrors = () => {
   if (eventData.details.videos[2].url && !regExp.test(eventData.details.videos[2].url)) {
     errArr.push('Video 3 URL incorrect')
   }
-  
+
   return errArr;
 }
 const setResponse = (type, message) => {
