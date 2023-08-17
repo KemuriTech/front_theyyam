@@ -1,9 +1,14 @@
 <template>
   <BgGradient />
-  <div class="max-w-2xl mx-auto pt-2 sm:py-4 sm:pt-12 lg:max-w-7xl">
-    <div class="flex items-center pb-3">
-      <div class="px-6 w-[16rem] md:w-[18rem]">
-        <datepicker :key="datepickerKey" v-model="filter" :formatter="pickerFormat" :placeholder="'Filter By Date'" />
+  <div class="max-w-2xl mx-auto py-16 sm:py-4 sm:pt-12 lg:max-w-7xl">
+    <div class="px-2 sm:px-5 lg:px-6">
+      <div class="flex items-center pb-3">
+        <div class="sm:w-[12rem] md:w-[15rem] pr-2">
+          <datepicker :key="datepickerKey" v-model="filter" :formatter="pickerFormat" :placeholder="'Filter By Date'" />
+        </div>
+        <div class="flex-grow">
+          <input  id="search" v-model="searchInput" autocomplete="search" class="relative block w-full opacity-100 pl-3 pr-12 py-2.5 rounded-lg overflow-hidden border-solid text-sm text-vtd-secondary-700 placeholder-vtd-secondary-400 transition-colors bg-white border border-vtd-secondary-300 focus:border-vtd-primary-300 focus:ring focus:ring-vtd-primary-500 focus:ring-opacity-10 focus:outline-none dark:bg-vtd-secondary-800 dark:border-vtd-secondary-700 dark:text-vtd-secondary-100 dark:placeholder-vtd-secondary-500 dark:focus:border-vtd-primary-500 dark:focus:ring-opacity-20" placeholder="Search here" type="text"/>
+        </div>
       </div>
     </div>
     <GoogleMap :key="mapKey" :api-key="`${config.googleAPIkey}`" :center="mapCenter" :zoom="11" class="px-6" style="width: 100%; height: 820px" @click="closeInfoWindow()">
@@ -68,6 +73,7 @@ const pickerFormat = ref({
   date: 'DD MMM YYYY',
   month: 'MMM'
 })
+const searchInput = ref('');
 const datepickerKey = ref(0);
 const mapKey = ref(0);
 
@@ -80,16 +86,26 @@ await $api.allEvents.get()
   });
     
 let filteredEventData = computed(() => {
-  if (!filter.value.fromDate || !filter.value.toDate) {
-    return eventData;
+  const fromDate = filter.value.fromDate ? new Date(filter.value.fromDate) : null;
+  const toDate = filter.value.toDate ? new Date(filter.value.toDate) : null;
+  const search = searchInput.value.trim().toLowerCase();
+  if (toDate) {
+    toDate.setHours(23, 59, 59, 999);
   }
-  const fromDate = new Date(filter.value.fromDate);
-  const toDate = new Date(filter.value.toDate);
-  toDate.setHours(23, 59, 59, 999);
   return eventData.filter((event) => {
     const eventFromDate = new Date(event.start_dt);
     const eventToDate = new Date(event.end_dt);
-    return eventFromDate >= fromDate && eventToDate <= toDate;
+    const contactNames = event.contacts.map(contact => contact.name);
+    const eventSearchParams = [
+      event.subject,
+      event.description,
+      event.performers,
+      event.venue_address,
+      ...contactNames
+    ].map(item => item.toLowerCase());
+    const dateFilter = (!fromDate || eventFromDate >= fromDate) && (!toDate || eventToDate <= toDate);
+    const searchFilter = !search || eventSearchParams.some(field => field.includes(search));
+    return dateFilter && searchFilter;
   });
 });
 
@@ -122,6 +138,7 @@ watch(filteredEventData, (newFilteredEventData) => {
 const handleReset = () => {
   filter.value.fromDate = null;
   filter.value.toDate = null;
+  searchInput.value = '';
   datepickerKey.value += 1;
   mapKey.value += 1;
 };

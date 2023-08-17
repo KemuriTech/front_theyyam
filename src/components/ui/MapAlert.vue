@@ -6,7 +6,7 @@
           <div class="p-4">
             <div class="flex items-center">
               <div class="w-0 flex-1 flex justify-between">
-                <p class="w-0 flex-1 text-sm font-medium text-gray-900">No events found in the given range</p>
+                <p class="w-0 flex-1 text-sm font-medium text-gray-900">No events found</p>
                 <button  @click="emitReset" class="ml-3 font-medium flex-shrink-0 bg-white rounded-md text-sm text-secondary hover:text-opacity-80 hover:outline-none hover:ring-1 hover:ring-offset-4 hover:ring-secondary">Reset</button>
               </div>
               <div class="ml-4 flex-shrink-0 flex">
