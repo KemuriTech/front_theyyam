@@ -204,28 +204,6 @@
                     </GoogleMap>
                   </div>
                 </div>
-                <div class="col-span-6 sm:col-span-3">
-                  <label class="block text-sm font-medium text-gray-700">Venue Latitude</label>
-                  <div class="mt-1 flex rounded-md shadow-sm">
-                    <input
-                      type="number"
-                      step="any"
-                      class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      v-model="markerPosition.lat"
-                    />
-                  </div>
-                </div>
-                <div class="col-span-6 sm:col-span-3">
-                  <label class="block text-sm font-medium text-gray-700">Venue Longitude</label>
-                  <div class="mt-1 flex rounded-md shadow-sm">
-                    <input
-                      type="number"
-                      step="any"
-                      class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      v-model="markerPosition.lng"
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -314,8 +292,6 @@ const getLatLng = (event) => {
 
 const getErrors = () => {
   const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-  const latExp = /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/;
-  const longExp = /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
 
   const errArr = [];
 
@@ -328,17 +304,7 @@ const getErrors = () => {
   if (eventData.details.videos[2].url && !regExp.test(eventData.details.videos[2].url)) {
     errArr.push('Video 3 URL incorrect')
   }
-  // lat and long both must have either value or empty
-  const lat = markerPosition.value.lat;
-  const lng = markerPosition.value.lng;
-  if (lat === '' && lng !== '') {
-    errArr.push('Venue Lat cannot be empty');
-  } else if (lat !== '' && lng === '') {
-    errArr.push('Venue Long cannot be empty');
-  } else if (!latExp.test(lat) || !longExp.test(lng)) {
-    errArr.push('Invalid Venue Lat and Long');
-  }
-
+  
   return errArr;
 }
 const setResponse = (type, message) => {
