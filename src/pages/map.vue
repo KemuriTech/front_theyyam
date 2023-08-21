@@ -14,7 +14,7 @@
     <GoogleMap :key="mapKey" :api-key="`${config.googleAPIkey}`" :center="mapCenter" :zoom="11" class="px-6" style="width: 100%; height: 820px" @click="closeInfoWindow()">
       <Marker v-for="(event, id) in filteredEventData" :key="event.id" :options="{ position: { lat: event.venue_lat, lng: event.venue_long } }" @mousedown="openInfoWindow(id)">
         <InfoWindow v-if="selectedMarkerId === id">
-          <NuxtLink :to="`/event/${event.topics_id}`" target="_blank">
+          <NuxtLink :to="`/event/${event.slug}`" target="_blank">
             <div v-if="isPageLoaded" id="content">
               <h3 id="firstHeading" class="firstHeading mt-0 font-bold">{{ event.subject }}</h3>
               <img :src="`${event.photo?.url}`" alt="Temple" class="w-full h-[10rem] object-center object-cover sm:rounded-lg py-2"/>

@@ -398,7 +398,7 @@ const submitHandler = async event => {
       }
       else {
         addNotification('Content Updated Successfully.', NOTIFICATION_TYPE.SUCCESS);
-        $router.push({ path: `/event/${eventData.details.topics_id}` })
+        $router.push({ path: `/event/${eventData.details.slug}` })
       }
     })
     .finally((res) => {
