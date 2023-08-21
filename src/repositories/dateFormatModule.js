@@ -34,10 +34,10 @@ class DateFormatModule {
       return `${fromDay} - ${toDay} ${fromMonth}`;
     }
     // If same month and year, format as "fromDay - toDay Month Year"
-    if (fromMonth == toMonth && fromYear === toYear &&  fromYear > currentYear && toYear > currentYear ) {
+    if ((fromMonth === toMonth && fromYear === toYear) && ((fromYear > currentYear && toYear > currentYear) || (fromYear < currentYear && toYear < currentYear))) {
       return `${fromDay} - ${toDay} ${toMonth} ${toYear}`;
-    }
-    if (fromMonth != toMonth && fromYear === toYear &&  fromYear > currentYear && toYear > currentYear ) {
+    } 
+    else if ((fromMonth !== toMonth && fromYear === toYear) && ((fromYear > currentYear && toYear > currentYear)|| (fromYear < currentYear && toYear < currentYear))) {
       return `${fromDay} ${fromMonth} - ${toDay} ${toMonth} ${toYear}`;
     }
 

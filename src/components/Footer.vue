@@ -21,6 +21,7 @@ const navigation = {
     { name: 'Events', href: '/events' },
     { name: 'Past Events', href: '/past' },
     { name: 'Map View', href: '/map' },
+    { name: 'Terms & Conditions', href: '/terms-conditions' },
   ],
   date: {
     year:(new Date()).getFullYear()

@@ -54,7 +54,7 @@
                       <input
                         type="text"
                         class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        v-model="eventData.details.contacts[index].name"
+                        v-model="contact.name"
                       />
                     </div>
                   </div>
@@ -64,7 +64,7 @@
                       <input
                         type="text"
                         class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        v-model="eventData.details.contacts[index].designation"
+                        v-model="contact.designation"
                       />
                     </div>
                   </div>
@@ -74,7 +74,7 @@
                       <input
                         type="text"
                         class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        v-model="eventData.details.contacts[index].phones[pIndex]"
+                        v-model="contact.phones[pIndex]"
                       />
                     </div>
                   </div>
@@ -196,24 +196,12 @@
                     />
                   </div>
                 </div>
-                <div class="col-span-6 sm:col-span-3">
-                  <label class="block text-sm font-medium text-gray-700">Venue Latitude</label>
+                <div class="col-span-6">
+                  <label class="block text-sm font-medium text-gray-700">Select Venue Location On Map</label>
                   <div class="mt-1 flex rounded-md shadow-sm">
-                    <input
-                      type="text"
-                      class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      v-model="eventData.details.venue_lat"
-                    />
-                  </div>
-                </div>
-                <div class="col-span-6 sm:col-span-3">
-                  <label class="block text-sm font-medium text-gray-700">Venue Longitude</label>
-                  <div class="mt-1 flex rounded-md shadow-sm">
-                    <input
-                      type="text"
-                      class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      v-model="eventData.details.venue_long"
-                    />
+                    <GoogleMap :api-key="`${config.googleAPIkey}`" style="width: 100%; height: 500px" :center="{ lat: markerPosition.lat, lng: markerPosition.lng }" :zoom="15">
+                      <Marker :options="{ position: { lat: markerPosition.lat , lng: markerPosition.lng}, draggable: true  }" @dragend="getLatLng" />
+                    </GoogleMap>
                   </div>
                 </div>
               </div>
@@ -245,9 +233,13 @@
 import { useRoute } from 'vue-router';
 import { NOTIFICATION_TYPE } from '~/constants';
 import { useNotification } from '~/stores/notification';
+import { GoogleMap, Marker } from 'vue3-google-map';
+import { onMounted, ref } from 'vue';
 
 definePageMeta({ middleware: 'auth' })
 
+const config = useRuntimeConfig();
+const markerPosition = ref({ lat: 0, lng: 0 });
 const { $api, $router } = useNuxtApp()
 const { params } = useRoute();
 const eventData = reactive({
@@ -277,26 +269,29 @@ await $api.occasion.show(params.id)
     if (!response.details) {
       return $router.push({ path: '/events' })
     }
-    const contacts = Array.apply(null, { length: 4 }).map((e, index)=>(
-      {
-        name:response.details.contacts[index]?.name,
-        designation:response.details.contacts[index]?.designation,
-        phones: Array.apply(null, { length: 3 })
-          .map((_e, _index)=>response?.details.contacts[index]?.phones?.[_index]),
-      }));
     const videos = Array.apply(null, { length:3 }).map((e, index) => (
       {
         url: response.details.videos[index]?.url,
         title: response.details.videos[index]?.title,
       }));
 
-    eventData.details = { ...response.details, contacts, videos };
+    eventData.details = { ...response.details, videos };
   });
 
+onMounted(async () => {
+  markerPosition.value = {
+    lat: eventData.details.venue_lat,
+    lng: eventData.details.venue_long
+  };
+});
+const getLatLng = (event) => {
+  const lat = parseFloat(event.latLng.lat().toFixed(5));
+  const lng = parseFloat(event.latLng.lng().toFixed(5));
+  markerPosition.value = { lat, lng };
+};
+
 const getErrors = () => {
-  const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-  const latExp = /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/;
-  const longExp = /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
+  const regExp = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|live\/|v\/)?)([\w\-]+)(\S+)?$/;
 
   const errArr = [];
 
@@ -308,13 +303,6 @@ const getErrors = () => {
   }
   if (eventData.details.videos[2].url && !regExp.test(eventData.details.videos[2].url)) {
     errArr.push('Video 3 URL incorrect')
-  }
-  // lat and long both must have either value or empty
-  if ((eventData.details.venue_long && eventData.details.venue_lat === '')
-    || (eventData.details.venue_lat && eventData.details.venue_long === '')
-  || (eventData.details.venue_lat && eventData.details.venue_long
-      && (!latExp.test(eventData.details.venue_lat) || !longExp.test(eventData.details.venue_long)))) {
-    errArr.push('invalid Venue Lat and Long')
   }
 
   return errArr;
@@ -348,24 +336,26 @@ const submitHandler = async event => {
     ext_8: eventData.details.venue_name,
     ext_9: eventData.details.venue_address,
     ext_10: eventData.details.venue_direction_notes,
-    ext_11: parseFloat(eventData.details.venue_lat),
-    ext_12: parseFloat(eventData.details.venue_long),
+    ext_11: markerPosition.value.lat,
+    ext_12: markerPosition.value.lng,
     ext_16: {
       url: eventData.details.photo.url,
       title: ''
     },
   };
   
-  for (let i = 0; i < eventData.details.contacts.length && i < 4; i++) {
-    const contactIndex = 17 + i * 5;
-    const contact = eventData.details.contacts[i];
-
-    requestBody[`ext_${contactIndex}`] = contact.name;
-    requestBody[`ext_${contactIndex + 1}`] = contact.designation;
-    requestBody[`ext_${contactIndex + 2}`] = contact.phones[1];
-    requestBody[`ext_${contactIndex + 3}`] = contact.phones[2];
-    requestBody[`ext_${contactIndex + 4}`] = contact.phones[3];
-  }
+  const contactsPayload = (eventData?.details?.contacts || []).map(contact => {
+    const name = contact.name || '';
+    const designation = contact.designation || '';
+    const phones = (contact.phones || []).slice(0, 3).map(phone => phone || '');
+    return { name, designation, phones };
+  });
+  
+  requestBody['ext_17'] = contactsPayload.map(contact => contact.name || '');
+  requestBody['ext_18'] = contactsPayload.map(contact => contact.designation || '');
+  requestBody['ext_19'] = contactsPayload.map(contact => contact.phones[0] || '');
+  requestBody['ext_20'] = contactsPayload.map(contact => contact.phones[1] || '');
+  requestBody['ext_21'] = contactsPayload.map(contact => contact.phones[2] || '');
   
   for (let i = 0; i < 3; i++) {
     if (eventData.details.videos[i]?.url) {
@@ -388,6 +378,7 @@ const submitHandler = async event => {
       }
       else {
         addNotification('Content Updated Successfully.', NOTIFICATION_TYPE.SUCCESS);
+        $router.push({ path: `/event/${eventData.details.topics_id}` })
       }
     })
     .finally((res) => {
