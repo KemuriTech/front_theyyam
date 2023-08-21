@@ -65,7 +65,7 @@ const config = useRuntimeConfig();
 
 const router = useRouter();
 const previousPath = ref(null);
-const { $api } = useNuxtApp();
+const { $api, $commonUtl } = useNuxtApp();
 const filter = ref('');
 
 const items = useState('items', () => ([]));
@@ -96,17 +96,6 @@ const initializeData = () => {
 onMounted(() => {
   scroll();
 })
-
-function debounce(func, timeout = 1000) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(this, args);
-    }, timeout);
-  };
-}
-
 
 const scroll = () => {
   window.onscroll = () => {
@@ -182,7 +171,7 @@ const fetchData = async () => {
 }
 
 fetchData();
-const hitSearchAPI = () => debounce(()=>{
+const hitSearchAPI = () => $commonUtl.debounce(()=>{
   pageInfo.value.pageID = 1;
   return fetchData();
 })
