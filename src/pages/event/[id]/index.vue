@@ -7,6 +7,13 @@
         <!-- Image gallery -->
         <TabGroup v-if="mediaArr.length" as="div" class="flex flex-col-reverse">
           <!-- Image selector -->
+          <div v-if="eventData.attribution_link" class="flex justify-start text-sm text-gray-500 px-4 sm:px-0 mt-4">
+            <span class="mr-1">Source:</span>
+            <a class="hover:cursor-pointer hover:text-black whitespace-nowrap overflow-hidden max-w-full sm:max-w-none flex items-center group" :href="`${eventData.attribution_link}`" target="_blank">
+              <span class="truncate">{{eventData.attribution_link}}</span>
+              <svg class="pl-[.1rem] group-hover:fill-black h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#6b7280"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+            </a>
+          </div>
           <div class="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
             <TabList class="grid grid-cols-4 gap-6">
               <Tab v-for="(media, id) in mediaArr" :key="id" class="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50" v-slot="{ selected }">
@@ -34,7 +41,7 @@
         </TabGroup>
 
         <!-- Product info -->
-        <div class="mt-8 px-4 sm:px-0 sm:mt-16 lg:mt-0">
+        <div class="mt-6 px-4 sm:px-0 sm:mt-16 lg:mt-0">
           <Head>
             <Title>{{ eventData.subject }}</Title>
             <Meta :content="eventData.description" name="description"/>

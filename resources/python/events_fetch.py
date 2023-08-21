@@ -50,6 +50,7 @@ def get_event_dict(id):
   event_soup = getSoup('https://www.keralatourism.org/theyyamcalendar/temple.php?id=' + str(id))
 
   # Populate basic event data
+  event_data['attribution_link(Additional items)'] = 'https://www.keralatourism.org/theyyamcalendar/temple.php?id=' + str(id)
   event_data['official_url(Additional items)'] = '{"url":"https://www.keralatourism.org/theyyamcalendar/temple.php?id=' + id + '","title":""}'
   event_data['Date'] = today
   event_data['Category'] = 'Events'
@@ -150,7 +151,7 @@ def get_event_dict(id):
 
 # Store events fields in CSV.        
 with open('events.csv', 'w') as csvfile:
-  fields = ['official_url(Additional items)', 'Date', 'Category', 'Title','description(Additional items)','start_dt(Additional items)','end_dt(Additional items)','performers(Additional items)','malayalam_calendar(Additional items)','venue_name(Additional items)','venue_address(Additional items)','venue_direction_notes(Additional items)','venue_lat(Additional items)','venue_long(Additional items)','videos_path_1(Additional items)','videos_path_2(Additional items)','videos_path_3(Additional items)','photos_path(Additional items)','contact_name(Additional items)','contact_designation(Additional items)','contact_details_1(Additional items)','contact_details_2(Additional items)','contact_details_3(Additional items)','contact_details_4(Additional items)']
+  fields = ['official_url(Additional items)', 'Date', 'Category', 'Title','description(Additional items)','start_dt(Additional items)','end_dt(Additional items)','performers(Additional items)','malayalam_calendar(Additional items)','venue_name(Additional items)','venue_address(Additional items)','venue_direction_notes(Additional items)','venue_lat(Additional items)','venue_long(Additional items)','videos_path_1(Additional items)','videos_path_2(Additional items)','videos_path_3(Additional items)','photos_path(Additional items)','contact_name(Additional items)','contact_designation(Additional items)','contact_details_1(Additional items)','contact_details_2(Additional items)','contact_details_3(Additional items)','contact_details_4(Additional items)','attribution_link(Additional items)']
   writer = csv.DictWriter(csvfile, fieldnames=fields)
   writer.writeheader()  
   
