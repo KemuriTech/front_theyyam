@@ -2,11 +2,7 @@
   <div class="max-w-2xl mx-auto py-16 sm:py-24 sm:pt-12 lg:max-w-7xl">
     <div class="space-y-6">
       <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <div v-if="formResponse.isResponse" class="text-center pt-2">
-          <div v-for="(message, number) in formResponse.messages" :key="number">
-            <ui-alert :message="message" :type="formResponse.type" />
-          </div>
-        </div>
+        <ui-error-alert v-if="formResponse.type === 'danger'" :messages="formResponse.messages"/>
         <form @submit="submitHandler">
           <div class="mt-10 mb-5 md:grid md:grid-cols-3 md:gap-6">
             <div class="md:col-span-1">
@@ -262,7 +258,6 @@ const eventData = reactive({
 });
 const mediaArr = useState('mediaArr', () => ([]));
 const formResponse = reactive({
-  isResponse: false,
   type: '',
   messages: [],
   isProcessing: false,
@@ -333,7 +328,6 @@ const getErrors = () => {
   return errArr;
 }
 const setResponse = (type, message) => {
-  formResponse.isResponse = true;
   formResponse.type = type;
   formResponse.messages = message;
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -342,7 +336,8 @@ const setResponse = (type, message) => {
 const submitHandler = async event => {
   event.preventDefault();
   formResponse.isProcessing = true;
-  formResponse.isResponse = false;
+  formResponse.messages = [];
+
   const errors = getErrors();
 
   if (errors.length) {

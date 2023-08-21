@@ -7,11 +7,7 @@
     </div>
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <div v-if="formResponse.isResponse" class="text-center pt-2">
-          <div v-for="(message, number) in formResponse.messages" :key="number">
-            <ui-alert :message="message" :type="formResponse.type" />
-          </div>
-        </div>
+        <ui-error-alert v-if="formResponse.type === 'danger'" :messages="formResponse.messages" class="mb-5"/>
         <form class="space-y-6" @submit="loginHandler">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700">
@@ -139,7 +135,6 @@ const state = reactive({
 const { $api } = useNuxtApp();
 const { signIn } = useAuth();
 const formResponse = reactive({
-  isResponse: false,
   type: '',
   messages: [],
   isProcessing: false,
@@ -149,7 +144,7 @@ const _successMessage = 'Successfully Logged in.';
 const loginHandler = async (event) => {
   event.preventDefault();
   formResponse.isProcessing = true;
-  formResponse.isResponse = false;
+  formResponse.messages = [];
 
   await signIn({ ...state.form, login_save: state.form.login_save ? 1 : 0 },  { redirect:false })
     .then(() => {
@@ -173,7 +168,6 @@ const loginHandler = async (event) => {
 };
 
 const setResponse = (type, message) => {
-  formResponse.isResponse = true;
   formResponse.type = type;
   formResponse.messages = message;
 };

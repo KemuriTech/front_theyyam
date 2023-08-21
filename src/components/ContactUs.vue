@@ -7,12 +7,13 @@
     </div>
 
     <div class="mx-auto max-w-xl sm:mt-20 lg:mt-10">
-      <div v-if="formResponse.isResponse" class="text-center">
+      <ui-error-alert v-if="formResponse.type === 'danger'" :messages="formResponse.messages" class="mb-5"/>
+      <div v-else-if="formResponse.isResponse" class="text-center">
         <div v-for="(message, number) in formResponse.messages" :key="number">
-          <ui-alert :message="message" :type="formResponse.type" />
+          <ui-success-alert :message="message"/>
         </div>
       </div>
-      <form v-if="(formResponse.isResponse && formResponse.type !== 'success') || formResponse.type === ''" class="" v-on:submit="submitHandler">
+      <form v-if="formResponse.type !== 'success'" class="" v-on:submit="submitHandler">
         <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
           <div>
             <label for="name" class="block text-sm font-semibold leading-6 text-gray-900">Name</label>
@@ -77,6 +78,7 @@ export default {
       event.preventDefault();
 
       this.formResponse.isProcessing = true;
+      this.formResponse.messages = [];
       const _successMessage = 'Thank you for contacting us. We will get back to you soon!';
       this.formResponse.isResponse = false;
 
