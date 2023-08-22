@@ -2,11 +2,7 @@
   <div class="max-w-2xl mx-auto py-16 sm:py-24 sm:pt-12 lg:max-w-7xl">
     <div class="space-y-6">
       <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <div v-if="formResponse.isResponse" class="text-center pt-2">
-          <div v-for="(message, number) in formResponse.messages" :key="number">
-            <ui-alert :message="message" :type="formResponse.type" />
-          </div>
-        </div>
+        <ui-error-alert v-if="formResponse.type === 'danger'" :messages="formResponse.messages"/>
         <form @submit="submitHandler">
           <div class="mt-10 mb-5 md:grid md:grid-cols-3 md:gap-6">
             <div class="md:col-span-1">
@@ -105,8 +101,15 @@
                       class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       :required="true"
                       v-model="eventData.details.photo.url"
+                      @keyup="checkImageOnChange"
                     />
                   </div>
+                  <template v-if="eventData.details.photo.url">
+                    <div v-if="eventData.details.photo.urlStatus" class="aspect-video overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 mt-2">
+                      <img :src="eventData.details.photo.url" :alt="eventData.details.subject" class="h-full w-full object-cover object-center lg:h-full lg:w-full"/>
+                    </div>
+                    <p v-else class="text-red-600 p-2">Invalid Image</p>
+                  </template>
                 </div>
                 <div v-for="(video, index) in eventData.details.videos" :key="index" class="col-span-6">
                   <label class="block text-sm font-medium text-gray-700">Video {{index + 1}} URL</label>
@@ -115,8 +118,15 @@
                       type="url"
                       class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       v-model="eventData.details.videos[index].url"
+                      @keyup="onYTKeyUp(eventData.details.videos[index])"
                     />
                   </div>
+                  <template v-if="eventData.details.videos[index].url">
+                    <div v-if="eventData.details.videos[index].urlStatus" class="aspect-[4/3] mt-2">
+                      <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" allowfullscreen :src="$ytVideo.getYTVideoUrl($ytVideo.youtubeParser(eventData.details.videos[index].url), 'mute=1&modestbranding=1&autoplay=1')"></iframe>
+                    </div>
+                    <p v-else class="text-red-600 p-2">Invalid Link</p>
+                  </template>
                 </div>
               </div>
             </div>
@@ -235,19 +245,19 @@ import { NOTIFICATION_TYPE } from '~/constants';
 import { useNotification } from '~/stores/notification';
 import { GoogleMap, Marker } from 'vue3-google-map';
 import { onMounted, ref } from 'vue';
+import { debounce } from 'instantsearch.js/es/lib/utils';
 
 definePageMeta({ middleware: 'auth' })
 
 const config = useRuntimeConfig();
 const markerPosition = ref({ lat: 0, lng: 0 });
-const { $api, $router } = useNuxtApp()
+const { $api, $router, $ytVideo, $commonUtl } = useNuxtApp()
 const { params } = useRoute();
 const eventData = reactive({
   details: {}
 });
 const mediaArr = useState('mediaArr', () => ([]));
 const formResponse = reactive({
-  isResponse: false,
   type: '',
   messages: [],
   isProcessing: false,
@@ -283,6 +293,12 @@ onMounted(async () => {
     lat: eventData.details.venue_lat,
     lng: eventData.details.venue_long
   };
+  if (eventData.details.photo.url)
+    await checkImage(eventData.details.photo.url);
+
+  eventData.details.videos.forEach((e, index) => {
+    if (e.url) checkYT(eventData.details.videos[index])
+  })
 });
 const getLatLng = (event) => {
   const lat = parseFloat(event.latLng.lat().toFixed(5));
@@ -295,20 +311,23 @@ const getErrors = () => {
 
   const errArr = [];
 
-  if (eventData.details.videos[0].url && !regExp.test(eventData.details.videos[0].url)) {
+  if (!eventData.details.photo.urlStatus) {
+    errArr.push('Image URL incorrect');
+  }
+
+  if ((eventData.details.videos[0].url && !regExp.test(eventData.details.videos[0].url)) || (eventData.details.videos[0].url && !eventData.details.videos[0].urlStatus)) {
     errArr.push('Video 1 URL incorrect')
   }
-  if (eventData.details.videos[1].url && !regExp.test(eventData.details.videos[1].url)) {
+  if ((eventData.details.videos[1].url && !regExp.test(eventData.details.videos[1].url)) || (eventData.details.videos[1].url && !eventData.details.videos[1].urlStatus)) {
     errArr.push('Video 2 URL incorrect')
   }
-  if (eventData.details.videos[2].url && !regExp.test(eventData.details.videos[2].url)) {
+  if ((eventData.details.videos[2].url && !regExp.test(eventData.details.videos[2].url)) || (eventData.details.videos[2].url && !eventData.details.videos[2].urlStatus)) {
     errArr.push('Video 3 URL incorrect')
   }
 
   return errArr;
 }
 const setResponse = (type, message) => {
-  formResponse.isResponse = true;
   formResponse.type = type;
   formResponse.messages = message;
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -317,7 +336,8 @@ const setResponse = (type, message) => {
 const submitHandler = async event => {
   event.preventDefault();
   formResponse.isProcessing = true;
-  formResponse.isResponse = false;
+  formResponse.messages = [];
+
   const errors = getErrors();
 
   if (errors.length) {
@@ -378,7 +398,7 @@ const submitHandler = async event => {
       }
       else {
         addNotification('Content Updated Successfully.', NOTIFICATION_TYPE.SUCCESS);
-        $router.push({ path: `/event/${eventData.details.topics_id}` })
+        $router.push({ path: `/event/${eventData.details.slug}` })
       }
     })
     .finally((res) => {
@@ -386,4 +406,39 @@ const submitHandler = async event => {
     });
 
 }
+
+const checkMedia = (url) => {
+  return new Promise((resolve,reject) => {
+    let img = new Image()
+    img.onload = () => resolve({ height: img.height, width: img.width })
+    img.onerror = reject
+    img.src = url;
+  })
+}
+const checkImage = async () => {
+  await checkMedia(eventData.details.photo.url)
+    .then(res => {
+      if (res.height) {
+        eventData.details.photo.urlStatus = true;
+      } else
+        eventData.details.photo.urlStatus = false;
+    })
+    .catch(er => eventData.details.photo.urlStatus = false);
+};
+
+
+const checkImageOnChange = $commonUtl.debounce(checkImage);
+
+const checkYT = async ytData => {
+  await checkMedia(`https://img.youtube.com/vi/${$ytVideo.youtubeParser(ytData.url)}/mqdefault.jpg`)
+    .then(res => {
+      if (res.width !== 120) {
+        ytData.urlStatus = true;
+      } else
+        ytData.urlStatus = false;
+    })
+    .catch(er => ytData.urlStatus = false);
+}
+
+const onYTKeyUp = $commonUtl.debounce(checkYT);
 </script>

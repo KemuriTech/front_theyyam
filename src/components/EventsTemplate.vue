@@ -13,7 +13,7 @@
     </div>
     <div class="w-full mt-6 grid grid-cols-1 gap-x-8 gap-y-8 justify-items-center sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 xl:grid-cols-4 px-4 sm:px-6 lg:px-8">
       <div v-for="(item, number) in items" :key="number">
-        <NuxtLink :to="`event/${item.topics_id}`" class="cursor-pointer">
+        <NuxtLink :to="`event/${item.slug}`" class="cursor-pointer">
           <div class="image-figure aspect-w-4 aspect-h-3 rounded-lg overflow-hidden bg-gray-100">
             <img v-if='!item?.videos?.length'
                  :src="item?.photo?.url"/>
@@ -65,7 +65,7 @@ const config = useRuntimeConfig();
 
 const router = useRouter();
 const previousPath = ref(null);
-const { $api } = useNuxtApp();
+const { $api, $commonUtl } = useNuxtApp();
 const filter = ref('');
 
 const items = useState('items', () => ([]));
@@ -96,17 +96,6 @@ const initializeData = () => {
 onMounted(() => {
   scroll();
 })
-
-function debounce(func, timeout = 1000) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(this, args);
-    }, timeout);
-  };
-}
-
 
 const scroll = () => {
   window.onscroll = () => {
@@ -182,7 +171,7 @@ const fetchData = async () => {
 }
 
 fetchData();
-const hitSearchAPI = () => debounce(()=>{
+const hitSearchAPI = () => $commonUtl.debounce(()=>{
   pageInfo.value.pageID = 1;
   return fetchData();
 })

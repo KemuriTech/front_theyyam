@@ -43,6 +43,14 @@ def get_sel_data(id):
   sel_data['contact_info'] = contact_info[2:-1]
   return sel_data
   
+  # Function for formatting title to slug format
+def slugify(s):
+  s = s.lower().strip()
+  s = re.sub(r'[^\w\s-]', '', s)
+  s = re.sub(r'[\s_-]+', '-', s)
+  s = re.sub(r'^-+|-+$', '', s)
+  return s
+    
 # Function to get event data based on temple id
 def get_event_dict(id): 
   global today
@@ -52,6 +60,7 @@ def get_event_dict(id):
   # Populate basic event data
   event_data['attribution_link(Additional items)'] = 'https://www.keralatourism.org/theyyamcalendar/temple.php?id=' + str(id)
   event_data['official_url(Additional items)'] = '{"url":"https://www.keralatourism.org/theyyamcalendar/temple.php?id=' + id + '","title":""}'
+  event_data['Slug'] = slugify(event_soup.find('h1').text)
   event_data['Date'] = today
   event_data['Category'] = 'Events'
   event_data['Title'] = event_soup.find('h1').text
@@ -151,7 +160,7 @@ def get_event_dict(id):
 
 # Store events fields in CSV.        
 with open('events.csv', 'w') as csvfile:
-  fields = ['official_url(Additional items)', 'Date', 'Category', 'Title','description(Additional items)','start_dt(Additional items)','end_dt(Additional items)','performers(Additional items)','malayalam_calendar(Additional items)','venue_name(Additional items)','venue_address(Additional items)','venue_direction_notes(Additional items)','venue_lat(Additional items)','venue_long(Additional items)','videos_path_1(Additional items)','videos_path_2(Additional items)','videos_path_3(Additional items)','photos_path(Additional items)','contact_name(Additional items)','contact_designation(Additional items)','contact_details_1(Additional items)','contact_details_2(Additional items)','contact_details_3(Additional items)','contact_details_4(Additional items)','attribution_link(Additional items)']
+  fields = ['official_url(Additional items)', 'Date', 'Category', 'Title','description(Additional items)','start_dt(Additional items)','end_dt(Additional items)','performers(Additional items)','malayalam_calendar(Additional items)','venue_name(Additional items)','venue_address(Additional items)','venue_direction_notes(Additional items)','venue_lat(Additional items)','venue_long(Additional items)','videos_path_1(Additional items)','videos_path_2(Additional items)','videos_path_3(Additional items)','photos_path(Additional items)','contact_name(Additional items)','contact_designation(Additional items)','contact_details_1(Additional items)','contact_details_2(Additional items)','contact_details_3(Additional items)','contact_details_4(Additional items)','attribution_link(Additional items)','Slug']
   writer = csv.DictWriter(csvfile, fieldnames=fields)
   writer.writeheader()  
   
