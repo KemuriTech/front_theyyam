@@ -17,7 +17,7 @@
     <div class="w-full mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-8 sm:gap-y-10
     justify-items-center">
       <div v-for="event in upcomingEventData" :key="event.id" class="relative group">
-        <NuxtLink :to="`/event/${event.topics_id}`" class="cursor-pointer">
+        <NuxtLink :to="`/event/${event.slug}`" class="cursor-pointer">
           <div class="w-full aspect-h-3 rounded bg-gray-100">
             <img v-if="!isAnyYTVideo(event)" :src="event.photo?.url" class="object-center object-cover h-full w-full" />
             <div v-else
