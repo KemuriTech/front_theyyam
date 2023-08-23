@@ -61,19 +61,8 @@
       <h2 class="text-base font-semibold tracking-wider text-secondary">Why to visit Theyyam</h2>
       <p class="mt-5 max-w-prose mx-auto text-xl text-gray-500">To visit Theyyam is to embark on a spiritual odyssey, where ancient mythologies awaken amidst the rhythm of drums and the swirl of vibrant costumes. It's a unique opportunity to witness the unparalleled artistic skills, deeply-rooted traditions, and spiritual devotion that transcends ordinary human experience. Witness the hypnotic performances that blur the lines between performer and deity, between audience and participants, taking you on a transcendental journey. Soak in the raw emotional power, the enthralling beats, the stunning visuals, and the spiritual awakening. Discover Theyyam - where history, culture, and spirituality converge in a mesmerizing dance of divinity. Experience the divine. Experience Theyyam.</p>
     </div>
-    <div class="mt-12">
-      <video controls class="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5" playsinline="" autoplay="autoplay" loop="loop" muted="muted" type="video" id="avatarVideo" >
-        <source id="videoSrc" :src="`/videos/${videoName}`" />
-      </video>
-    </div>
-    <div class="video-credits text-sm pt-2">
-      <p class="flex justify-end text-base text-gray-500">
-        <span class="mr-1">Source:</span>
-        <a href="https://www.youtube.com/watch?v=qm7NbZWi3EY&t=12s" target="_blank" class="hover:text-black flex items-center group">
-          Gods of Malabar by Tom Dcruz
-          <svg class="pl-[.1rem] group-hover:fill-black h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#6b7280"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
-        </a>
-      </p>
+    <div class="mt-12 pb-6">
+      <img class="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5" :src="`/images/th_bg_3.jpg`" alt="">
     </div>
     <div class="mt-10 pb-20">
       <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
