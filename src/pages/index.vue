@@ -3,7 +3,7 @@
   <section class="text-black body-font overflow-hidden">
     <div class="container mx-auto flex px-5 py-5 md:flex-row flex-col items-center ">
       <div class="lg:flex-grow flex flex-col md:items-start md:text-left sm:mb-5 mb-16 md:mb-0 items-center text-center">
-        <h1 class="title-font tracking-wide text-5xl md:text-7xl mb-4 font-bold ">{{config.SERVICE_NAME}}
+        <h1 class="title-font tracking-wide text-5xl md:text-7xl mb-4 font-bold ">{{config.public.SERVICE_NAME}}
         </h1>
         <p class="mb-8 text-lg leading-8 text-gray-600">Experience the Vibrancy of Tradition at the Theyyam Festival - A Sacred Dance That Transcends Time</p>
         <div class="flex justify-center">
@@ -216,10 +216,13 @@ const section2Img = 'th_bg_1.jpg';
 const eventImg = 'th_bg_2.jpg';
 
 useHead({
-  title: config.SERVICE_NAME,
+  title: config.public.SERVICE_NAME,
   meta: [
-    { hid: 'description', name: 'description', content: config.SITE_DESC },
-    { hid: 'og:image', property: 'og:image', content: `https://${config.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+    { name: 'description', content: config.public.SITE_DESC },
+    { name: 'image', property: 'image', content: `https://${config.public.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+    { name: 'og:title', property: 'og:title', content: config.public.SERVICE_NAME },
+    { name: 'og:description', property: 'og:description', content: config.public.SITE_DESC },
+    { name: 'og:image', property: 'og:image', content: `https://${config.public.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
   ],
 })
 </script>

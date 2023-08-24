@@ -26,7 +26,7 @@
             >
               <iframe :data-uid="JSON.stringify(getYTUID(event))" :style='`background-image: url("${getYoutubeImage(event)}");`'
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowfullscreen class="bg-cover bg-center rounded pointer-events-none" frameborder="0"></iframe>
+                      allowfullscreen class="bg-cover bg-center rounded pointer-events-none" frameborder="0" :title="event.subject"></iframe>
             </div>
           </div>
           <div class="max-w-18 break-words mt-4 flex text-left justify-between text-base font-medium text-gray-900 space-x-8 mb-1">

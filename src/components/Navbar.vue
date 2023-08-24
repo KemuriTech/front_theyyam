@@ -6,8 +6,8 @@
           class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary from-10% to-secondary to-90%"
           to="/"
         >
-          <span class="sr-only">{{ config.SERVICE_NAME }}</span>
-          {{ config.SERVICE_NAME }}
+          <span class="sr-only">{{ config.public.SERVICE_NAME }}</span>
+          {{ config.public.SERVICE_NAME }}
         </NuxtLink>
       </div>
       <div class="-mr-2 -my-2 md:hidden">
@@ -68,8 +68,8 @@
                 to="/"
                 @click="close"
               >
-                <span class="sr-only">{{ config.SERVICE_NAME }}</span>
-                {{ config.SERVICE_NAME }}
+                <span class="sr-only">{{ config.public.SERVICE_NAME }}</span>
+                {{ config.public.SERVICE_NAME }}
               </NuxtLink>
               <div class="-mr-2">
                 <PopoverButton
@@ -122,7 +122,7 @@ import {
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import { NOTIFICATION_TYPE } from '~/constants';
 import { useNotification } from '~/stores/notification';
-const config =useRuntimeConfig();
+const config = useRuntimeConfig();
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
