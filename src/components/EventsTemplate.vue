@@ -24,7 +24,7 @@
               <iframe :data-uid='JSON.stringify(getUIDs(item))'
                       :style='`background-image: url("${getYoutubeImage(item)}");`'
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowfullscreen class='bg-cover bg-center pointer-events-none' frameborder="0"
+                      allowfullscreen class='bg-cover bg-center pointer-events-none' frameborder="0" :title="item.subject"
               >
               </iframe>
             </div>
@@ -214,10 +214,13 @@ router.beforeEach((to, from) => {
 });
 
 useHead({
-  title: config.SERVICE_NAME,
+  title: `${config.public.SERVICE_NAME} | ${extraParam === 'past' ? 'Past Events' : 'Events'}`,
   meta: [
-    { hid: 'description', name: 'description', content: config.SITE_DESC },
-    { hid: 'og:image', property: 'og:image', content: `https://${config.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+    { name: 'description', content: config.public.SITE_DESC },
+    { name: 'image', property: 'image', content: `https://${config.public.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+    { name: 'og:title', property: 'og:title', content: `${config.public.SERVICE_NAME} | ${extraParam === 'past' ? 'Past Events' : 'Events'}` },
+    { name: 'og:description', property: 'og:description', content: config.public.SITE_DESC },
+    { name: 'og:image', property: 'og:image', content: `https://${config.public.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
   ],
 })
 </script>

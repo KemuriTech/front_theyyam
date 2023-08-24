@@ -118,4 +118,16 @@
 </template>
 
 <script setup>
+const config = useRuntimeConfig();
+
+useHead({
+  title: `${config.public.SERVICE_NAME} | Terms & Conditions`,
+  meta: [
+    { name: 'description', content: `These terms and conditions outline the rules and regulations for the use of Theyyam Festival's Website, located at https://${config.public.FRONTEND_BASE_URL}.com` },
+    { name: 'image', property: 'image', content: `https://${config.public.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+    { name: 'og:title', property: 'og:title', content: `${config.public.SERVICE_NAME} | Terms & Conditions` },
+    { name: 'og:description', property: 'og:description', content: `These terms and conditions outline the rules and regulations for the use of Theyyam Festival's Website, located at https://${config.public.FRONTEND_BASE_URL}.com` },
+    { name: 'og:image', property: 'og:image', content: `https://${config.public.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+  ],
+})
 </script>
