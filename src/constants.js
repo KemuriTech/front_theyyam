@@ -3,7 +3,7 @@ const NOTIFICATION_TYPE = {
   SUCCESS: 'SUCCESS',
   WARNING: 'WARNING'
 };
-const searchExt = [3, 6, 10, 17];
+const searchExt = ['description', 'performers', 'venue_direction_notes', 'contact_name'];
 
 export {
   USER,

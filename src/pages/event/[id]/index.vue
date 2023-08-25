@@ -48,7 +48,7 @@
           </Head>
           <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 inline align-middle">{{ eventData.subject }}</h1>
           <div v-if="status === 'authenticated'" class="inline-flex px-3">
-            <NuxtLink :to="`/event/${eventData.slug}/edit`" class="w-full rounded-md bg-secondary px-3.5 py-1.5 text-center text-sm text-white shadow-sm hover:bg-opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+            <NuxtLink :to="`/event/${eventData.topics_id}/edit`" class="w-full rounded-md bg-secondary px-3.5 py-1.5 text-center text-sm text-white shadow-sm hover:bg-opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
               Edit
             </NuxtLink>
           </div>
@@ -171,7 +171,7 @@
 <script>
 import { useRoute } from 'vue-router';
 
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import {
   Dialog,
   DialogOverlay,
@@ -237,8 +237,17 @@ export default {
     let eventData = {};
     const mediaArr = useState('mediaArr', () => ([]));
     const { status } = useAuth();
-
-    await $api.occasion.show(params.id)
+    
+    const targetApi = computed(() => {
+      if (status.value === 'unauthenticated') {
+        return 'occasion';
+      } else if (status.value === 'authenticated') {
+        return 'authDetailOccasion';
+      }
+      return '';
+    });
+    
+    await $api[targetApi.value].show(params.id)
       .then(response => response.json())
       .then(response => {
         if (!response.details) {

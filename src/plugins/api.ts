@@ -12,14 +12,20 @@ interface APIInstance {
     logout: PublicAPIModule,
     authOccasion: AuthAPIModule,
     token: AuthAPIModule,
+    authOccasions : AuthAPIModule,
+    authPastEvents : AuthAPIModule,
+    authDetailOccasion : AuthAPIModule,
 }
 
 export default defineNuxtPlugin((nuxtApp) => {
     const modules: APIInstance = {
         contact: new PublicAPIModule('contact-us'),
         occasion: new PublicAPIModule('event'),
+        authDetailOccasion : new AuthAPIModule('auth-detail'),
         occasions: new PublicAPIModule('events'),
+        authOccasions: new AuthAPIModule('auth-events'),
         pastEvents: new PublicAPIModule('past-events'),
+        authPastEvents: new AuthAPIModule('auth-past-events'),
         upcomingEvents: new PublicAPIModule('latest-event'),
         allEvents: new PublicAPIModule('all-events'),
         auth: new PublicAPIModule('profile'),
