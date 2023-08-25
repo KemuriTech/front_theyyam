@@ -4,14 +4,14 @@
     <div class="px-2 sm:px-5 lg:px-6">
       <div class="flex items-center pb-3">
         <div class="sm:w-[12rem] md:w-[15rem] pr-2">
-          <datepicker :key="datepickerKey" v-model="filter" :formatter="pickerFormat" :placeholder="'Filter By Date'" />
+          <datepicker :key="datepickerKey" v-model="filter" :formatter="pickerFormat" :placeholder="'Filter By Date'" aria-label="Filter By Date"/>
         </div>
         <div class="flex-grow">
           <input  id="search" v-model="searchInput" autocomplete="search" class="relative block w-full opacity-100 pl-3 pr-12 py-2.5 rounded-lg overflow-hidden border-solid text-sm text-vtd-secondary-700 placeholder-vtd-secondary-400 transition-colors bg-white border border-vtd-secondary-300 focus:border-vtd-primary-300 focus:ring focus:ring-vtd-primary-500 focus:ring-opacity-10 focus:outline-none dark:bg-vtd-secondary-800 dark:border-vtd-secondary-700 dark:text-vtd-secondary-100 dark:placeholder-vtd-secondary-500 dark:focus:border-vtd-primary-500 dark:focus:ring-opacity-20" placeholder="Search here" type="text"/>
         </div>
       </div>
     </div>
-    <GoogleMap :key="mapKey" :api-key="`${config.googleAPIkey}`" :center="mapCenter" :zoom="11" class="px-6" style="width: 100%; height: 820px" @click="closeInfoWindow()">
+    <GoogleMap :key="mapKey" :api-key="`${config.public.googleAPIkey}`" :center="mapCenter" :zoom="11" class="px-6" style="width: 100%; height: 820px" @click="closeInfoWindow()">
       <Marker v-for="(event, id) in filteredEventData" :key="event.id" :options="{ position: { lat: event.venue_lat, lng: event.venue_long } }" @mousedown="openInfoWindow(id)">
         <InfoWindow v-if="selectedMarkerId === id">
           <NuxtLink :to="`/event/${event.slug}`" target="_blank">
@@ -47,10 +47,13 @@ import BgGradient from '../components/BgGradient';
 const config = useRuntimeConfig();
 
 useHead({
-  title: 'Find Theyyam Events Near You | Interactive Map of Theyyam Performances | Theyyam Festival',
+  title: `${config.public.SERVICE_NAME} | Find Theyyam Events Near You | Interactive Map of Theyyam Performances`,
   meta: [
-    { hid: 'description', name: 'description', content: 'Explore our interactive map to discover Theyyam events happening near you. Stay updated on the vibrant Theyyam performances and never miss a ritual dance again. Locate and join the tradition!' },
-    { hid: 'og:image', property: 'og:image', content: `https://${config.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+    { name: 'description', content: 'Explore our interactive map to discover Theyyam events happening near you. Stay updated on the vibrant Theyyam performances and never miss a ritual dance again. Locate and join the tradition!' },
+    { name: 'image', property: 'image', content: `https://${config.public.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+    { name: 'og:title', property: 'og:title', content: `${config.public.SERVICE_NAME} | Find Theyyam Events Near You | Interactive Map of Theyyam Performances` },
+    { name: 'og:description', property: 'og:description', content: 'Explore our interactive map to discover Theyyam events happening near you. Stay updated on the vibrant Theyyam performances and never miss a ritual dance again. Locate and join the tradition!' },
+    { name: 'og:image', property: 'og:image', content: `https://${config.public.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
   ],
 })
 
@@ -95,7 +98,7 @@ let filteredEventData = computed(() => {
   return eventData.filter((event) => {
     const eventFromDate = new Date(event.start_dt);
     const eventToDate = new Date(event.end_dt);
-    const contactNames = event.contacts.map(contact => contact.name);
+    const contactNames = event.contact_name.map(contact => contact);
     const eventSearchParams = [
       event.subject,
       event.description,

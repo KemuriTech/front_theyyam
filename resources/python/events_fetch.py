@@ -113,9 +113,6 @@ def get_event_dict(id):
   event_data['venue_lat(Additional items)'] = map_loc[0]
   event_data['venue_long(Additional items)'] = map_loc[1]
   videos = sel_data['urls']
-  event_data['videos_path_1(Additional items)'] = '{"url":"' + videos[0] + '","title":""}'
-  event_data['videos_path_2(Additional items)'] = '{"url":"' + videos[1] + '","title":""}'
-  event_data['videos_path_3(Additional items)'] = '{"url":"' + videos[2] + '","title":""}'
   event_data['photos_path(Additional items)']   = '{"url":"https://www.keralatourism.org/theyyamcalendar/'+event_soup.find_all("img")[1]["src"] + '","title":""}'
   contact_direction_p = event_soup.find('div',{'class':'mb-4'}).find_all('p')
   event_data['venue_direction_notes(Additional items)'] = contact_direction_p[len(contact_direction_p)-1].text
@@ -156,11 +153,17 @@ def get_event_dict(id):
         else:
             concatenated_value = __RCMS_CONTENT_BOUNDARY__.join(values)
             event_data[f'contact_{field}(Additional items)'] = concatenated_value
+    video_urls = [videos[0], videos[1], videos[2]]
+    video_data_list = [
+        f'{{"url":"{video_url}","title":""}}' for video_url in videos
+    ]
+    video_data = f'{__RCMS_CONTENT_BOUNDARY__}'.join(video_data_list)
+    event_data['videos(Additional items)'] = video_data
   return event_data
 
 # Store events fields in CSV.        
 with open('events.csv', 'w') as csvfile:
-  fields = ['official_url(Additional items)', 'Date', 'Category', 'Title','description(Additional items)','start_dt(Additional items)','end_dt(Additional items)','performers(Additional items)','malayalam_calendar(Additional items)','venue_name(Additional items)','venue_address(Additional items)','venue_direction_notes(Additional items)','venue_lat(Additional items)','venue_long(Additional items)','videos_path_1(Additional items)','videos_path_2(Additional items)','videos_path_3(Additional items)','photos_path(Additional items)','contact_name(Additional items)','contact_designation(Additional items)','contact_details_1(Additional items)','contact_details_2(Additional items)','contact_details_3(Additional items)','contact_details_4(Additional items)','attribution_link(Additional items)','Slug']
+  fields = ['official_url(Additional items)', 'Date', 'Category', 'Title','description(Additional items)','start_dt(Additional items)','end_dt(Additional items)','performers(Additional items)','malayalam_calendar(Additional items)','venue_name(Additional items)','venue_address(Additional items)','venue_direction_notes(Additional items)','venue_lat(Additional items)','venue_long(Additional items)','videos(Additional items)','photos_path(Additional items)','contact_name(Additional items)','contact_designation(Additional items)','contact_details_1(Additional items)','contact_details_2(Additional items)','contact_details_3(Additional items)','contact_details_4(Additional items)','attribution_link(Additional items)','Slug']
   writer = csv.DictWriter(csvfile, fieldnames=fields)
   writer.writeheader()  
   

@@ -1,11 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import dynamicRoutes from './src/helpers/dynamicRoutes'
+
 export default defineNuxtConfig({
   srcDir: 'src',
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/eslint-module',
     '@pinia/nuxt',
-    '@sidebase/nuxt-auth'
+    '@sidebase/nuxt-auth',
+    'nuxt-simple-sitemap'
   ],
   css: [
     '@/assets/css/common.css'
@@ -92,5 +95,22 @@ export default defineNuxtConfig({
       enableRefreshPeriodically: false,
       enableRefreshOnWindowFocus: false,
     }
+  },
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: ['/', 'sitemap.xml'],
+    },
+  },
+  site: {
+    url: `https://${process.env.FRONTEND_BASE_URL}`,
+  },
+  sitemap: {
+    xsl: false,
+    defaults: {
+      priority: 1,
+      changefreq: 'weekly'
+    },
+    cacheTtl: 60 * 60 * 24 * 1000
   }
 })

@@ -34,7 +34,7 @@
               </Head>
               <img v-if="media.type === MEDIA_TYPE.IMAGE" class="w-full h-[21rem] object-center object-cover sm:rounded-lg" :src="media.url" alt="Temple" />
               <div v-else-if="media.type === MEDIA_TYPE.YT_VIDEO" class='w-full h-[21rem]'>
-                <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" allowfullscreen :src="$ytVideo.getYTVideoUrl(media.url, 'mute=1&modestbranding=1&autoplay=1')"></iframe>
+                <iframe class="w-full h-full sm:rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" allowfullscreen :src="$ytVideo.getYTVideoUrl(media.url, 'mute=1&modestbranding=1&autoplay=1')" :title="eventData.subject"></iframe>
               </div>
             </TabPanel>
           </TabPanels>
@@ -106,7 +106,7 @@
                     <p class="my-2">{{ eventData.venue_direction_notes }}</p>
                   </div>
                   <div>
-                    <GoogleMap :api-key="`${config.googleAPIkey}`" style="width: 100%; height: 500px" :center="{ lat: eventData.venue_lat, lng: eventData.venue_long}" :zoom="15">
+                    <GoogleMap :api-key="`${config.public.googleAPIkey}`" style="width: 100%; height: 500px" :center="{ lat: eventData.venue_lat, lng: eventData.venue_long}" :zoom="15">
                       <Marker :options="{ position: { lat: eventData.venue_lat , lng: eventData.venue_long  } }" >
                         <InfoWindow>
                           <NuxtLink v-if="eventData.venue_lat && eventData.venue_long" :to="`https://www.google.com/maps/search/?api=1&query=${eventData.venue_lat}%2C${eventData.venue_long}`" class='no-underline' target="_blank">
@@ -171,7 +171,7 @@
 <script>
 import { useRoute } from 'vue-router';
 
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import {
   Dialog,
   DialogOverlay,
@@ -237,8 +237,17 @@ export default {
     let eventData = {};
     const mediaArr = useState('mediaArr', () => ([]));
     const { status } = useAuth();
-
-    await $api.occasion.show(params.id)
+    
+    const targetApi = computed(() => {
+      if (status.value === 'unauthenticated') {
+        return 'occasion';
+      } else if (status.value === 'authenticated') {
+        return 'authDetailOccasion';
+      }
+      return '';
+    });
+    
+    await $api[targetApi.value].show(params.id)
       .then(response => response.json())
       .then(response => {
         if (!response.details) {

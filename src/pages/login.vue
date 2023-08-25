@@ -100,7 +100,7 @@ import { nextTick, ref } from 'vue';
 import { NOTIFICATION_TYPE } from '~/constants';
 import { useNotification } from '~/stores/notification';
 import { useRoute } from 'vue-router';
-const  config=useRuntimeConfig();
+const  config = useRuntimeConfig();
 const { rawToken } = useAuthState();
 const { getSession } = useAuth();
 
@@ -114,6 +114,14 @@ definePageMeta({
 });
 
 useHead({
+  title: `${config.public.SERVICE_NAME} | Login`,
+  meta: [
+    { name: 'description', content: config.public.SITE_DESC },
+    { name: 'image', property: 'image', content: `https://${config.public.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+    { name: 'og:title', property: 'og:title', content: `${config.public.SERVICE_NAME} | Login` },
+    { name: 'og:description', property: 'og:description', content: config.public.SITE_DESC },
+    { name: 'og:image', property: 'og:image', content: `https://${config.public.FRONTEND_BASE_URL}/images/th_bg_1.jpg` },
+  ],
   bodyAttrs: {
     class: computed(() => 'h-full'),
   },
@@ -180,7 +188,7 @@ const redirectAfterLogin = async () => {
 };
 
 const googleLoginHandler = () => {
-  window.location.href = `https://${config.BASE_URL}/direct/login/oauth_login/?spid=1&api_id=${config.KUROCO_API_VER_AUTH}`;
+  window.location.href = `https://${config.public.BASE_URL}/direct/login/oauth_login/?spid=1&api_id=${config.public.KUROCO_API_VER_AUTH}`;
 }
 
 if (query.oauth === 'success' && query.grant_token !== undefined) {
