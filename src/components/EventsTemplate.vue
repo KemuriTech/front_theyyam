@@ -40,6 +40,11 @@
               $formatter.formatDate(item.start_dt, item.end_dt)
             }}</span>
           </p>
+          <div v-if="status === 'authenticated'" class="w-full flex items-center text-sm font-medium">
+            <p class="text-gray-700">{{isPublished(item.open_flg)}}</p>
+            <CheckCircleIcon v-if="isPublished(item.open_flg) === 'Published'" aria-hidden="true" class="h-7 w-7 text-green-500" />
+            <XCircleIcon v-else aria-hidden="true" class="h-7 w-7 text-red-500" />
+          </div>
         </NuxtLink>
       </div>
       <template v-if="isProcessing">
@@ -56,11 +61,13 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { watch , ref } from 'vue';
+import { watch , ref, computed } from 'vue';
 import { useYTValidate } from '~/stores/ytValidate';
 import Datepicker from 'vue-tailwind-datepicker';
 import { searchExt } from '../constants';
 import dayjs from 'dayjs'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
+const { status } = useAuth();
 const config = useRuntimeConfig();
 
 const router = useRouter();
@@ -139,6 +146,20 @@ const buildFilterQuery = () => {
     .join(' AND ');
   return filterQuery;
 }
+
+watch(status, () => {
+  fetchData();
+});
+
+const targetApi = computed(() => {
+  if (status.value === 'unauthenticated') {
+    return extraParam === 'past' ? 'pastEvents' : 'occasions';
+  } else if (status.value === 'authenticated') {
+    return extraParam === 'past' ? 'authPastEvents' : 'authOccasions';
+  }
+  return '';
+});
+
 const fetchData = async () => {
   const params = {
     pageID: pageInfo.value.pageID,
@@ -152,7 +173,7 @@ const fetchData = async () => {
   initializeData();
 
   await $api
-    [extraParam === 'past' ? 'pastEvents' : 'occasions']
+    [targetApi.value]
     .get(params)
     .then(response => response.json())
     .then(res => {
@@ -208,6 +229,8 @@ const splitYTUID = (url) => {
 const getUIDs = item => {
   return item?.videos?.map(e=>splitYTUID(e.url));
 }
+
+const isPublished = (item) => (item === 1) ? 'Published' : 'Not Published';
 
 router.beforeEach((to, from) => {
   previousPath.value = from.name;

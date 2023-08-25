@@ -222,6 +222,46 @@
               <div class="border-t border-gray-200" />
             </div>
           </div>
+          <div class="md:grid md:grid-cols-3 md:gap-6">
+            <div class="md:col-span-1">
+              <h3 class="text-lg font-medium leading-6 text-gray-900">Publish Settings</h3>
+              <p class="mt-1 text-sm text-gray-500">Do you want to Publish your event?</p>
+            </div>
+            <div class="my-4 md:my-0 md:col-span-2 flex items-center space-x-4">
+              <div class="appearance-none block w-40 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <div class="mt-1 space-y-2">
+                  <div class="flex items-center">
+                    <input
+                      type="radio"
+                      value="1"
+                      v-model="publishPayload"
+                      class="w-4 h-4 text-secondary focus:ring-secondary dark:focus:ring-secondary dark:ring-offset-gray-800"
+                    />
+                    <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Publish</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input
+                      type="radio"
+                      value="0"
+                      v-model="publishPayload"
+                      class="w-4 h-4 text-secondary focus:ring-secondary dark:focus:ring-secondary dark:ring-offset-gray-800"
+                    />
+                    <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Unpublish</label>
+                  </div>
+                </div>
+              </div>
+              <div class="w-full flex items-center text-sm font-medium text-gray-900 dark:text-gray-300">
+                <p>This content is currently {{ isPublished }}.</p>
+                <CheckCircleIcon v-if="isPublished === 'published'" aria-hidden="true" class="h-7 w-7 text-green-500" />
+                <XCircleIcon v-else aria-hidden="true" class="h-7 w-7 text-red-500" />
+              </div>
+            </div>
+          </div>
+          <div aria-hidden="true" class="hidden sm:block">
+            <div class="py-5">
+              <div class="border-t border-gray-200" />
+            </div>
+          </div>
 
           <div class="flex justify-end">
             <NuxtLink class="bg-white py-2 px-4 text-sm font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -244,8 +284,9 @@ import { useRoute } from 'vue-router';
 import { NOTIFICATION_TYPE } from '~/constants';
 import { useNotification } from '~/stores/notification';
 import { GoogleMap, Marker } from 'vue3-google-map';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch, computed } from 'vue';
 import { debounce } from 'instantsearch.js/es/lib/utils';
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 
 definePageMeta({ middleware: 'auth' })
 
@@ -273,7 +314,18 @@ useHead({
   }
 });
 
-await $api.occasion.show(params.id)
+const { status } = useAuth();
+
+const targetApi = computed(() => {
+  if (status.value === 'unauthenticated') {
+    return 'occasion';
+  } else if (status.value === 'authenticated') {
+    return 'authDetailOccasion';
+  }
+  return '';
+});
+
+await $api[targetApi.value].show(params.id)
   .then(response => response.json())
   .then(response => {
     if (!response.details) {
@@ -305,6 +357,8 @@ const getLatLng = (event) => {
   const lng = parseFloat(event.latLng.lng().toFixed(5));
   markerPosition.value = { lat, lng };
 };
+const publishPayload = ref(eventData.details.open_flg);
+const isPublished = computed(() => (eventData.details.open_flg === 1) ? 'published' : 'not published');
 
 const getErrors = () => {
   const regExp = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|live\/|v\/)?)([\w\-]+)(\S+)?$/;
@@ -358,6 +412,7 @@ const submitHandler = async event => {
     ext_10: eventData.details.venue_direction_notes,
     ext_11: markerPosition.value.lat,
     ext_12: markerPosition.value.lng,
+    open_flg: parseInt(publishPayload.value),
     ext_16: {
       url: eventData.details.photo.url,
       title: ''
