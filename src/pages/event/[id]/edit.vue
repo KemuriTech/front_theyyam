@@ -399,21 +399,21 @@ const submitHandler = async event => {
     formResponse.isProcessing = false;
     return;
   }
-
+  
   const requestBody = {
     subject: eventData.details.subject,
-    ext_3: eventData.details.description,
-    ext_4: eventData.details.start_dt,
-    ext_5: eventData.details.end_dt,
-    ext_6: eventData.details.performers,
-    ext_7: eventData.details.malayalam_calendar,
-    ext_8: eventData.details.venue_name,
-    ext_9: eventData.details.venue_address,
-    ext_10: eventData.details.venue_direction_notes,
-    ext_11: markerPosition.value.lat,
-    ext_12: markerPosition.value.lng,
+    description: eventData.details.description,
+    start_dt: eventData.details.start_dt,
+    end_dt: eventData.details.end_dt,
+    performers: eventData.details.performers,
+    malayalam_calendar: eventData.details.malayalam_calendar,
+    venue_name: eventData.details.venue_name,
+    venue_address: eventData.details.venue_address,
+    venue_direction_notes: eventData.details.venue_direction_notes,
+    venue_lat: markerPosition.value.lat,
+    venue_long: markerPosition.value.lng,
     open_flg: parseInt(publishPayload.value),
-    ext_16: {
+    photo: {
       url: eventData.details.photo.url,
       title: ''
     },
@@ -426,21 +426,19 @@ const submitHandler = async event => {
     return { name, designation, phones };
   });
   
-  requestBody['ext_17'] = contactsPayload.map(contact => contact.name || '');
-  requestBody['ext_18'] = contactsPayload.map(contact => contact.designation || '');
-  requestBody['ext_19'] = contactsPayload.map(contact => contact.phones[0] || '');
-  requestBody['ext_20'] = contactsPayload.map(contact => contact.phones[1] || '');
-  requestBody['ext_21'] = contactsPayload.map(contact => contact.phones[2] || '');
+  requestBody['contact_name'] = contactsPayload.map(contact => contact.name || '');
+  requestBody['contact_designation'] = contactsPayload.map(contact => contact.designation || '');
+  requestBody['contact_details_1'] = contactsPayload.map(contact => contact.phones[0] || '');
+  requestBody['contact_details_2'] = contactsPayload.map(contact => contact.phones[1] || '');
+  requestBody['contact_details_3'] = contactsPayload.map(contact => contact.phones[2] || '');
   
-  for (let i = 0; i < 3; i++) {
-    if (eventData.details.videos[i]?.url) {
-      requestBody[`ext_${13 + i}`] = {
-        url: eventData.details.videos[i].url,
-        title: '',
-      };
-    }
-  }
-
+  requestBody['videos'] = eventData.details.videos.map(video => {
+    return {
+      url: video.url,
+      title: video.title || ''
+    };
+  });
+  
   await $api.authOccasion.update(params.id, requestBody)
     .then(response => response.json())
     .then(res => {

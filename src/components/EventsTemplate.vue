@@ -133,13 +133,13 @@ const buildFilterQuery = () => {
     .reduce((queries, [col, value]) => {
       if (value !== '') {
         const query = searchExt.map(ext => {
-          const extCondition = `ext_${ext} icontains "${value}"`;
+          const extCondition = `${ext} icontains "${value}"`;
           return `${col} icontains "${value}" OR ${extCondition}`;
         }).join(' OR ');
         queries.push(query);
       }
       if (fromDate !== '' && toDate !== '') {
-        queries.push(`ext_4 >= "${fromDate}" AND ext_5 <= "${toDate}"`)
+        queries.push(`start_dt >= "${fromDate}" AND end_dt <= "${toDate}"`)
       }
       return queries;
     }, [])

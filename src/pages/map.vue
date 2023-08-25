@@ -98,7 +98,7 @@ let filteredEventData = computed(() => {
   return eventData.filter((event) => {
     const eventFromDate = new Date(event.start_dt);
     const eventToDate = new Date(event.end_dt);
-    const contactNames = event.contacts.map(contact => contact.name);
+    const contactNames = event.contact_name.map(contact => contact);
     const eventSearchParams = [
       event.subject,
       event.description,
