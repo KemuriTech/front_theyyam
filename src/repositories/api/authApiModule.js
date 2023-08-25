@@ -3,7 +3,7 @@ import apiModule from '~/repositories/apiModule';
 class AuthAPIModule extends apiModule {
   constructor(resource) {
     const config =useRuntimeConfig();
-    super(`${config.LANDING_PAGE_URL}/${config.KUROCO_API_PREFIX}/${config.KUROCO_API_VER_AUTH}/${resource}`);
+    super(`${config.public.LANDING_PAGE_URL}/${config.public.KUROCO_API_PREFIX}/${config.public.KUROCO_API_VER_AUTH}/${resource}`);
   }
 
 }
