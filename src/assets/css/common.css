@@ -10,6 +10,11 @@
     max-width: 18rem;
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 .text-trans-y {
     text-decoration: none;
     -webkit-background-clip: text;
